@@ -1,0 +1,135 @@
+reactive TimeVarying1 {
+  input:
+    i : Ta;
+
+  output:
+    o1 : Bool;
+    c1 : Nat;
+    o2 : Bool;
+    c2 : Nat;
+    o3 : Bool;
+    c3 : Nat;
+    o4 : Bool;
+    c4 : Nat;
+
+  state:
+    c1 : Nat = 0;
+    c2 : Nat = 0;
+    c3 : Nat = 0;
+    c4 : Nat = 0;
+
+  rules:
+    o1 = i == :a1 for 2ms every 5ms;
+    o2 = i == :a1 for 3ms and not 6ms every 10ms;
+    o3 = i == :a1 for (1ms and not 5ms) or 8ms every 12ms;
+    o4 = i == :a1 for (3ms and not 4ms) or (7ms and not 10ms) every 15ms;
+
+    c1 = nat(_add_(c1, 1)) when o1;
+    c2 = nat(_add_(c2, 1)) when o2;
+    c3 = nat(_add_(c3, 1)) when o3;
+    c4 = nat(_add_(c4, 1)) when o4;
+}
+
+
+(Maybe[Ta], Nat, Bool, Nat, Bool, Nat, Bool, Nat, Bool, Nat)* time_varying_1_test_data_0 = (
+  (:just(:a0),    0,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,       1,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,       1,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,       1,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,      10,    false,    0,    false,    0,    false,    0,    false,    0),
+  (:just(:a1),    1,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,       1,    false,    0,    false,    0,    true,     1,    false,    0),
+  (nothing,       1,    true,     1,    false,    0,    true,     1,    false,    0),
+  (nothing,       1,    true,     1,    true,     1,    true,     1,    true,     1),
+  (nothing,       1,    true,     1,    true,     1,    true,     1,    false,    1),
+  (nothing,       1,    false,    1,    true,     1,    false,    1,    false,    1),
+  (nothing,       1,    false,    1,    false,    1,    false,    1,    false,    1),
+  (nothing,       1,    true,     2,    false,    1,    false,    1,    true,     2),
+  (nothing,       1,    true,     2,    false,    1,    true,     2,    true,     2),
+  (nothing,       1,    true,     2,    false,    1,    true,     2,    true,     2),
+  (nothing,       1,    false,    2,    false,    1,    true,     2,    false,    2),
+  (nothing,       1,    false,    2,    false,    1,    true,     2,    false,    2),
+  (nothing,       1,    true,     3,    false,    1,    false,    2,    false,    2),
+  (nothing,       1,    true,     3,    true,     2,    true,     3,    false,    2),
+  (nothing,       1,    true,     3,    true,     2,    true,     3,    false,    2),
+  (nothing,       1,    false,    3,    true,     2,    true,     3,    false,    2),
+  (nothing,       1,    false,    3,    false,    2,    true,     3,    false,    2),
+  (nothing,       1,    true,     4,    false,    2,    false,    3,    false,    2),
+  (nothing,       1,    true,     4,    false,    2,    false,    3,    true,     3),
+  (nothing,       1,    true,     4,    false,    2,    false,    3,    false,    3),
+  (nothing,       1,    false,    4,    false,    2,    true,     4,    false,    3),
+  (nothing,       1,    false,    4,    false,    2,    true,     4,    false,    3),
+  (nothing,       1,    true,     5,    false,    2,    true,     4,    true,     4),
+  (nothing,       1,    true,     5,    true,     3,    true,     4,    true,     4),
+  (nothing,       1,    true,     5,    true,     3,    false,    4,    true,     4),
+  (:just(:a2),    0,    false,    5,    false,    3,    false,    4,    false,    4),
+  (nothing,       1,    false,    5,    false,    3,    false,    4,    false,    4)
+);
+
+
+(Maybe[Ta], Nat, Bool, Nat, Bool, Nat, Bool, Nat, Bool, Nat)* time_varying_1_test_data_1 = (
+  (:just(:a0),    0,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,       1,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,       1,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,       1,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,      10,    false,    0,    false,    0,    false,    0,    false,    0),
+  (:just(:a1),    1,    false,    0,    false,    0,    false,    0,    false,    0),
+  (nothing,      24,    true,     5,    true,     3,    false,    4,    true,     4),
+  (:just(:a2),    0,    false,    5,    false,    3,    false,    4,    false,    4),
+  (nothing,       1,    false,    5,    false,    3,    false,    4,    false,    4)
+);
+
+
+(Maybe[Ta], Nat, Bool, Nat, Bool, Nat, Bool, Nat, Bool, Nat)* time_varying_1_test_data_2 = (
+  (:just(:a1),  100,    false,    0,    false,    0,    false,    0,    false,    0),
+  (:just(:a2),   60,    false,   12,    false,    6,    false,   10,    false,    8),
+  (nothing,     200,    false,   12,    false,    6,    false,   10,    false,    8)
+);
+
+
+Bool RunTimeVaryingTest1((Maybe[Ta], Nat, Bool, Nat, Bool, Nat, Bool, Nat, Bool, Nat)* test_data) {
+  a : TimeVarying1;
+
+  for mi, dt, eo1, ec1, eo2, ec2, eo3, ec3, eo4, ec4 @ j <- test_data:
+    if mi != nothing:
+      a.i = match (mi) just(i?) = i;
+    ;
+
+    elapsed a dt;
+    loop
+      done = apply a;
+    while not done;
+
+    if  a.o1 != eo1 or a.c1 != ec1 or
+         a.o2 != eo2 or a.c2 != ec2 or
+         a.o3 != eo3 or a.c3 != ec3 or
+         a.o4 != eo4 or a.c4 != ec4:
+      Print("Error\n");
+      print (mi, dt, eo1, ec1, eo2, ec2, eo3, ec3, eo4, ec4);
+      print a.o1;
+      print a.c1;
+      print a.o2;
+      print a.c2;
+      print a.o3;
+      print a.c3;
+      print a.o4;
+      print a.c4;
+      print j;
+      return false;
+    // else
+    //   Print("OK\n");
+    ;
+  ;
+
+  return true;
+}
+
+
+Bool RunAllTimeVaryingTests1() {
+  ok = RunTimeVaryingTest1(time_varying_1_test_data_0);
+  return false if not ok;
+  ok = RunTimeVaryingTest1(time_varying_1_test_data_1);
+  return false if not ok;
+  ok = RunTimeVaryingTest1(time_varying_1_test_data_2);
+  return ok;
+}

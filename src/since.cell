@@ -1,0 +1,76 @@
+reactive Since {
+  input:
+    an_input* : Any;
+
+  output:
+    more_than_10s_ago : Bool;
+
+  state:
+    counter : Nat = 0;
+
+  rules:
+    counter = nat(_add_(counter, 1)) : an_input;
+    idle_for_10s = counter after 10s;
+    more_than_10s_ago = counter != 0 and idle_for_10s;
+}
+
+
+reactive SinceTest {
+  input:
+    an_input* : Ta;
+
+  output:
+    output : Bool;
+
+  rules:
+    since = Since(an_input=an_input);
+    output = since.more_than_10s_ago;
+}
+
+
+Bool RunSinceTest0() {
+  ta : SinceTest;
+
+  done = apply ta;
+  assert done;
+
+  for t < 20:
+    if ta.output:
+      Print("ERROR (1)\n");
+      return false;
+    ;
+    elapsed ta 1000;
+    loop
+      done = apply ta;
+    while not done;
+  ;
+
+  for 100:
+    ta.an_input = rand_elem([:a0, :a1, :a2, :a3, :a4, :a5, :a6, :a7, :a8, :a9]);
+    done = apply ta;
+    assert done;
+    time_since_change = 0;
+    for 10:
+      elapsed_time = _rand_nat_(15);
+      time_since_change = _add_(time_since_change, elapsed_time);
+      elapsed ta _mult_(1000, elapsed_time);
+      loop
+        done = apply ta;
+      while not done;
+      exp_output = _le_(10, time_since_change);
+      if ta.output != exp_output:
+        Print("ERROR!\n");
+        return false;
+      // else
+      //   Print(".");
+      ;
+    ;
+  ;
+  return true;
+}
+
+
+Bool RunAllSinceTests() {
+  ok = RunSinceTest0();
+  return ok;
+}

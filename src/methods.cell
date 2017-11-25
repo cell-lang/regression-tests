@@ -1,0 +1,171 @@
+reactive Methods {
+  input:
+    i   : Ta;
+    a*  : <reapply, reapply(l1: Atom, l2: Atom)>;
+
+  output:
+    v1 : Any;
+    v2 : Any;
+    d1 : Any;
+    d2 : Any;
+
+  state:
+    v1 : Any = :g(d1);
+    v2 : Any = :l(d2);
+
+  rules:
+    v1 = if a == :reapply then :g(:f(@i)) else {a.l1}(:f(@i));
+    v1 = :p(d1) if i == :a3 : i, not a;
+
+    v2 = if a == :reapply then :l(:h(@v1)) else {a.l2}(:h(@v1));
+    v2 = :q(d2) if i == :a4 : i, not a;
+
+    d1 = :f(i);
+    d2 = :h(v1);
+}
+
+
+
+Any Methods.my_meth(<v1> p) = v1;
+
+Any Methods.my_meth(<v2> p) = v2;
+
+Any Methods.my_meth(<d1> p) = d1;
+
+Any Methods.my_meth(<d2> p) = d2;
+
+
+(Any, Any) Methods.my_other_meth(<v1, v2, d1, d2> p1, <v1, v2, d1, d2> p2) = (my_meth(p1), my_meth(p2));
+
+
+(Nat, Ta, Any, Any, Any, Any)* method_test_data_1a = (
+  (0, :a0, :f(:a0), :g(:f(:a0)), :h(:g(:f(:a0))), :l(:h(:g(:f(:a0))))),
+  (0, :a1, :f(:a1), :g(:f(:a0)), :h(:g(:f(:a0))), :l(:h(:g(:f(:a0))))),
+  (0, :a2, :f(:a2), :g(:f(:a0)), :h(:g(:f(:a0))), :l(:h(:g(:f(:a0))))),
+  (0, :a3, :f(:a3), :p(:f(:a3)), :h(:p(:f(:a3))), :l(:h(:g(:f(:a0))))),
+  (0, :a4, :f(:a4), :p(:f(:a3)), :h(:p(:f(:a3))), :q(:h(:p(:f(:a3))))),
+  (0, :a5, :f(:a5), :p(:f(:a3)), :h(:p(:f(:a3))), :q(:h(:p(:f(:a3))))),
+  (1, :a5, :f(:a5), :g(:f(:a5)), :h(:g(:f(:a5))), :l(:h(:p(:f(:a3))))),
+  (0, :a6, :f(:a6), :g(:f(:a5)), :h(:g(:f(:a5))), :l(:h(:p(:f(:a3))))),
+  (1, :a6, :f(:a6), :g(:f(:a6)), :h(:g(:f(:a6))), :l(:h(:g(:f(:a5))))),
+  (0, :a7, :f(:a7), :g(:f(:a6)), :h(:g(:f(:a6))), :l(:h(:g(:f(:a5))))),
+  (2, :a7, :f(:a7), :s(:f(:a7)), :h(:s(:f(:a7))), :t(:h(:g(:f(:a6))))),
+  (0, :a8, :f(:a8), :s(:f(:a7)), :h(:s(:f(:a7))), :t(:h(:g(:f(:a6))))),
+  (0, :a3, :f(:a3), :p(:f(:a3)), :h(:p(:f(:a3))), :t(:h(:g(:f(:a6))))),
+  (2, :a3, :f(:a3), :s(:f(:a3)), :h(:s(:f(:a3))), :t(:h(:p(:f(:a3)))))
+);
+
+
+(Nat, Ta, Any, Any, Any, Any)* method_test_data_1b = (
+  (0, :a0, :f(:a0), :g(:f(:a0)), :h(:g(:f(:a0))), :l(:h(:g(:f(:a0))))),
+  (0, :a1, :f(:a1), :g(:f(:a0)), :h(:g(:f(:a0))), :l(:h(:g(:f(:a0))))),
+  (0, :a2, :f(:a2), :g(:f(:a0)), :h(:g(:f(:a0))), :l(:h(:g(:f(:a0))))),
+  (0, :a3, :f(:a3), :p(:f(:a3)), :h(:p(:f(:a3))), :l(:h(:g(:f(:a0))))),
+  (0, :a4, :f(:a4), :p(:f(:a3)), :h(:p(:f(:a3))), :q(:h(:p(:f(:a3))))),
+  // (0, :a5, :f(:a5), :p(:f(:a3)), :h(:p(:f(:a3))), :q(:h(:p(:f(:a3))))),
+  (1, :a5, :f(:a5), :g(:f(:a5)), :h(:g(:f(:a5))), :l(:h(:p(:f(:a3))))),
+  // (0, :a6, :f(:a6), :g(:f(:a5)), :h(:g(:f(:a5))), :l(:h(:p(:f(:a3))))),
+  (1, :a6, :f(:a6), :g(:f(:a6)), :h(:g(:f(:a6))), :l(:h(:g(:f(:a5))))),
+  // (0, :a7, :f(:a7), :g(:f(:a6)), :h(:g(:f(:a6))), :l(:h(:g(:f(:a5))))),
+  (2, :a7, :f(:a7), :s(:f(:a7)), :h(:s(:f(:a7))), :t(:h(:g(:f(:a6))))),
+  (0, :a8, :f(:a8), :s(:f(:a7)), :h(:s(:f(:a7))), :t(:h(:g(:f(:a6))))),
+  // (0, :a3, :f(:a3), :p(:f(:a3)), :h(:p(:f(:a3))), :t(:h(:g(:f(:a6))))),
+  (2, :a3, :f(:a3), :s(:f(:a3)), :h(:s(:f(:a3))), :t(:h(:p(:f(:a3)))))
+);
+
+
+(Nat, Ta, Any, Any, Any, Any)* method_test_data_2a = (
+  (0, :a0, :f(:a0), :g(:f(:a0)), :h(:g(:f(:a0))), :l(:h(:g(:f(:a0))))),
+  (2, :a0, :f(:a0), :s(:f(:a0)), :h(:s(:f(:a0))), :t(:h(:g(:f(:a0))))),
+  (0, :a1, :f(:a1), :s(:f(:a0)), :h(:s(:f(:a0))), :t(:h(:g(:f(:a0))))),
+  (0, :a3, :f(:a3), :p(:f(:a3)), :h(:p(:f(:a3))), :t(:h(:g(:f(:a0))))),
+  (1, :a3, :f(:a3), :g(:f(:a3)), :h(:g(:f(:a3))), :l(:h(:p(:f(:a3))))),
+  (0, :a4, :f(:a4), :g(:f(:a3)), :h(:g(:f(:a3))), :q(:h(:g(:f(:a3))))),
+  (2, :a4, :f(:a4), :s(:f(:a4)), :h(:s(:f(:a4))), :t(:h(:g(:f(:a3)))))
+);
+
+
+(Nat, Ta, Any, Any, Any, Any)* method_test_data_2b = (
+  // (0, :a0, :f(:a0), :g(:f(:a0)), :h(:g(:f(:a0))), :l(:h(:g(:f(:a0))))),
+  (2, :a0, :f(:a0), :s(:f(:a0)), :h(:s(:f(:a0))), :t(:h(:g(:f(:a0))))),
+  (0, :a1, :f(:a1), :s(:f(:a0)), :h(:s(:f(:a0))), :t(:h(:g(:f(:a0))))),
+  // (0, :a3, :f(:a3), :p(:f(:a3)), :h(:p(:f(:a3))), :t(:h(:g(:f(:a0))))),
+  (1, :a3, :f(:a3), :g(:f(:a3)), :h(:g(:f(:a3))), :l(:h(:p(:f(:a3))))),
+  // (0, :a4, :f(:a4), :g(:f(:a3)), :h(:g(:f(:a3))), :q(:h(:g(:f(:a3))))),
+  (2, :a4, :f(:a4), :s(:f(:a4)), :h(:s(:f(:a4))), :t(:h(:g(:f(:a3)))))
+);
+
+
+Bool RunBasicMethodTests((Nat, Ta, Any, Any, Any, Any)* test_data) {
+  t : Methods;
+
+  for a, i, ed1, ev1, ed2, ev2 @ j <- test_data:
+    // print "-----------------------------------------------------";
+    // print (a, i);
+    // print (t.v1, t.v2, t.d1, t.d2);
+
+    t.i = i;
+    done = apply t;
+    assert done;
+    // print (t.v1, t.v2, t.d1, t.d2);
+
+    if a == 1:
+      t.a = :reapply;
+    elif a == 2:
+      t.a = reapply(l1: :s, l2: :t);
+    ;
+
+    done = apply t;
+    assert done;
+    // print (t.v1, t.v2, t.d1, t.d2);
+
+    if not {t.v1 == ev1 and t.v2 == ev2 and t.d1 == ed1 and t.d2 == ed2}:
+      Print("Error\n");
+      print (ev1, ev2, ed1, ed2);
+      print t.v1;
+      print t.v2;
+      print t.d1;
+      print t.d2;
+      return false;
+    // else
+    //   Print("OK\n");
+    ;
+
+    id_combs = (
+      (:v1, :v2), (:d1, :d2), (:v1, :d2), (:d1, :v2),
+      (:v2, :v1), (:d2, :d1), (:v2, :d1), (:d2, :v1),
+      (:v1, :v1), (:d1, :d1), (:v1, :d1), (:d1, :v1),
+      (:v2, :v2), (:d2, :d2), (:v2, :d2), (:d2, :v2)
+    );
+
+    exp_res = (
+      (t.v1, t.v2), (t.d1, t.d2), (t.v1, t.d2), (t.d1, t.v2),
+      (t.v2, t.v1), (t.d2, t.d1), (t.v2, t.d1), (t.d2, t.v1),
+      (t.v1, t.v1), (t.d1, t.d1), (t.v1, t.d1), (t.d1, t.v1),
+      (t.v2, t.v2), (t.d2, t.d2), (t.v2, t.d2), (t.d2, t.v2)
+    );
+
+    act_res = (t.my_other_meth(id1, id2) : id1, id2 <- id_combs);
+
+    if act_res != exp_res:
+      Print("ERROR (METHODS):\n");
+      print exp_res;
+      print act_res;
+      return false;
+    ;
+  ;
+
+  return true;
+}
+
+
+Bool RunAllMethodTests() {
+  ok = RunBasicMethodTests(method_test_data_1a);
+  return false if not ok;
+  ok = RunBasicMethodTests(method_test_data_1b);
+  return false if not ok;
+  ok = RunBasicMethodTests(method_test_data_2a);
+  return false if not ok;
+  ok = RunBasicMethodTests(method_test_data_2b);
+  return ok;
+}

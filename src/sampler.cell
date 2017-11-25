@@ -1,0 +1,84 @@
+type Ta = a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10;
+type Tb = b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
+
+type Tab = Ta, Tb;
+
+
+reactive Sampler {
+  input:
+    ia  : Ta;
+    ib  : Tb;
+    take_sample* : <a, b>;
+
+  output:
+    last_sample   : Maybe[Tab];
+    curr_sample*  : Tab;
+
+  state:
+    last_sample : Maybe[Tab] = nothing;
+
+  rules:
+    curr_sample := if take_sample == :a then ia else ib;
+    last_sample = just(curr_sample);
+}
+
+
+type SamplerTestSample = (<Ta, nothing>, <Tb, nothing>, <a, b, nothing>, <Tab, nothing>);
+
+
+SamplerTestSample* sampler_test_data = (
+  (:a0, :b0, :b, :b0),
+  (nothing, nothing, nothing, nothing),
+  (nothing, nothing, :a, :a0),
+  (:a1, nothing, :a, :a1),
+  (nothing, :b1, :b, :b1),
+  (:a2, :b2, :b, :b2),
+  (nothing, nothing, :a, :a2),
+  (nothing, nothing, nothing, nothing)
+);
+
+
+Bool RunBasicSamplerTest(SamplerTestSample* test_data) {
+  s : Sampler;
+
+  els = nothing;
+
+  for ia, ib, ts, ecs <- test_data:
+    if ia != nothing:
+      s.ia = ia;
+    ;
+    if ib != nothing:
+      s.ib = ib;
+    ;
+    if ts != nothing:
+      s.take_sample = ts;
+    ;
+
+    done = apply s;
+    assert done;
+
+    els = just(ecs) if ecs != nothing;
+
+    cs_ok = if ecs != nothing then s.curr_sample? and s.curr_sample == ecs else not s.curr_sample?;
+    ls_ok = s.last_sample == els;
+
+    if not cs_ok or not ls_ok:
+      Print("ERROR ERROR ERROR!\n");
+      print (cs_ok, ls_ok);
+      print (ecs, els);
+      print s.last_sample;
+      print s.curr_sample;
+      return false;
+    // else
+    //   Print("OK\n");
+    ;
+  ;
+
+  return true;
+}
+
+
+Bool RunAllSamplerTests() {
+  res = RunBasicSamplerTest(sampler_test_data);
+  return res;
+}

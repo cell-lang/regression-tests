@@ -1,0 +1,99 @@
+reactive FilteredHistory {
+  input:
+    input* : Ta;
+
+  output:
+    history         : Ta*;
+    input_filtered* : Ta;
+
+  state:
+    history : Ta* = ();
+
+  rules:
+    history = (history | input) : input;
+    input_filtered := input if input != :a2;
+}
+
+
+reactive NestedAutomata1 {
+  input:
+    i*  : Ta;
+
+  output:
+    h     : Ta*;
+    hs    : Nat;
+    fi*   : Ta;
+    fib*  : Ta+;
+
+  rules:
+    ha = FilteredHistory(input = i);
+    h = ha.history;
+    fi := ha.input_filtered;
+
+    hs = |h|;
+    fib := (fi);
+}
+
+
+(Ta, Bool)* nested_automata_1_test_data = (
+  (:a0, true),
+  (:a1, true),
+  (:a2, false),
+  (:a3, true),
+  (:a4, true),
+  (:a0, true),
+  (:a1, true),
+  (:a2, false),
+  (:a3, true),
+  (:a4, true)
+);
+
+
+Bool RunAllNestedAutomata1Tests() {
+  ta : NestedAutomata1;
+
+  done = apply ta;
+  assert done;
+
+  eh = ();
+  ehs = 0;
+
+  for i, s <- nested_automata_1_test_data:
+    eh = (eh | i);
+    ehs = _add_(ehs, 1);
+    ta.i = i;
+    done = apply ta;
+    assert done;
+    if ta.h != eh or ta.hs != ehs:
+      Print("ERROR!\n");
+      print ta.h;
+      print ta.hs;
+      print ta.fi;
+      print ta.fib;
+      print (eh, ehs);
+      return false;
+    ;
+    if ta.fi? != s or ta.fib? != s:
+      Print("DISCRETE SET/UNSET ERROR!\n");
+      print ta.h;
+      print ta.hs;
+      print ta.fi;
+      print ta.fib;
+      print s;
+      return false;
+    ;
+    if s and {ta.fi != i or ta.fib != (i)}:
+      Print("DISCRETE VALUE ERROR!\n");
+      print ta.h;
+      print ta.hs;
+      print ta.fi;
+      print ta.fib;
+      print s;
+      return false;
+    ;
+    // Print("OK\n");
+    // print ta;
+  ;
+
+  return true;
+}

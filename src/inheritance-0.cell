@@ -1,0 +1,107 @@
+reactive Base {
+  input:
+    in_a : Ta;
+    in_b : Tb;
+
+  output:
+    out_a : Ta;
+    out_b : Tb;
+
+  rules:
+    out_a = if in_a == :a0 then :a9 else in_a;
+    out_b = if in_b == :b0 then :b9 else in_b;
+}
+
+
+reactive Derived : Base {
+  rules:
+    out_a = if in_a == :a1 then :a8 else in_a;
+}
+
+
+reactive TwiceDerived : Derived {
+  rules:
+    out_b = if in_b == :b1 then :b8 else in_b;
+}
+
+
+reactive InputOverriding : Base {
+  input:
+   new_in_a : Ta;
+   new_in_b : Tb;
+
+  rules:
+    in_a = if new_in_a == :a2 then :a0 else new_in_a;
+    in_b = if new_in_b == :b2 then :b0 else new_in_b;
+}
+
+
+(Ta, Tb, Ta, Tb, Ta, Tb, Ta, Tb, Ta, Tb)* basic_inheritance_test_data = (
+  (:a0, :b0, :a9, :b9, :a0, :b9, :a0, :b0, :a9, :b9),
+  (:a1, :b1, :a1, :b1, :a8, :b1, :a8, :b8, :a1, :b1),
+  (:a2, :b2, :a2, :b2, :a2, :b2, :a2, :b2, :a9, :b9)
+);
+
+
+Bool RunAllBasicInheritanceTests() {
+  b : Base;
+  d : Derived;
+  t : TwiceDerived;
+  i : InputOverriding;
+
+  for in_a, in_b, eba, ebb, eda, edb, eta, etb, eia, eib <- basic_inheritance_test_data:
+    b.in_a = in_a;
+    b.in_b = in_b;
+    d.in_a = in_a;
+    d.in_b = in_b;
+    t.in_a = in_a;
+    t.in_b = in_b;
+    i.new_in_a = in_a;
+    i.new_in_b = in_b;
+
+    done = apply b;
+    assert done;
+    done = apply d;
+    assert done;
+    done = apply t;
+    assert done;
+    done = apply i;
+    assert done;
+
+    if b.out_a != eba or b.out_b != ebb:
+      Print("ERROR: Base\n");
+      print (eba, ebb);
+      print b.out_a;
+      print b.out_b;
+      return false;
+    ;
+
+    if d.out_a != eda or d.out_b != edb:
+      Print("ERROR: Derived\n");
+      print (eda, edb);
+      print b.out_a;
+      print b.out_b;
+      return false;
+    ;
+
+    if t.out_a != eta or t.out_b != etb:
+      Print("ERROR: TwiceDerived\n");
+      print (eta, etb);
+      print b.out_a;
+      print b.out_b;
+      return false;
+    ;
+
+    if i.out_a != eia or i.out_b != eib:
+      Print("ERROR: InputOverriding\n");
+      print (eia, eib);
+      print b.out_a;
+      print b.out_b;
+      return false;
+    ;
+
+    // Print("OK\n");
+  ;
+
+  return true;
+}

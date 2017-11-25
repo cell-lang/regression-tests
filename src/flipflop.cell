@@ -1,0 +1,124 @@
+reactive FlipFlop on, off -> state {
+  input:
+    on  : Bool;
+    off : Bool;
+
+  output:
+    state : Bool;
+
+  state:
+    state : Bool  = if   on and off then undefined
+                    elif on         then true
+                    elif off        then false
+                                    else init_state;
+
+  static:
+    init_state = false;
+
+  rules:
+    state = true   when on;
+    state = false  when off;
+}
+
+
+reactive FlipFlopClient -> state {
+  input:
+    action* : <on, off, same, none>;
+
+  output:
+    state : Bool;
+    // state_bad : Bool;
+
+  state:
+    on  : Bool = false;
+    off : Bool = false;
+
+  rules:
+    on = true  if action == :on;
+    on = false if action == :off;
+
+    off = true  if action == :off;
+    off = false if action == :on;
+
+
+    flipflop = FlipFlop(on=on, off=off);
+    state = flipflop;
+    // state_bad = flipflop.state;
+}
+
+
+reactive FlipFlopClientPositional -> state {
+  input:
+    action* : <on, off, same, none>;
+
+  output:
+    state : Bool;
+
+  state:
+    on  : Bool = false;
+    off : Bool = false;
+
+  rules:
+    on = true  if action == :on;
+    on = false if action == :off;
+
+    off = true  if action == :off;
+    off = false if action == :on;
+
+    state = FlipFlop(on, off);
+    state_copy = state;
+}
+
+
+(<on, off, same, none>, Bool)* flipflop_test_data_1 = (
+  (:none,   false),
+  (:same,   false),
+  (:off,    false),
+  (:on,     true),
+  (:none,   true),
+  (:on,     true),
+  (:same,   true),
+  (:off,    false)
+);
+
+
+Bool RunBasicFlipFlopTest((<on, off, same, none>, Bool)* test_data) {
+  fc  : FlipFlopClient;
+  fcp : FlipFlopClientPositional;
+
+  done = apply fc;
+  assert done;
+  done = apply fcp;
+  assert done;
+  if fc.state != false or fcp.state != false:
+    Print("ERROR: INITIAL UPDATE FAILED SOMEHOW!\n");
+    print fc.state;
+    print fcp.state;
+    return false;
+  ;
+
+  for a, er <- test_data:
+    fc.action = a;
+    fcp.action = a;
+    done = apply fc;
+    assert done;
+    done = apply fcp;
+    assert done;
+    if fc.state != er or fcp.state != er:
+      Print("ERROR! ERROR! ERROR!\n");
+      print fc.state;
+      print fcp.state;
+      return false;
+    // else
+    //   Print("OK\n");
+    ;
+  ;
+
+  return true;
+}
+
+
+Bool RunAllFlipFlopTests() {
+  ok = RunBasicFlipFlopTest(flipflop_test_data_1);
+  return ok;
+}

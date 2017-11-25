@@ -1,0 +1,121 @@
+reactive YComb {
+  input:
+    ia : Ta;
+    ib : Tb;
+
+  output:
+    o : Tab;
+
+  state:
+    o : Tab = ia;
+
+  rules:
+    o = ia : ia;
+    o = ib : ib, not ia;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+(Ta, Tb, Tab)* y_comb_data = (
+  (:a1, :b1, :a1),
+  (:a1, :b2, :b2),
+  (:a2, :b2, :a2),
+  (:a3, :b3, :a3),
+  (:a4, :b3, :a4),
+  (:a4, :b4, :b4),
+  (:a4, :b4, :b4)
+);
+
+
+PrintOK() {
+  Print("OK\n");
+}
+
+
+PrintError(Tab expected, Tab actual) {
+  Print("\nError! Expected: " & printed(expected) & ", seen: " & printed(actual) & "\n");
+}
+
+
+PrintUndefError(Any yc, Any ryc) {
+  Print("\nError! Version with undefined values doesn't match the reference version\n");
+  Print(printed(yc) & "\n");
+  Print(printed(ryc) & "\n");
+}
+
+
+Bool RunBasicYCombTest() {
+  yc : YComb;
+
+  for ia, ib, eo <- y_comb_data:
+    yc.ia = ia;
+    yc.ib = ib;
+    done = apply yc;
+    assert done;
+
+    if not yc.o?? or yc.o != eo:
+      PrintError(eo, yc.o);
+      return false;
+    ;
+  ;
+
+  return true;
+}
+
+
+Bool RunNullYCombTest(Nat run_idx) {
+  yc  : YComb;
+  ryc : YComb;
+
+  ia_def = false;
+  ib_def = false;
+
+  for ia, ib, eo <- y_comb_data:
+    ia_def = ia_def or one_in(3);
+    ib_def = ib_def or one_in(3);
+
+    yc.ia = ia;
+    yc.ib = ib;
+    done = apply yc;
+    assert done;
+
+    if ia_def:
+      ryc.ia = ia;
+    ;
+    if ib_def:
+      ryc.ib = ib;
+    ;
+    done = apply ryc;
+    assert done;
+
+    if not yc.o?? or yc.o != eo:
+      // PrintError(eo, yc.o);
+      Print("\nError!\n");
+      print yc.o;
+      print eo;
+      return false;
+    ;
+
+    if ryc.o?? and ryc.o != yc.o:
+      // PrintUndefError(yc, ryc);
+      Print("\nError! Version with undefined values doesn't match the reference version\n");
+      print ryc.o;
+      print yc.o;
+      print run_idx;
+      return false;
+    ;
+  ;
+
+  return true;
+}
+
+
+Bool RunAllYCombTests() {
+  ok = RunBasicYCombTest();
+  return false if not ok;
+  for i < 1000:
+    ok = RunNullYCombTest(i);
+    return false if not ok;
+  ;
+  return true;
+}

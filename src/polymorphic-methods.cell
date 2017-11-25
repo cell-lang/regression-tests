@@ -1,0 +1,259 @@
+type Reset  = reset(Int);
+type Incr   = increment;
+type Decr   = decrement;
+type Acc    = accumulate(Int);
+
+type PolyMsg = Reset, Incr, Decr, Acc;
+
+
+Reset reset         = :reset(0);
+Reset reset(Int n)  = :reset(n);
+
+Incr increment  = :increment;
+Decr decrement  = :decrement;
+
+PolyMsg accumulate(Int n) = if   n ==  1  then increment
+                            elif n == -1  then decrement
+                                          else :accumulate(n);
+
+
+Int variation(PolyMsg msg) =
+  increment       = 1,
+  decrement       = -1,
+  accumulate(n?)  = n;
+
+
+PolyMsg sequential_combine(PolyMsg msg1, PolyMsg msg2) =
+  _,            reset()   = msg2,
+  reset(x?),    _         = :reset(x + variation(msg2)),
+  _,            _         = accumulate(variation(msg1) + variation(msg2));
+
+////////////////////////////////////////////////////////////////////////////////
+
+schema PolymorphicMethodsInnerCounter {
+  a_counter : Int = 0;
+}
+
+
+PolymorphicMethodsInnerCounter.Reset {
+  run(self);
+}
+
+PolymorphicMethodsInnerCounter.Incr {
+  set a_counter = _add_(a_counter, 1);
+}
+
+PolymorphicMethodsInnerCounter.Decr {
+  set a_counter = _sub_(a_counter, 1);
+}
+
+PolymorphicMethodsInnerCounter.Acc {
+  run(self);
+}
+
+
+using PolymorphicMethodsInnerCounter {
+  run(Reset msg) {
+    set a_counter = _untag_(msg);
+  }
+
+  run(Incr msg) {
+    set a_counter = _add_(a_counter, 1);
+  }
+
+  run(Decr msg) {
+    set a_counter = _sub_(a_counter, 1);
+  }
+
+  run(Acc msg) {
+    set a_counter = _add_(a_counter, _untag_(msg));
+  }
+
+  reset() {
+    set a_counter = 0;
+  }
+
+  set_counter(Nat value) {
+    set a_counter = value;
+  }
+}
+
+
+reactive PolymorphicMethodsSomeCounter {
+  input:
+    an_input : Ta;
+    msg*     : <Reset, Incr, Decr, Acc>;
+
+  output:
+    a_counter : Int;
+
+  state:
+    inner_counter : PolymorphicMethodsInnerCounter;
+
+  rules:
+    other_msg := :accumulate(2) when an_input == :a1 or an_input == :a3 or an_input == :a5;
+
+    final_msg := msg : msg, not other_msg;
+    final_msg := other_msg : other_msg, not msg;
+    final_msg := sequential_combine(other_msg, msg);
+
+    inner_counter <- final_msg;
+
+    a_counter = inner_counter.a_counter;
+}
+
+
+reactive PolymorphicMethods1 {
+  input:
+    my_input : Ta;
+
+  output:
+    my_counter     : Nat;
+    nested_counter : Int;
+
+  state:
+    my_counter : Nat = 0;
+
+  rules:
+    maybe_msg = match (my_input)
+      a0  = just(accumulate(100)),
+      a2  = just(decrement),
+      a4  = just(increment),
+      a6  = just(reset),
+      _   = nothing;
+
+    msg := value(maybe_msg) when maybe_msg != nothing;
+    na = PolymorphicMethodsSomeCounter(an_input=my_input, msg=msg);
+
+    my_counter = nat(_add_(my_counter, 1)) when my_input == :a1 or my_input == :a4;
+
+    nested_counter = na.a_counter;
+}
+
+
+reactive PolymorphicMethods2 {
+  input:
+    my_input : Ta;
+
+  output:
+    my_counter     : Nat;
+    nested_counter : Int;
+
+  state:
+    my_counter : Nat = 0;
+
+  rules:
+    msg := match (my_input)
+        a0  = accumulate(100),
+        a2  = decrement,
+        a4  = increment,
+        a6  = reset
+      if my_input :: <a0, a2, a4, a6> : my_input;
+
+    na = PolymorphicMethodsSomeCounter(an_input=my_input, msg=msg);
+
+    my_counter = nat(_add_(my_counter, 1)) when my_input == :a1 or my_input == :a4;
+
+    nested_counter = na.a_counter;
+}
+
+
+(Ta, Int, Int)* polymorphic_methods_test_data_1 = (
+  (:a0,   0,     0),
+  (:a1,   1,     2),
+  (:a2,   1,     1),
+  (:a3,   1,     3),
+  (:a4,   2,     4),
+  (:a5,   2,     6),
+  (:a6,   2,     0),
+  (:a7,   2,     0),
+  (:a0,   2,   100),
+  (:a1,   3,   102),
+  (:a2,   3,   101),
+  (:a3,   3,   103),
+  (:a4,   4,   104),
+  (:a5,   4,   106),
+  (:a6,   4,     0)
+);
+
+
+(Ta, Int, Int)* polymorphic_methods_test_data_2 = (
+  (:a0,   0,     0),
+  (:a2,   0,     0),
+  (:a4,   1,     0),
+  (:a6,   1,     0),
+  (:a7,   1,     0),
+  (:a0,   1,   100),
+  (:a2,   1,   100),
+  (:a4,   2,   100),
+  (:a6,   2,   100)
+);
+
+
+(Ta, Int, Int)* polymorphic_methods_test_data_3 = (
+  (:a0,   0,         0),
+  (:a2,   0,  _neg_(1)),
+  (:a4,   1,         0),
+  (:a6,   1,         0),
+  (:a7,   1,         0),
+  (:a0,   1,       100),
+  (:a2,   1,        99),
+  (:a4,   2,       100),
+  (:a6,   2,         0)
+);
+
+
+Bool RunPolymorphicMethodsTestA((Ta, Int, Int)* test_data) {
+  ta : PolymorphicMethods1;
+
+  for input, ec, enc <- test_data:
+    ta.my_input = input;
+    done = apply ta;
+    assert done;
+
+    if ta.my_counter != ec or ta.nested_counter != enc:
+      Print("ERROR\n");
+      print (input, ec, enc);
+      print ta.my_counter;
+      print ta.nested_counter;
+      return false;
+    // else
+    //   Print("OK\n");
+    ;
+  ;
+  return true;
+}
+
+
+Bool RunPolymorphicMethodsTestB((Ta, Int, Int)* test_data) {
+  ta : PolymorphicMethods2;
+
+  for input, ec, enc <- test_data:
+    ta.my_input = input;
+    done = apply ta;
+    assert done;
+
+    if ta.my_counter != ec or ta.nested_counter != enc:
+      Print("ERROR\n");
+      print (input, ec, enc);
+      print ta.my_counter;
+      print ta.nested_counter;
+      return false;
+    // else
+    //   Print("OK\n");
+    ;
+  ;
+  return true;
+}
+
+
+Bool RunAllPolymorphicMethodsTests() {
+  ok = RunPolymorphicMethodsTestA(polymorphic_methods_test_data_1);
+  return false if not ok;
+  ok = RunPolymorphicMethodsTestA(polymorphic_methods_test_data_2);
+  return false if not ok;
+  ok = RunPolymorphicMethodsTestB(polymorphic_methods_test_data_1);
+  return false if not ok;
+  ok = RunPolymorphicMethodsTestB(polymorphic_methods_test_data_3);
+  return ok;
+}

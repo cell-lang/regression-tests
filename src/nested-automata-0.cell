@@ -1,0 +1,59 @@
+reactive FullHistory {
+  input:
+    input : Ta;
+
+  output:
+    history : Ta+;
+
+  state:
+    history : Ta+ = (input);
+
+  rules:
+    history = (history | input) : input;
+}
+
+
+reactive FullHistoryClient {
+  input:
+    i : Ta;
+
+  output:
+    h  : Ta+;
+    hs : Nat;
+
+  rules:
+    ha = FullHistory(input = i);
+    h = ha.history;
+
+    hs = |h|;
+}
+
+
+Ta* full_history_test_data = (:a0, :a1, :a2, :a3, :a4, :a0, :a1, :a2, :a3, :a4);
+
+
+Bool RunAllFullHistoryTests() {
+  fhc : FullHistoryClient;
+
+  eh = ();
+  ehs = 0;
+
+  for i <- full_history_test_data:
+    eh = (eh | i);
+    ehs = _add_(ehs, 1);
+    fhc.i = i;
+    done = apply fhc;
+    assert done;
+    if fhc.h != eh or fhc.hs != ehs:
+      Print("ERROR!\n");
+      print fhc.h;
+      print fhc.hs;
+      print (eh, ehs);
+      return false;
+    // else
+    //   Print("OK\n");
+    ;
+  ;
+
+  return true;
+}

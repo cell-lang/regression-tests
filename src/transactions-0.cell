@@ -1,0 +1,67 @@
+schema IntSM {
+  state1 : Int = 0;
+  state2 : Int = 0;
+}
+
+IntSM.incr1 {
+  set state1 = _add_(state1, 1);
+}
+
+IntSM.incr2 {
+  set state2 = _add_(state2, 1);
+}
+
+IntSM.do {
+  set state1 = -1;
+  set state1 = -2;
+}
+
+
+schema CompSM {
+  nested : IntSM;
+}
+
+CompSM.do {
+  nested <- :incr1;
+  nested <- :incr2;
+}
+
+
+// reactive WrapperA {
+//   input:
+//     signal1 : <none>;
+//     signal2 : <none>;
+
+//   output:
+//     state1 : Int;
+//     state2 : Int;
+
+//   state:
+//     nested : IntSM;
+
+//   rules:
+//     nested <- :incr1 : signal1;
+//     // nested <- :incr2 : signal2;
+
+//     state1 = nested.state1;
+//     state2 = nested.state2;
+// }
+
+Bool RunAllTransaction0Tests() {
+  int_sm   : IntSM;
+  comp_sm  : CompSM;
+
+  ok = int_sm <- :do;
+  if ok or int_sm.state1 != 0 or int_sm.state2 != 0:
+    Print("ERROR\n");
+    return false;
+  ;
+
+  ok = comp_sm <- :do;
+  if ok or comp_sm.nested.state1 != 0 or comp_sm.nested.state2 != 0:
+    Print("ERROR\n");
+    return false;
+  ;
+
+  return true;
+}
