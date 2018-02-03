@@ -330,20 +330,20 @@ public static class TrAutoA_Tests {
       Console.Write("({0}, {1:0.00000}) ", symb_float_pairs[i].Item1, symb_float_pairs[i].Item2);
     Console.WriteLine("\n");
 
-    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("010", "(false, true, false)") ? 1 : 0);
-    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("100110", "(true, false, false, true, true, false)") ? 1 : 0);
-    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("", "()") ? 1 : 0);
-    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("010", "(false, true)") ? 1 : 0);
-    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("100110", "(true, false, false)") ? 1 : 0);
-    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("010", "(true, false, false, true, true, false)") ? 1 : 0);
-    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("100110", "(false, true, false)") ? 1 : 0);
+    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("010", new bool[] {false, true, false}) ? 1 : 0);
+    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("100110", new bool[] {true, false, false, true, true, false}) ? 1 : 0);
+    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("", new bool[0]) ? 1 : 0);
+    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("010", new bool[] {false, true}) ? 1 : 0);
+    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("100110", new bool[] {true, false, false}) ? 1 : 0);
+    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("010", new bool[] {true, false, false, true, true, false}) ? 1 : 0);
+    Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("100110", new bool[] {false, true, false}) ? 1 : 0);
 
     val = testDb.Get_An_int_to_symb_map_var();
     Console.WriteLine("\n" + val.ToString() + "\n");
 
     Console.Write("msecs(123) -> ");
     try {
-      longs = testDb.Lookup_An_int_seq_time_span_binary_rel("msecs(123)");
+      longs = testDb.Lookup_An_int_seq_time_span_binary_rel(123);
       Console.Write("(");
       for (int i=0 ; i < longs.Length ; i++)
         Console.Write((i > 0 ? ", " : "") + longs[i]);
@@ -364,9 +364,9 @@ public static class TrAutoA_Tests {
     }
     Console.WriteLine("");
 
-    Console.Write((testDb.In_An_int_string_float_seq_ternary_rel(0, "pi - e", "(3.14159, 2.71828)") ? 1 : 0) + " ");
-    Console.Write((testDb.In_An_int_string_float_seq_ternary_rel(0, "sqrt(2) - sqrt(3)", "(1.41421, 1.73205)") ? 1 : 0) + " ");
-    Console.WriteLine(testDb.In_An_int_string_float_seq_ternary_rel(0, "sqrt(2) - sqrt(3)", "(141421e-5, 173205e-5)") ? 1 : 0);
+    Console.Write((testDb.In_An_int_string_float_seq_ternary_rel(0, "pi - e", new double[] {3.14159, 2.71828}) ? 1 : 0) + " ");
+    Console.Write((testDb.In_An_int_string_float_seq_ternary_rel(0, "sqrt(2) - sqrt(3)", new double[] {1.41421, 1.73205}) ? 1 : 0) + " ");
+    Console.WriteLine(testDb.In_An_int_string_float_seq_ternary_rel(0, "sqrt(2) - sqrt(3)", new double[] {141421e-5, 173205e-5}) ? 1 : 0);
     Console.WriteLine("");
 
     Tuple<string, long, bool[]>[] triplev_S_I_BS = testDb.Get_A_symb_int_bool_seq_ternary_rel();
@@ -379,15 +379,15 @@ public static class TrAutoA_Tests {
     }
     Console.WriteLine("");
 
-    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("one",   1, "(true)") ? 1 : 0) + " ");
-    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("two",   2, "(true, false)") ? 1 : 0) + " ");
-    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("three", 3, "(true, true)") ? 1 : 0) + " ");
-    Console.WriteLine((testDb.In_A_symb_int_bool_seq_ternary_rel("four",  4, "(true, false, false)") ? 1 : 0) + " ");
+    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("one",   1, new bool[] {true}) ? 1 : 0) + " ");
+    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("two",   2, new bool[] {true, false}) ? 1 : 0) + " ");
+    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("three", 3, new bool[] {true, true}) ? 1 : 0) + " ");
+    Console.WriteLine((testDb.In_A_symb_int_bool_seq_ternary_rel("four",  4, new bool[] {true, false, false}) ? 1 : 0) + " ");
 
-    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("(true)", 1, "one") ? 1 : 0) + " ");
-    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("two",    2, "(false, false)") ? 1 : 0) + " ");
-    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("three",  3, "(true)") ? 1 : 0) + " ");
-    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("four",   5, "(true, false, false)") ? 1 : 0) + " ");
+    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("(true)", 1, new bool[] {true}) ? 1 : 0) + " ");
+    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("two",    2, new bool[] {false, false}) ? 1 : 0) + " ");
+    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("three",  3, new bool[] {true}) ? 1 : 0) + " ");
+    Console.Write((testDb.In_A_symb_int_bool_seq_ternary_rel("four",   5, new bool[] {true, false, false}) ? 1 : 0) + " ");
 
     Console.WriteLine("\n");
 
