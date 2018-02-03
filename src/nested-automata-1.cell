@@ -82,7 +82,7 @@ Bool RunAllNestedAutomata1Tests() {
       print s;
       return false;
     ;
-    if s and {ta.fi != i or ta.fib != (i)}:
+    if s and (ta.fi != i or ta.fib != (i)):
       Print("DISCRETE VALUE ERROR!\n");
       print ta.h;
       print ta.hs;

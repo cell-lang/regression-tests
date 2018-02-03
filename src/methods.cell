@@ -14,10 +14,10 @@ reactive Methods {
     v2 : Any = :l(d2);
 
   rules:
-    v1 = if a == :reapply then :g(:f(@i)) else {a.l1}(:f(@i));
+    v1 = if a == :reapply then :g(:f(@i)) else #(a.l1)(:f(@i));
     v1 = :p(d1) if i == :a3 : i, not a;
 
-    v2 = if a == :reapply then :l(:h(@v1)) else {a.l2}(:h(@v1));
+    v2 = if a == :reapply then :l(:h(@v1)) else #(a.l2)(:h(@v1));
     v2 = :q(d2) if i == :a4 : i, not a;
 
     d1 = :f(i);
@@ -119,7 +119,7 @@ Bool RunBasicMethodTests((Nat, Ta, Any, Any, Any, Any)* test_data) {
     assert done;
     // print (t.v1, t.v2, t.d1, t.d2);
 
-    if not {t.v1 == ev1 and t.v2 == ev2 and t.d1 == ed1 and t.d2 == ed2}:
+    if not (t.v1 == ev1 and t.v2 == ev2 and t.d1 == ed1 and t.d2 == ed2):
       Print("Error\n");
       print (ev1, ev2, ed1, ed2);
       print t.v1;

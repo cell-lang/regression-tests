@@ -127,7 +127,7 @@ using ChatServer0 {
     already_logged_in = core_state.user_names(user, *);
     name_already_taken = core_state.user_ids(name, *);
 
-    core_state <- msg if not {already_logged_in or name_already_taken};
+    core_state <- msg if not (already_logged_in or name_already_taken);
 
     resp_msg = if   already_logged_in    then "ERROR already logged in"
                elif name_already_taken   then "ERROR name already in use"

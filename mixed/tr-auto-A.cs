@@ -57,7 +57,7 @@ public static class TrAutoA_Tests {
 
     Value[] vals = testDb.Get_A_point_seq_var();
     for (int i=0 ; i < vals.Length ; i++)
-      Console.Write("{0} ", vals[i].Printed());
+      Console.Write("{0} ", vals[i].ToString());
     Console.WriteLine("");
 
     long x = testDb.Get_A_point_var().Lookup("x").AsLong();
@@ -79,7 +79,7 @@ public static class TrAutoA_Tests {
     Console.WriteLine("");
 
     val = testDb.Get_An_any_point_var();
-    Console.WriteLine(val.Printed());
+    Console.WriteLine(val.ToString());
 
     val = testDb.Get_A_rect_var();
     double width = val.Lookup("width").AsDouble();
@@ -88,7 +88,7 @@ public static class TrAutoA_Tests {
     x = val.Lookup("bottom_left").Lookup("x").AsLong();
     y = val.Lookup("bottom_left").Lookup("y").AsLong();
     Console.WriteLine("(bottom_left: {0}, x: {1}, y: {2}, width: {3:0.000000}, height: {4:0.000000}, color: {5})\n",
-      val.Lookup("bottom_left").Printed(), x, y, width, height, color);
+      val.Lookup("bottom_left").ToString(), x, y, width, height, color);
 
     int[] elems = new int[] {0, 1, -1, 100, -1000, 2, -2, 10, -100, 1000};
     for (int i=0 ; i < 10 ; i++)
@@ -128,7 +128,7 @@ public static class TrAutoA_Tests {
     Console.Write("[");
     vals = testDb.Get_An_any_point_unary_rel();
     for (int i=0 ; i < vals.Length ; i++)
-      Console.Write("{0}{1}", i == 0 ? "" : ", ", vals[i].Printed());
+      Console.Write("{0}{1}", i == 0 ? "" : ", ", vals[i].ToString());
     Console.WriteLine("]\n");
 
     //////////////////////////////////////////////////////////////////////////////
@@ -263,10 +263,10 @@ public static class TrAutoA_Tests {
     // Console.WriteLine("sqrt(2) = %8s %s", testDb.Call_Lookup("141421e-5"), testDb.Call_Lookup("sqrt2"));
     // Console.WriteLine("sqrt(3) = %8s %s", testDb.Call_Lookup("173205e-5"), testDb.Call_Lookup("sqrt3"));
 
-    Console.WriteLine("pi      = {0,8} {1:0.00000}", testDb.Call_Lookup("3.14159").Printed(), testDb.Call_Lookup("pi").Printed());
-    Console.WriteLine("e       = {0,8} {1:0.00000}", testDb.Call_Lookup("2.71828").Printed(), testDb.Call_Lookup("e").Printed());
-    Console.WriteLine("sqrt(2) = {0,8} {1:0.00000}", testDb.Call_Lookup("1.41421").Printed(), testDb.Call_Lookup("sqrt2").Printed());
-    Console.WriteLine("sqrt(3) = {0,8} {1:0.00000}", testDb.Call_Lookup("1.73205").Printed(), testDb.Call_Lookup("sqrt3").Printed());
+    Console.WriteLine("pi      = {0,8} {1:0.00000}", testDb.Call_Lookup("3.14159").ToString(), testDb.Call_Lookup("pi").ToString());
+    Console.WriteLine("e       = {0,8} {1:0.00000}", testDb.Call_Lookup("2.71828").ToString(), testDb.Call_Lookup("e").ToString());
+    Console.WriteLine("sqrt(2) = {0,8} {1:0.00000}", testDb.Call_Lookup("1.41421").ToString(), testDb.Call_Lookup("sqrt2").ToString());
+    Console.WriteLine("sqrt(3) = {0,8} {1:0.00000}", testDb.Call_Lookup("1.73205").ToString(), testDb.Call_Lookup("sqrt3").ToString());
 
     // testDb.Call_Lookup("314159e-5");
 
@@ -288,11 +288,11 @@ public static class TrAutoA_Tests {
     Console.WriteLine("{0} -> {1}",      2, testDb.Call_Lookup_by_int(2) ? "true" : "false");
     Console.WriteLine("{0} -> {1}", -72305, testDb.Call_Lookup_by_int(-72305) ? "true" : "false");
 
-    Console.WriteLine("{0} -> {1}",      0, testDb.Call_Lookup("0").Printed());
-    Console.WriteLine("{0} -> {1}",      1, testDb.Call_Lookup("1").Printed());
-    Console.WriteLine("{0} -> {1}",     -1, testDb.Call_Lookup("-1").Printed());
-    Console.WriteLine("{0} -> {1}",      2, testDb.Call_Lookup("2").Printed());
-    Console.WriteLine("{0} -> {1}", -72305, testDb.Call_Lookup("-72305").Printed());
+    Console.WriteLine("{0} -> {1}",      0, testDb.Call_Lookup("0").ToString());
+    Console.WriteLine("{0} -> {1}",      1, testDb.Call_Lookup("1").ToString());
+    Console.WriteLine("{0} -> {1}",     -1, testDb.Call_Lookup("-1").ToString());
+    Console.WriteLine("{0} -> {1}",      2, testDb.Call_Lookup("2").ToString());
+    Console.WriteLine("{0} -> {1}", -72305, testDb.Call_Lookup("-72305").ToString());
 
     Console.WriteLine("");
 
@@ -318,10 +318,10 @@ public static class TrAutoA_Tests {
     // Console.WriteLine('"' << testDb.Call_Alt_lookup("(true, false, false, true, true, false)") << '"' << endl;
     // Console.WriteLine('"' << testDb.Call_Alt_lookup("()") << '"' << endl << endl;
 
-    Console.Write(testDb.Call_Alt_lookup("msecs(123)").Printed() + " : ");
-    Console.WriteLine(testDb.Call_Alt_lookup("(0, 1, 2, 3)").Printed());
-    Console.Write(testDb.Call_Alt_lookup("msecs(98765)").Printed() + " : ");
-    Console.WriteLine(testDb.Call_Alt_lookup("(9, 8, 7, 6, 5)").Printed());
+    Console.Write(testDb.Call_Alt_lookup("msecs(123)").ToString() + " : ");
+    Console.WriteLine(testDb.Call_Alt_lookup("(0, 1, 2, 3)").ToString());
+    Console.Write(testDb.Call_Alt_lookup("msecs(98765)").ToString() + " : ");
+    Console.WriteLine(testDb.Call_Alt_lookup("(9, 8, 7, 6, 5)").ToString());
 
     Console.WriteLine("");
 
@@ -339,7 +339,7 @@ public static class TrAutoA_Tests {
     Console.WriteLine(testDb.Call_Has_string_bool_seq_pair("100110", "(false, true, false)") ? 1 : 0);
 
     val = testDb.Get_An_int_to_symb_map_var();
-    Console.WriteLine("\n" + val.Printed() + "\n");
+    Console.WriteLine("\n" + val.ToString() + "\n");
 
     Console.Write("msecs(123) -> ");
     try {

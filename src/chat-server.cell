@@ -54,7 +54,7 @@ String* split_chat_msg(Byte* msg_text) {
     ;
 
     j = 0;
-    while i + j < len and {|fields| == 2 or msg_text(i+j) != ascii_space}:
+    while i + j < len and (|fields| == 2 or msg_text(i+j) != ascii_space):
       j = j + 1;
     ;
 
