@@ -1,4 +1,4 @@
-schema MinTrAuto {
+schema MinRelAuto {
   an_any_point_set_var : [AnyPoint] = [
     point(x: 24, y: 32),
     polar(ro: 2.58, theta: 1.5708),

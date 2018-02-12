@@ -1,4 +1,4 @@
-set_tr_auto_a_state(
+set_rel_auto_a_state(
   a_bool_var: true,
   a_date_var: date(11, 2, 1937),
   a_rect_var: (color: blue, width: 4.16, height: 0.81, bottom_left: point(x: 25, y: 9)),

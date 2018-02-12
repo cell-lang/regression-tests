@@ -1,4 +1,4 @@
-schema TrAutoA {
+schema RelAutoA {
   a_bool_var    : Bool    = false;
   a_symb_var    : Atom    = :none;
   an_int_var    : Int     = 0;
@@ -46,7 +46,7 @@ schema TrAutoA {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-using TrAutoA {
+using RelAutoA {
   Float     lookup_by_symb(Atom symb)           = only([f : f <- a_symb_float_binary_rel(symb, ?)]);
   Atom      lookup_by_float(Float float)        = only([s : s <- a_symb_float_binary_rel(?, float)]);
   Bool      lookup_by_int(Int int)              = only([b : b <- a_bool_int_binary_rel(?, int)]);
@@ -70,13 +70,13 @@ using TrAutoA {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TrAutoA.my_msg {
+RelAutoA.my_msg {
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-type SetTrAutoAState = set_tr_auto_a_state(
+type SetRelAutoAState = set_rel_auto_a_state(
   a_bool_var    : Bool,
   a_symb_var    : Atom,
   an_int_var    : Int,
@@ -123,7 +123,7 @@ type SetTrAutoAState = set_tr_auto_a_state(
 );
 
 
-TrAutoA.SetTrAutoAState {
+RelAutoA.SetRelAutoAState {
   set a_bool_var             = self.a_bool_var;
   set a_symb_var             = self.a_symb_var;
   set an_int_var             = self.an_int_var;

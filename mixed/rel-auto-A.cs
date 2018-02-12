@@ -4,12 +4,12 @@ using System.IO;
 using CellLang;
 
 
-public static class TrAutoA_Tests {
+public static class RelAutoA_Tests {
   public static void Run(string file, bool setState) {
-    Generated.TrAutoA testDb = new Generated.TrAutoA();
+    Generated.RelAutoA testDb = new Generated.RelAutoA();
 
     if (file != null) {
-      string content = System.IO.File.ReadAllText(file);
+      string content = File.ReadAllText(file);
       if (setState)
         testDb.SetState(content);
       else
@@ -398,23 +398,5 @@ public static class TrAutoA_Tests {
 
     state.Print(stdOutWriter);
     Console.WriteLine("\n");
-  }
-
-
-  public static void Main(string[] args) {
-    if (args.Length != 1) {
-      Console.WriteLine("Usage: <executable> <directory>");
-      return;
-    }
-
-    Run(args[0] + "/state-A0.txt", true);
-
-    Console.Write("\n\n");
-    for (int i=0 ; i < 80 ; i++)
-      Console.Write("#");
-    Console.WriteLine("\n\n");
-
-    Run(args[0] + "/msg-A0.txt", false);
-    Console.WriteLine("");
   }
 }

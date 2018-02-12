@@ -1,0 +1,76 @@
+reactive ReactAutoA {
+  input:
+    a_bool_input    : Bool;
+    a_symb_input    : Atom;
+    an_int_input    : Int;
+    a_float_input   : Float;
+    a_string_input  : String;
+
+    a_time_span_input : TimeSpan;
+
+    a_rect_input        : Rect;
+    a_date_rec_input    : DateRec;
+    a_date_input        : Date;
+    a_point_input       : Point;
+    an_any_point_input  : AnyPoint;
+
+    a_tuple_input : (Float, String, Int*);
+
+    a_bool_seq_input      : Bool*;
+    an_int_seq_input      : Int*;
+    a_float_seq_input     : Float*;
+    a_point_seq_input     : Point*;
+    a_time_span_seq_input : TimeSpan*;
+
+    an_int_to_symb_map_input  : [Int -> Atom];
+
+  output:
+    a_bool_output    : Bool;
+    a_symb_output    : Atom;
+    an_int_output    : Int;
+    a_float_output   : Float;
+    a_string_output  : String;
+
+    a_time_span_output : TimeSpan;
+
+    a_rect_output        : Rect;
+    a_date_rec_output    : DateRec;
+    a_date_output        : Date;
+    a_point_output       : Point;
+    an_any_point_output  : AnyPoint;
+
+    a_tuple_output : (Float, String, Int*);
+
+    a_bool_seq_output      : Bool*;
+    an_int_seq_output      : Int*;
+    a_float_seq_output     : Float*;
+    a_point_seq_output     : Point*;
+    a_time_span_seq_output : TimeSpan*;
+
+    an_int_to_symb_map_output  : [Int -> Atom];
+
+  rules:
+    a_bool_output   = a_bool_input;
+    a_symb_output   = a_symb_input;
+    an_int_output   = an_int_input;
+    a_float_output  = a_float_input;
+    a_string_output = a_string_input;
+
+    a_time_span_output = a_time_span_input;
+
+    a_rect_output       = a_rect_input;
+    a_date_rec_output   = a_date_rec_input;
+    a_date_output       = a_date_input;
+    a_point_output      = a_point_input;
+    an_any_point_output = an_any_point_input;
+
+    a_tuple_output = a_tuple_input;
+
+    a_bool_seq_output      = a_bool_seq_input;
+    an_int_seq_output      = an_int_seq_input;
+    a_float_seq_output     = a_float_seq_input;
+    a_point_seq_output     = a_point_seq_input;
+    a_time_span_seq_output = a_time_span_seq_input;
+
+    an_int_to_symb_map_output = an_int_to_symb_map_input;
+}
