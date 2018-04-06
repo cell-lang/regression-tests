@@ -7,7 +7,7 @@ unsigned int get_max_live_objs_count();
 unsigned int get_total_objs_count();
 
 
-void run_TrAutoA_tests(const char *file, bool set_state);
+void run_RelAutoA_tests(const char *file, bool set_state);
 
 
 int main(int argc, char **argv) {
@@ -19,12 +19,12 @@ int main(int argc, char **argv) {
   }
 
   sprintf(filename, "%s/state-A0.txt", argv[1]);
-  run_TrAutoA_tests(filename, true);
+  run_RelAutoA_tests(filename, true);
 
   cout << "\n\n" << string(80, '#') << "\n\n" << endl;
 
   sprintf(filename, "%s/msg-A0.txt", argv[1]);
-  run_TrAutoA_tests(filename, false);
+  run_RelAutoA_tests(filename, false);
 
   cout << "\n\n" << endl;
 

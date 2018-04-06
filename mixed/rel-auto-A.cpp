@@ -1,10 +1,10 @@
 #include "common.h"
 
-using generated::TrAutoA;
+using generated::RelAutoA;
 
 
-void run_TrAutoA_tests(const char *file, bool set_state) {
-  TrAutoA test_db;
+void run_RelAutoA_tests(const char *file, bool set_state) {
+  RelAutoA test_db;
 
   if (file != NULL) {
     char buffer[65536];
