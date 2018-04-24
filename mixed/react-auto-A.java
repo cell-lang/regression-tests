@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 class ReactAutoA_Tests {
   public static void run() {
-    Generated.ReactAutoA testAuto = new Generated.ReactAutoA();
+    ReactAutoA testAuto = new ReactAutoA();
 
     boolean aBool = true;
     String aSymb = "my_symbol";
@@ -20,41 +20,41 @@ class ReactAutoA_Tests {
     long[] aTimeSpanSeq = new long[] {60, 3600, 86420};
     String anIntToSymbMap = "[0 -> zero, 1 -> one, 2 -> two, 3 -> three]";
 
-    Generated.Rect aRect = new Generated.Rect();
-    aRect.color = Generated.Blue.singleton;
+    Rect aRect = new Rect();
+    aRect.color = Blue.singleton;
     aRect.width = 4.16;
     aRect.height = 0.81;
-    aRect.bottomLeft = new Generated.Point();
+    aRect.bottomLeft = new Point();
     aRect.bottomLeft.x = 25;
     aRect.bottomLeft.y = 9;
 
-    Generated.DateRec aDateRec = new Generated.DateRec();
+    DateRec aDateRec = new DateRec();
     aDateRec.day = 15;
     aDateRec.month = 3;
     aDateRec.year = 2007;
 
-    Generated.Date aDate = new Generated.Date();
-    aDate.item0 = 5;
-    aDate.item1 = 2;
-    aDate.item2 = 2018;
+    Date aDate = new Date();
+    aDate.item1 = 5;
+    aDate.item2 = 2;
+    aDate.item3 = 2018;
 
-    Generated.Point aPoint = new Generated.Point();
+    Point aPoint = new Point();
     aPoint.x = 12;
     aPoint.y = 7;
 
-    Generated.Polar aPolar = new Generated.Polar();
+    Polar aPolar = new Polar();
     aPolar.ro = 6.28318;
     aPolar.theta = 1.73205;
     // anAnyPoint = "polar(ro: 6.28318, theta: 1.73205)";
 
-    Generated.Double_String_Long_Seq aTuple = new Generated.Double_String_Long_Seq();
-    aTuple.item0 = 2.71828;
-    aTuple.item1 = "It's easy if you try...";
-    aTuple.item2 = new long[] {1, 1, 2, 6, 24};
+    Double_String_Long_Seq aTuple = new Double_String_Long_Seq();
+    aTuple.item1 = 2.71828;
+    aTuple.item2 = "It's easy if you try...";
+    aTuple.item3 = new long[] {1, 1, 2, 6, 24};
 
-    Generated.Point[] aPointSeq = new Generated.Point[3];
+    Point[] aPointSeq = new Point[3];
     for (int i=0 ; i < aPointSeq.length ; i++)
-      aPointSeq[i] = new Generated.Point();
+      aPointSeq[i] = new Point();
     aPointSeq[0].x = 0;
     aPointSeq[0].y = 0;
     aPointSeq[1].x = 1;
@@ -70,24 +70,24 @@ class ReactAutoA_Tests {
     // var aTuple = new Tuple<double, String, long[]>(2.71828, "It's easy if you try...", new long[] {1, 1, 2, 6, 24});
     // String[] aPointSeq = new String[] {"point(x: 0, y: 0)", "point(x: 1, y: 1)", "point(x: 2, y: 4)"};
 
-    testAuto.aBoolInput(aBool);
-    testAuto.aSymbInput(aSymb);
-    testAuto.anIntInput(anInt);
-    testAuto.aFloatInput(aFloat);
-    testAuto.aStringInput(aString);
-    testAuto.aTimeSpanInput(aTimeSpan);
-    testAuto.aRectInput(aRect);
-    testAuto.aDateRecInput(aDateRec);
-    testAuto.aDateInput(aDate);
-    testAuto.aPointInput(aPoint);
-    testAuto.anAnyPointInput(aPolar);
-    testAuto.aTupleInput(aTuple);
-    testAuto.aBoolSeqInput(aBoolSeq);
-    testAuto.anIntSeqInput(anIntSeq);
-    testAuto.aFloatSeqInput(aFloatSeq);
-    testAuto.aPointSeqInput(aPointSeq);
-    testAuto.aTimeSpanSeqInput(aTimeSpanSeq);
-    testAuto.anIntToSymbMapInput(anIntToSymbMap);
+    testAuto.setABoolInput(aBool);
+    testAuto.setASymbInput(aSymb);
+    testAuto.setAnIntInput(anInt);
+    testAuto.setAFloatInput(aFloat);
+    testAuto.setAStringInput(aString);
+    testAuto.setATimeSpanInput(aTimeSpan);
+    testAuto.setARectInput(aRect);
+    testAuto.setADateRecInput(aDateRec);
+    testAuto.setADateInput(aDate);
+    testAuto.setAPointInput(aPoint);
+    testAuto.setAnAnyPointInput(aPolar);
+    testAuto.setATupleInput(aTuple);
+    testAuto.setABoolSeqInput(aBoolSeq);
+    testAuto.setAnIntSeqInput(anIntSeq);
+    testAuto.setAFloatSeqInput(aFloatSeq);
+    testAuto.setAPointSeqInput(aPointSeq);
+    testAuto.setATimeSpanSeqInput(aTimeSpanSeq);
+    testAuto.setAnIntToSymbMapInput(anIntToSymbMap);
 
     testAuto.apply();
 
@@ -128,37 +128,37 @@ class ReactAutoA_Tests {
       return;
     }
 
-    Generated.Rect aRectOutput = testAuto.aRectOutput();
+    Rect aRectOutput = testAuto.aRectOutput();
     if (!aRectOutput.toString().equals(aRect.toString())) {
       System.out.printf("ERROR: ARectOutput = %s, aRect = %s\n", aRectOutput.toString(), aRect.toString());
       return;
     }
 
-    Generated.DateRec aDateRecOutput = testAuto.aDateRecOutput();
+    DateRec aDateRecOutput = testAuto.aDateRecOutput();
     if (!aDateRecOutput.toString().equals(aDateRec.toString())) {
       System.out.printf("ERROR: aDateRecOutput = %s, aDateRec = %s\n", aDateRecOutput.toString(), aDateRec.toString());
       return;
     }
 
-    Generated.Date aDateOutput = testAuto.aDateOutput();
-    if (aDateOutput.item0 != aDate.item0 || aDateOutput.item1 != aDate.item1 || aDateOutput.item2 != aDate.item2) {
+    Date aDateOutput = testAuto.aDateOutput();
+    if (aDateOutput.item1 != aDate.item1 || aDateOutput.item2 != aDate.item2 || aDateOutput.item3 != aDate.item3) {
       System.out.printf("ERROR: aDateOutput = %s, aDate = %s\n", aDateOutput.toString(), aDate.toString());
       return;
     }
 
-    Generated.Point aPointOutput = testAuto.aPointOutput();
+    Point aPointOutput = testAuto.aPointOutput();
     if (!aPointOutput.toString().equals(aPoint.toString())) {
       System.out.printf("ERROR: aPointOutput = %s, aPoint = %s\n", aPointOutput.toString(), aPoint.toString());
       return;
     }
 
-    Generated.AnyPoint anAnyPointOutput = testAuto.anAnyPointOutput();
+    AnyPoint anAnyPointOutput = testAuto.anAnyPointOutput();
     if (!anAnyPointOutput.toString().equals(aPolar.toString())) {
       System.out.printf("ERROR: anAnyPointOutput = %s, anAnyPoint = %s\n", anAnyPointOutput.toString(), aPolar.toString());
       return;
     }
 
-    Generated.Double_String_Long_Seq aTupleOutput = testAuto.aTupleOutput();
+    Double_String_Long_Seq aTupleOutput = testAuto.aTupleOutput();
     if (!aTupleOutput.toString().equals(aTuple.toString())) {
       System.out.printf("ERROR: aTupleOutput = %s, aTuple = %s\n", aTupleOutput.toString(), aTuple.toString());
       return;
@@ -182,7 +182,7 @@ class ReactAutoA_Tests {
       return;
     }
 
-    Generated.Point[] aPointSeqOutput = testAuto.aPointSeqOutput();
+    Point[] aPointSeqOutput = testAuto.aPointSeqOutput();
     if (!cellEquals(aPointSeqOutput, aPointSeq)) {
       // System.out.printf("ERROR: aPointSeqOutput = %s, aPointSeq = %s\n", aPointSeqOutput.toString(), aPointSeq.toString());
       System.out.println("ERROR: aPointSeqOutput != aPointSeq");

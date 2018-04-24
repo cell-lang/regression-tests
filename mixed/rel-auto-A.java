@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 
 class RelAutoA_Tests {
   public static void run(String file, boolean setState) throws IOException {
-    Generated.RelAutoA testDb = new Generated.RelAutoA();
+    RelAutoA testDb = new RelAutoA();
 
     if (file != null) {
       String content = new String(Files.readAllBytes(Paths.get(file)));
@@ -41,36 +41,36 @@ class RelAutoA_Tests {
       System.out.printf("%.6f ", doubles[i]);
     System.out.println("\n");
 
-    Generated.Double_String_Long_Seq tuple_3A = testDb.aTupleVar();
-    double f0 = tuple_3A.item0;
-    str = tuple_3A.item1;
-    longs = tuple_3A.item2;
+    Double_String_Long_Seq tuple_3A = testDb.aTupleVar();
+    double f0 = tuple_3A.item1;
+    str = tuple_3A.item2;
+    longs = tuple_3A.item3;
 
     System.out.printf("%.6f - %s -", f0, str);
     for (int i=0 ; i < longs.length ; i++)
       System.out.printf(" %d", longs[i]);
     System.out.println("");
 
-    Generated.DateRec aDateRec = testDb.aDateRecVar();
+    DateRec aDateRec = testDb.aDateRecVar();
     long day = aDateRec.day;
     long month = aDateRec.month;
     long year = aDateRec.year;
     System.out.printf("%d/%02d/%d\n\n", day, month, year);
 
-    Generated.Point[] aPointSeq = testDb.aPointSeqVar();
+    Point[] aPointSeq = testDb.aPointSeqVar();
     for (int i=0 ; i < aPointSeq.length ; i++)
       System.out.printf("%s ", aPointSeq[i].toString());
     System.out.println("");
 
-    Generated.Point aPointVar = testDb.aPointVar();
+    Point aPointVar = testDb.aPointVar();
     long x = aPointVar.x;
     long y = aPointVar.y;
     System.out.println(aPointVar.toString());
 
-    Generated.Date date = testDb.aDateVar();
-    day = date.item0;
-    month = date.item1;
-    year = date.item2;
+    Date date = testDb.aDateVar();
+    day = date.item1;
+    month = date.item2;
+    year = date.item3;
     System.out.println(date.toString());
 
     long time_span = testDb.aTimeSpanVar();
@@ -81,13 +81,13 @@ class RelAutoA_Tests {
       System.out.printf("msecs(%d) ", longs[i]);
     System.out.println("");
 
-    Generated.AnyPoint anyPoint = testDb.anAnyPointVar();
+    AnyPoint anyPoint = testDb.anAnyPointVar();
     System.out.println(anyPoint.toString());
 
-    Generated.Rect rect = testDb.aRectVar();
+    Rect rect = testDb.aRectVar();
     double width = rect.width;
     double height = rect.height;
-    Generated.Color color = rect.color;
+    Color color = rect.color;
     x = rect.bottomLeft.x;
     y = rect.bottomLeft.y;
     System.out.printf("(bottom_left: %s, x: %d, y: %d, width: %.6f, height: %.6f, color: %s)\n\n",
@@ -129,7 +129,7 @@ class RelAutoA_Tests {
     System.out.println("]\n");
 
     System.out.print("[");
-    Generated.AnyPoint[] anyPointV = testDb.anAnyPointUnaryRel();
+    AnyPoint[] anyPointV = testDb.anAnyPointUnaryRel();
     for (int i=0 ; i < anyPointV.length ; i++)
       System.out.printf("%s%s", i == 0 ? "" : ", ", anyPointV[i].toString());
     System.out.println("]\n");
@@ -327,9 +327,9 @@ class RelAutoA_Tests {
 
     System.out.println("");
 
-    Generated.Value_Double[] symbDoubleV = testDb.symbsAndFloats();
+    Value_Double[] symbDoubleV = testDb.symbsAndFloats();
     for (int i=0 ; i < symbDoubleV.length ; i++)
-      System.out.printf("(%s, %.5f) ", symbDoubleV[i].item0, symbDoubleV[i].item1);
+      System.out.printf("(%s, %.5f) ", symbDoubleV[i].item1, symbDoubleV[i].item2);
     System.out.println("\n");
 
     System.out.println(testDb.hasStringBoolSeqPair("010", new boolean[] {false, true, false}) ? 1 : 0);
