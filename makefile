@@ -31,15 +31,15 @@ tests.jar:
 	mkdir tmp
 	mkdir tmp/gen/
 	java -jar ~/bin/cellc-java.jar project.txt tmp/gen/
-	javac -d tmp/ tmp/gen/*.java
+	# java -jar ../work/cellcd-java-B.jar project.txt tmp/gen/
+	javac -g -d tmp/ tmp/gen/*.java
 	jar cfe tmp/tests.jar net.cell_lang.Generated -C tmp net/
 
 mixed-tests.jar:
-	rm -rf tmp/
-	mkdir tmp
-	mkdir tmp/gen/
+	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
 	java -jar ~/bin/cellc-java.jar mixed/project.txt tmp/gen/
-	javac -d tmp/ tmp/gen/*.java mixed/*.java
+	# java -jar ../work/cellcd-java-B.jar mixed/project.txt tmp/gen/
+	javac -g -d tmp/ tmp/gen/*.java mixed/*.java
 	jar cfe tmp/mixed-tests.jar net.cell_lang.Main -C tmp net
 
 clean:
