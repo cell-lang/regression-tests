@@ -36,7 +36,7 @@ schema PolymorphicMethodsInnerCounter {
 
 
 PolymorphicMethodsInnerCounter.Reset {
-  run(self);
+  run(this);
 }
 
 PolymorphicMethodsInnerCounter.Incr {
@@ -48,7 +48,7 @@ PolymorphicMethodsInnerCounter.Decr {
 }
 
 PolymorphicMethodsInnerCounter.Acc {
-  run(self);
+  run(this);
 }
 
 

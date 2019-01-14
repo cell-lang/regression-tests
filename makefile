@@ -30,15 +30,15 @@ tests.jar:
 	rm -rf tmp/
 	mkdir tmp
 	mkdir tmp/gen/
-	java -jar ~/bin/cellc-java.jar project.txt tmp/gen/
-	# java -jar ../work/cellcd-java-B.jar project.txt tmp/gen/
+	# java -jar ~/bin/cellc-java.jar project.txt tmp/gen/
+	java -jar ../java/bin/cellcd-java.jar project.txt tmp/gen/
 	javac -g -d tmp/ tmp/gen/*.java
 	jar cfe tmp/tests.jar net.cell_lang.Generated -C tmp net/
 
 mixed-tests.jar:
 	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
-	java -jar ~/bin/cellc-java.jar mixed/project.txt tmp/gen/
-	# java -jar ../work/cellcd-java-B.jar mixed/project.txt tmp/gen/
+	# java -jar ~/bin/cellc-java.jar mixed/project.txt tmp/gen/
+	java -jar ../java/bin/cellcd-java.jar mixed/project.txt tmp/gen/
 	javac -g -d tmp/ tmp/gen/*.java mixed/*.java
 	jar cfe tmp/mixed-tests.jar net.cell_lang.Main -C tmp net
 
@@ -46,3 +46,15 @@ clean:
 	@rm -rf tmp/ debug/ generated.* Generated.* dump-*.txt interfaces.txt
 	@mkdir debug
 	@touch debug/stack-trace.txt
+
+################################################################################
+
+update-tests.jar:
+	rm -rf tmp/tests.jar tmp/net
+	javac -g -d tmp/ tmp/gen/*.java
+	jar cfe tmp/tests.jar net.cell_lang.Generated -C tmp net/
+
+update-mixed-tests.jar:
+	rm -f tmp/mixed-tests.jar
+	javac -g -d tmp/ tmp/gen/*.java mixed/*.java
+	jar cfe tmp/mixed-tests.jar net.cell_lang.Main -C tmp net

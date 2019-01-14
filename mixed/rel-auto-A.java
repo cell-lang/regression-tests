@@ -201,9 +201,9 @@ class RelAutoA_Tests {
     System.out.println("");
 
     System.out.print("[");
-    Pair<Value[], double[]> valueDoubleR = testDb.aSymbFloatBinaryRel();
-    for (int i=0 ; i < valueDoubleR.item1.length ; i++)
-      System.out.printf("%s(%s, %.6f)", i == 0 ? "" : ", ", valueDoubleR.item1[i].toString(), valueDoubleR.item2[i]);
+    Value_Double[] valueDoubleR = testDb.aSymbFloatBinaryRel();
+    for (int i=0 ; i < valueDoubleR.length ; i++)
+      System.out.printf("%s(%s, %.6f)", i == 0 ? "" : ", ", valueDoubleR[i].item1.toString(), valueDoubleR[i].item2);
     System.out.println("]\n\n");
 
     String[] symbV = new String[] {"pi", "e", "sqrt2", "sqrt3", "sqrt5", "non-key"};
@@ -230,28 +230,28 @@ class RelAutoA_Tests {
     // }
     // puts("\n");
 
-    Pair<boolean[], long[]> boolLongR = testDb.aBoolIntBinaryRel();
-    for (int i=0 ; i < boolLongR.item1.length ; i++)
-      System.out.printf("(%d, %d) ", boolLongR.item1[i] ? 1 : 0, boolLongR.item2[i]);
+    Bool_Long[] boolLongR = testDb.aBoolIntBinaryRel();
+    for (int i=0 ; i < boolLongR.length ; i++)
+      System.out.printf("(%d, %d) ", boolLongR[i].item1 ? 1 : 0, boolLongR[i].item2);
     System.out.println("");
 
-    Pair<String[], boolean[][]> stringBoolsR = testDb.aStringBoolSeqBinaryRel();
-    for (int i=0 ; i < stringBoolsR.item1.length ; i++) {
-      System.out.printf("(\"%s\", (", stringBoolsR.item1[i]);
-      boolv = stringBoolsR.item2[i];
+    String_Bool_Seq[] stringBoolsR = testDb.aStringBoolSeqBinaryRel();
+    for (int i=0 ; i < stringBoolsR.length ; i++) {
+      System.out.printf("(\"%s\", (", stringBoolsR[i].item1);
+      boolv = stringBoolsR[i].item2;
       for (int j=0 ; j < boolv.length ; j++)
         System.out.printf("%s%d", j > 0 ? ", " : "", boolv[j] ? 1 : 0);
       System.out.print(")) ");
     }
     System.out.println("");
 
-    Pair<long[][], long[]> longsLongR = testDb.anIntSeqTimeSpanBinaryRel();
-    for (int i=0 ; i < longsLongR.item1.length ; i++) {
+    Long_Seq_TimeSpan[] longsLongR = testDb.anIntSeqTimeSpanBinaryRel();
+    for (int i=0 ; i < longsLongR.length ; i++) {
       System.out.print("((");
-      long[] longV = longsLongR.item1[i];
+      long[] longV = longsLongR[i].item1;
       for (int j=0 ; j < longV.length ; j++)
         System.out.printf("%s%d", j > 0 ? ", " : "", longV[j]);
-      System.out.printf("), %d) ", longsLongR.item2[i]);
+      System.out.printf("), %d) ", longsLongR[i].item2);
     }
     System.out.println("\n\n");
 
@@ -343,24 +343,24 @@ class RelAutoA_Tests {
     Value value = testDb.anIntToSymbMapVar();
     System.out.println("\n" + value.toString() + "\n");
 
-    System.out.print("msecs(123) -> ");
-    try {
-      longs = testDb.anIntSeqTimeSpanBinaryRel(123);
-      System.out.print("(");
-      for (int i=0 ; i < longs.length ; i++)
-        System.out.print((i > 0 ? ", " : "") + longs[i]);
-      System.out.println(")");
-    }
-    catch (Exception e) {
-      System.out.println("--");
-    }
-    System.out.println("");
+    // System.out.print("msecs(123) -> ");
+    // try {
+    //   longs = testDb.anIntSeqTimeSpanBinaryRel(123);
+    //   System.out.print("(");
+    //   for (int i=0 ; i < longs.length ; i++)
+    //     System.out.print((i > 0 ? ", " : "") + longs[i]);
+    //   System.out.println(")");
+    // }
+    // catch (Exception e) {
+    //   System.out.println("--");
+    // }
+    // System.out.println("");
 
-    Triplet<long[], String[], double[][]> longStringDoubleR = testDb.anIntStringFloatSeqTernaryRel();
-    for (int i=0 ; i < longStringDoubleR.item1.length ; i++) {
-      System.out.printf("%d, %s, (", longStringDoubleR.item1[i], longStringDoubleR.item2[i]);
-      for (int j=0 ; j < longStringDoubleR.item3[i].length ; j++)
-        System.out.printf("%s%.5f", j > 0 ? ", " : "", longStringDoubleR.item3[i][j]);
+    Long_String_Double_Seq[] longStringDoubleR = testDb.anIntStringFloatSeqTernaryRel();
+    for (int i=0 ; i < longStringDoubleR.length ; i++) {
+      System.out.printf("%d, %s, (", longStringDoubleR[i].item1, longStringDoubleR[i].item2);
+      for (int j=0 ; j < longStringDoubleR[i].item3.length ; j++)
+        System.out.printf("%s%.5f", j > 0 ? ", " : "", longStringDoubleR[i].item3[j]);
       System.out.println(")");
     }
     System.out.println("");
@@ -370,11 +370,11 @@ class RelAutoA_Tests {
     System.out.println(testDb.anIntStringFloatSeqTernaryRel(0, "sqrt(2) - sqrt(3)", new double[] {141421e-5, 173205e-5}) ? 1 : 0);
     System.out.println("");
 
-    Triplet<Value[], long[], boolean[][]> stringLongBoolsR = testDb.aSymbIntBoolSeqTernaryRel();
-    for (int i=0 ; i < stringLongBoolsR.item1.length ; i++) {
-      System.out.printf("%s, %d, (", stringLongBoolsR.item1[i].toString(), stringLongBoolsR.item2[i]);
-      for (int j=0 ; j < stringLongBoolsR.item3[i].length ; j++)
-        System.out.printf("%s%d", j > 0 ? ", " : "", stringLongBoolsR.item3[i][j] ? 1 : 0);
+    Value_Long_Bool_Seq[] stringLongBoolsR = testDb.aSymbIntBoolSeqTernaryRel();
+    for (int i=0 ; i < stringLongBoolsR.length ; i++) {
+      System.out.printf("%s, %d, (", stringLongBoolsR[i].item1.toString(), stringLongBoolsR[i].item2);
+      for (int j=0 ; j < stringLongBoolsR[i].item3.length ; j++)
+        System.out.printf("%s%d", j > 0 ? ", " : "", stringLongBoolsR[i].item3[j] ? 1 : 0);
       System.out.println(")");
     }
     System.out.println("");

@@ -70,24 +70,24 @@ type PopulateFlights = populate_flights(data: FlightsData);
 
 
 Flights.PopulateFlights {
-  delete country(*), code(*, *), name(*, *);
-  for id, code, name <- self.data.countries:
+  delete country(*);
+  for id, code, name <- this.data.countries:
     insert country(id), code(id, code), name(id, name);
   ;
 
-  delete airport(*), name(*, *), location(*, *);
-  for id, name, country <- self.data.airports:
+  delete airport(*);
+  for id, name, country <- this.data.airports:
     insert airport(id), name(id, name), location(id, country);
   ;
 
   delete flight_route(*, *, *);
-  for id, from, to <- self.data.routes:
+  for id, from, to <- this.data.routes:
     insert flight_route(id, from, to);
     insert departing(from, id);
   ;
 
-  delete flight(*), route(*, *), departure(*, *), arrival(*, *), price(*, *);
-  for id, route, departure, arrival, price <- self.data.flights:
+  delete flight(*);
+  for id, route, departure, arrival, price <- this.data.flights:
     insert flight(id), route(id, route), departure(id, departure), arrival(id, arrival), price(id, price);
   ;
 }
@@ -98,10 +98,10 @@ type PopulateTravels = populate_travels(data: TravelsData);
 
 
 Travels.PopulateTravels {
-  set budget = self.data.budget;
-  set favorites = self.data.favorites;
-  set visited = self.data.visited;
-  flights <- populate_flights(data: self.data.flights);
+  set budget = this.data.budget;
+  set favorites = this.data.favorites;
+  set visited = this.data.visited;
+  flights <- populate_flights(data: this.data.flights);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

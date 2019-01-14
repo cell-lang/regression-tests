@@ -18,141 +18,141 @@ schema TernTableColsPerms {
 
 
 TernTableColsPerms.insert_a(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_a(n, s, p);
 }
 
 
 TernTableColsPerms.insert_b(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_b(n, s, p);
 }
 
 
 TernTableColsPerms.insert_c(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_c(n, s, p);
 }
 
 
 TernTableColsPerms.insert_d(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_d(n, s, p);
 }
 
 
 TernTableColsPerms.insert_e(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_e(n, s, p);
 }
 
 
 TernTableColsPerms.insert_f(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_f(n, s, p);
 }
 
 
 TernTableColsPerms.insert_g(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_g(n, s, p);
 }
 
 
 TernTableColsPerms.insert_h(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_h(n, s, p);
 }
 
 
 TernTableColsPerms.insert_i(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_i(n, s, p);
 }
 
 
 TernTableColsPerms.insert_j(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_j(n, s, p);
 }
 
 
 TernTableColsPerms.insert_k(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   insert tern_rel_k(n, s, p);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 TernTableColsPerms.update_a(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_a(n, s, p);
 }
 
 
 TernTableColsPerms.update_b(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_b(n, s, p);
 }
 
 
 TernTableColsPerms.update_c(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_c(n, s, p);
 }
 
 
 TernTableColsPerms.update_d(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_d(n, s, p);
 }
 
 
 TernTableColsPerms.update_e(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_e(n, s, p);
 }
 
 
 TernTableColsPerms.update_f(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_f(n, s, p);
 }
 
 
 TernTableColsPerms.update_g(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_g(n, s, p);
 }
 
 
 TernTableColsPerms.update_h(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_h(n, s, p);
 }
 
 
 TernTableColsPerms.update_i(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_i(n, s, p);
 }
 
 
 TernTableColsPerms.update_j(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_j(n, s, p);
 }
 
 
 TernTableColsPerms.update_k(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
   update tern_rel_k(n, s, p);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 TernTableColsPerms.(Nat, String, Point) {
-  n, s, p = self;
+  n, s, p = this;
 
   insert tern_rel_a(n, s, p);
   insert tern_rel_b(n, s, p);
@@ -169,52 +169,52 @@ TernTableColsPerms.(Nat, String, Point) {
 
 
 TernTableColsPerms.Nat {
-  delete tern_rel_a(self, *, *);
-  delete tern_rel_b(self, *, *);
-  delete tern_rel_c(self, *, *);
-  delete tern_rel_d(self, *, *);
-  delete tern_rel_e(self, *, *);
-  delete tern_rel_f(self, *, *);
-  delete tern_rel_g(self, *, *);
-  delete tern_rel_h(self, *, *);
-  delete tern_rel_i(self, *, *);
-  delete tern_rel_j(self, *, *);
-  delete tern_rel_k(self, *, *);
+  delete tern_rel_a(this, *, *);
+  delete tern_rel_b(this, *, *);
+  delete tern_rel_c(this, *, *);
+  delete tern_rel_d(this, *, *);
+  delete tern_rel_e(this, *, *);
+  delete tern_rel_f(this, *, *);
+  delete tern_rel_g(this, *, *);
+  delete tern_rel_h(this, *, *);
+  delete tern_rel_i(this, *, *);
+  delete tern_rel_j(this, *, *);
+  delete tern_rel_k(this, *, *);
 }
 
 
 TernTableColsPerms.String {
-  delete tern_rel_a(*, self, *);
-  delete tern_rel_b(*, self, *);
-  delete tern_rel_c(*, self, *);
-  delete tern_rel_d(*, self, *);
-  delete tern_rel_e(*, self, *);
-  delete tern_rel_f(*, self, *);
-  delete tern_rel_g(*, self, *);
-  delete tern_rel_h(*, self, *);
-  delete tern_rel_i(*, self, *);
-  delete tern_rel_j(*, self, *);
-  delete tern_rel_k(*, self, *);
+  delete tern_rel_a(*, this, *);
+  delete tern_rel_b(*, this, *);
+  delete tern_rel_c(*, this, *);
+  delete tern_rel_d(*, this, *);
+  delete tern_rel_e(*, this, *);
+  delete tern_rel_f(*, this, *);
+  delete tern_rel_g(*, this, *);
+  delete tern_rel_h(*, this, *);
+  delete tern_rel_i(*, this, *);
+  delete tern_rel_j(*, this, *);
+  delete tern_rel_k(*, this, *);
 }
 
 
 TernTableColsPerms.Point {
-  delete tern_rel_a(*, *, self);
-  delete tern_rel_b(*, *, self);
-  delete tern_rel_c(*, *, self);
-  delete tern_rel_d(*, *, self);
-  delete tern_rel_e(*, *, self);
-  delete tern_rel_f(*, *, self);
-  delete tern_rel_g(*, *, self);
-  delete tern_rel_h(*, *, self);
-  delete tern_rel_i(*, *, self);
-  delete tern_rel_j(*, *, self);
-  delete tern_rel_k(*, *, self);
+  delete tern_rel_a(*, *, this);
+  delete tern_rel_b(*, *, this);
+  delete tern_rel_c(*, *, this);
+  delete tern_rel_d(*, *, this);
+  delete tern_rel_e(*, *, this);
+  delete tern_rel_f(*, *, this);
+  delete tern_rel_g(*, *, this);
+  delete tern_rel_h(*, *, this);
+  delete tern_rel_i(*, *, this);
+  delete tern_rel_j(*, *, this);
+  delete tern_rel_k(*, *, this);
 }
 
 
 TernTableColsPerms.del_01(Nat, String) {
-  n, s = _untag_(self);
+  n, s = _untag_(this);
 
   delete tern_rel_a(n, s, *);
   delete tern_rel_b(n, s, *);
@@ -231,7 +231,7 @@ TernTableColsPerms.del_01(Nat, String) {
 
 
 TernTableColsPerms.del_02(Nat, Point) {
-  n, p = _untag_(self);
+  n, p = _untag_(this);
 
   delete tern_rel_a(n, *, p);
   delete tern_rel_b(n, *, p);
@@ -248,7 +248,7 @@ TernTableColsPerms.del_02(Nat, Point) {
 
 
 TernTableColsPerms.del_12(String, Point) {
-  s, p = _untag_(self);
+  s, p = _untag_(this);
 
   delete tern_rel_a(*, s, p);
   delete tern_rel_b(*, s, p);
@@ -265,7 +265,7 @@ TernTableColsPerms.del_12(String, Point) {
 
 
 TernTableColsPerms.del_012(Nat, String, Point) {
-  n, s, p = _untag_(self);
+  n, s, p = _untag_(this);
 
   delete tern_rel_a(n, s, p);
   delete tern_rel_b(n, s, p);

@@ -60,7 +60,7 @@ using ChatServer1CoreState {
 ////////////////////////////////////////////////////////////////////////////////
 
 ChatServer1CoreState.ChatServerCoreAction {
-  safe_do(self);
+  safe_do(this);
 }
 
 using ChatServer1CoreState {
@@ -148,7 +148,7 @@ schema ChatServer1 {
 
 
 ChatServer1.ChatServerMsg {
-  do(self);
+  do(this);
 }
 
 

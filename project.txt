@@ -1,6 +1,7 @@
 ../compiler/src/stdlib/prelude.cell
 ../compiler/src/stdlib/prelude-deprecated.cell
 ../compiler/src/stdlib/printing.cell
+../compiler/src/stdlib/algorithms.cell
 
 src/mine.cell
 src/pedometer.cell
