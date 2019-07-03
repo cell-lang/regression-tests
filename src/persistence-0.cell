@@ -20,11 +20,11 @@ FlightId  flight_id(Nat n)  = :flight_id(n);
 
 
 schema Flights {
-  country(CountryId):
+  country(CountryId)
     code  : CountryCode,
     name  : String;
 
-  airport(AirportId):
+  airport(AirportId)
     name      : String,
     location  : CountryId;
 
@@ -32,7 +32,7 @@ schema Flights {
 
   departing(AirportId, RouteId) [key: 1];
 
-  flight(FlightId):
+  flight(FlightId)
     route     : RouteId,
     departure : Time,
     arrival   : Time,
@@ -71,25 +71,22 @@ type PopulateFlights = populate_flights(data: FlightsData);
 
 Flights.PopulateFlights {
   delete country(*);
-  for id, code, name <- this.data.countries:
+  for id, code, name <- this.data.countries
     insert country(id), code(id, code), name(id, name);
-  ;
 
   delete airport(*);
-  for id, name, country <- this.data.airports:
+  for id, name, country <- this.data.airports
     insert airport(id), name(id, name), location(id, country);
-  ;
 
   delete flight_route(*, *, *);
-  for id, from, to <- this.data.routes:
+  for id, from, to <- this.data.routes {
     insert flight_route(id, from, to);
     insert departing(from, id);
-  ;
+  }
 
   delete flight(*);
-  for id, route, departure, arrival, price <- this.data.flights:
+  for id, route, departure, arrival, price <- this.data.flights
     insert flight(id), route(id, route), departure(id, departure), arrival(id, arrival), price(id, price);
-  ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -228,14 +225,13 @@ TravelsData travels_data_2 = (
   fail if ac == 0;
 
   rs = ();
-  for i < count:
+  for i < count {
     from = airports(_rand_nat_(ac));
     to = airports(_rand_nat_(ac));
-    while to == from:
+    while to == from
       to = airports(_rand_nat_(ac));
-    ;
     rs = (rs | (route_id(i), from, to));
-  ;
+  }
 
   fail if rs == ();
   return rs;
@@ -247,14 +243,14 @@ TravelsData travels_data_2 = (
   fs = ();
   rc = |rs|;
   fail if rc == 0;
-  for i < count:
+  for i < count {
     r = rs(_rand_nat_(rc));
     dt = nat(min_epoc_time + _rand_nat_(1000));
     at = nat(dt + _rand_nat_(20));
     p = nat(99 + 100 * _rand_nat_(40));
     data = (flight_id(i), r,  epoc_time(dt), epoc_time(at), euro_cents(p));
     fs = (fs | data);
-  ;
+  }
   fail if fs == ();
   return fs;
 }
@@ -326,82 +322,83 @@ Bool RunFlightsTests() {
   s2 = flights_state(d2);
 
   s = read fsdb;
-  if s != s0:
-    Print("ERROR! (A)");
+  if s != s0 {
+    Print("\n\nERROR! (A)\n");
     return false;
-  ;
+  }
 
   ok = fsdb <- populate_flights(data: d1);
-  if not ok:
-    Print("ERROR! (B)");
+  if not ok {
+    Print("\n\nERROR! (B)\n");
     return false;
-  ;
+  }
 
   s = read fsdb;
-  if s != s1:
-    Print("ERROR! (C)");
+  if s != s1 {
+    Print("\n\nERROR! (C)\n");
     return false;
-  ;
+  }
 
   ok = write fsdb <- s2;
-  if not ok:
-    Print("ERROR! (D)");
+  if not ok {
+    Print("\n\nERROR! (D)\n");
     return false;
-  ;
+  }
 
   s = read fsdb;
-  if s != s2:
-    Print("ERROR! (E)");
+  if s != s2 {
+    Print("\n\nERROR! (E)\n");
     return false;
-  ;
+  }
 
   ok = write fsdb <- s1;
-  if not ok:
-    Print("ERROR! (F)");
+  if not ok {
+    Print("\n\nERROR! (F)\n");
+    print s1;
     return false;
-  ;
+  }
 
   s = read fsdb;
-  if s != s1:
-    Print("ERROR! (G)");
+  if s != s1 {
+    Print("\n\nERROR! (G)\n");
     return false;
-  ;
+  }
 
   ok = fsdb <- populate_flights(data: d2);
-  if ok:
-    Print("ERROR! (H)");
+  if ok {
+    Print("\n\nERROR! (H)\n");
     return false;
-  ;
+  }
 
   s = read fsdb;
-  if s != s1:
-    Print("ERROR! (I)");
+  if s != s1 {
+    Print("\n\nERROR! (I)\n");
     return false;
-  ;
+  }
 
   ok = write fsdb <- s0;
-  if not ok:
-    Print("ERROR! (L)");
+  if not ok {
+    Print("\n\nERROR! (L)\n");
     return false;
-  ;
+  }
 
   s = read fsdb;
-  if s != s0:
-    Print("ERROR! (M)");
+  if s != s0 {
+    Print("\n\nERROR! (M)\n");
     return false;
-  ;
+  }
 
   ok = fsdb <- populate_flights(data: d2);
-  if not ok:
-    Print("ERROR! (N)");
+  if not ok {
+    Print("\n\nERROR! (N)\n");
     return false;
-  ;
+  }
 
   s = read fsdb;
-  if s != s2:
-    Print("ERROR! (O)");
+  if s != s2 {
+    Print("\n\nERROR! (O)\n");
     return false;
-  ;
+  }
 
   return true;
 }
@@ -424,82 +421,82 @@ Bool RunTravelsTests() {
   s2 = travels_state(d2);
 
   s = read tdb;
-  if s != s0:
-    Print("ERROR! (Travels: 0)\n");
+  if s != s0 {
+    Print("\n\nERROR! (Travels: 0)\n");
     return false;
-  ;
+  }
 
   ok = tdb <- populate_travels(data: d1);
-  if not ok:
-    Print("ERROR! (Travels: 1)\n");
+  if not ok {
+    Print("\n\nERROR! (Travels: 1)\n");
     return false;
-  ;
+  }
 
   s = read tdb;
-  if s != s1:
-    Print("ERROR! (Travels: 2)\n");
+  if s != s1 {
+    Print("\n\nERROR! (Travels: 2)\n");
     return false;
-  ;
+  }
 
   ok = write tdb <- s2;
-  if not ok:
-    Print("ERROR! (Travels: 4)\n");
+  if not ok {
+    Print("\n\nERROR! (Travels: 4)\n");
     return false;
-  ;
+  }
 
   s = read tdb;
-  if s != s2:
-    Print("ERROR! (Travels: 5)\n");
+  if s != s2 {
+    Print("\n\nERROR! (Travels: 5)\n");
     return false;
-  ;
+  }
 
   ok = write tdb <- s1;
-  if not ok:
-    Print("ERROR! (Travels: 6)\n");
+  if not ok {
+    Print("\n\nERROR! (Travels: 6)\n");
     return false;
-  ;
+  }
 
   s = read tdb;
-  if s != s1:
-    Print("ERROR! (Travels: 7)\n");
+  if s != s1 {
+    Print("\n\nERROR! (Travels: 7)\n");
     return false;
-  ;
+  }
 
   ok = tdb <- populate_travels(data: d2);
-  if ok:
-    Print("ERROR! (Travels: 8)\n");
+  if ok {
+    Print("\n\nERROR! (Travels: 8)\n");
     return false;
-  ;
+  }
 
   s = read tdb;
-  if s != s1:
-    Print("ERROR! (Travels: 9)\n");
+  if s != s1 {
+    Print("\n\nERROR! (Travels: 9)\n");
     return false;
-  ;
+  }
 
   ok = write tdb <- s0;
-  if not ok:
-    Print("ERROR! (Travels: 10)\n");
+  if not ok {
+    Print("\n\nERROR! (Travels: 10)\n");
     return false;
-  ;
+  }
 
   s = read tdb;
-  if s != s0:
-    Print("ERROR! (Travels: 11)\n");
+  if s != s0 {
+    Print("\n\nERROR! (Travels: 11)\n");
     return false;
-  ;
+  }
 
   ok = tdb <- populate_travels(data: d2);
-  if not ok:
-    Print("ERROR! (Travels: 12)\n");
+  if not ok {
+    Print("\n\nERROR! (Travels: 12)\n");
     return false;
-  ;
+  }
 
   s = read tdb;
-  if s != s2:
-    Print("ERROR! (Travels: 13)\n");
+  if s != s2 {
+    Print("\n\nERROR! (Travels: 13)\n");
     return false;
-  ;
+  }
 
   return true;
 }

@@ -34,38 +34,38 @@ Bool RunSinceTest0() {
   done = apply ta;
   assert done;
 
-  for t < 20:
-    if ta.output:
+  for t < 20 {
+    if ta.output {
       Print("ERROR (1)\n");
       return false;
-    ;
+    }
     elapsed ta 1000;
-    loop
+    do
       done = apply ta;
     while not done;
-  ;
+  }
 
-  for 100:
+  for 100 {
     ta.an_input = rand_elem([:a0, :a1, :a2, :a3, :a4, :a5, :a6, :a7, :a8, :a9]);
     done = apply ta;
     assert done;
     time_since_change = 0;
-    for 10:
+    for 10 {
       elapsed_time = _rand_nat_(15);
       time_since_change = _add_(time_since_change, elapsed_time);
       elapsed ta _mult_(1000, elapsed_time);
-      loop
+      do
         done = apply ta;
       while not done;
       exp_output = _le_(10, time_since_change);
-      if ta.output != exp_output:
+      if ta.output != exp_output {
         Print("ERROR!\n");
         return false;
       // else
       //   Print(".");
-      ;
-    ;
-  ;
+      }
+    }
+  }
   return true;
 }
 

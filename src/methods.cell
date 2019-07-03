@@ -99,7 +99,7 @@ Any Methods.my_meth(<d2> p) = d2;
 Bool RunBasicMethodTests((Nat, Ta, Any, Any, Any, Any)* test_data) {
   t : Methods;
 
-  for a, i, ed1, ev1, ed2, ev2 @ j <- test_data:
+  for a, i, ed1, ev1, ed2, ev2 @ j <- test_data {
     // print "-----------------------------------------------------";
     // print (a, i);
     // print (t.v1, t.v2, t.d1, t.d2);
@@ -109,17 +109,16 @@ Bool RunBasicMethodTests((Nat, Ta, Any, Any, Any, Any)* test_data) {
     assert done;
     // print (t.v1, t.v2, t.d1, t.d2);
 
-    if a == 1:
+    if a == 1
       t.a = :reapply;
-    elif a == 2:
+    else if a == 2
       t.a = reapply(l1: :s, l2: :t);
-    ;
 
     done = apply t;
     assert done;
     // print (t.v1, t.v2, t.d1, t.d2);
 
-    if not (t.v1 == ev1 and t.v2 == ev2 and t.d1 == ed1 and t.d2 == ed2):
+    if not (t.v1 == ev1 and t.v2 == ev2 and t.d1 == ed1 and t.d2 == ed2) {
       Print("Error\n");
       print (ev1, ev2, ed1, ed2);
       print t.v1;
@@ -129,7 +128,7 @@ Bool RunBasicMethodTests((Nat, Ta, Any, Any, Any, Any)* test_data) {
       return false;
     // else
     //   Print("OK\n");
-    ;
+    }
 
     id_combs = (
       (:v1, :v2), (:d1, :d2), (:v1, :d2), (:d1, :v2),
@@ -147,13 +146,13 @@ Bool RunBasicMethodTests((Nat, Ta, Any, Any, Any, Any)* test_data) {
 
     act_res = (t.my_other_meth(id1, id2) : id1, id2 <- id_combs);
 
-    if act_res != exp_res:
+    if act_res != exp_res {
       Print("ERROR (METHODS):\n");
       print exp_res;
       print act_res;
       return false;
-    ;
-  ;
+    }
+  }
 
   return true;
 }

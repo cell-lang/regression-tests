@@ -17,14 +17,14 @@ IntSM.do {
 }
 
 
-schema CompSM {
-  nested : IntSM;
-}
+// schema CompSM {
+//   nested : IntSM;
+// }
 
-CompSM.do {
-  nested <- :incr1;
-  nested <- :incr2;
-}
+// CompSM.do {
+//   nested <- :incr1;
+//   nested <- :incr2;
+// }
 
 
 // reactive WrapperA {
@@ -49,19 +49,25 @@ CompSM.do {
 
 Bool RunAllTransaction0Tests() {
   int_sm   : IntSM;
-  comp_sm  : CompSM;
+  // comp_sm  : CompSM;
 
   ok = int_sm <- :do;
-  if ok or int_sm.state1 != 0 or int_sm.state2 != 0:
-    Print("ERROR\n");
+  if ok or int_sm.state1 != 0 or int_sm.state2 != 0 {
+    Print("\n\nERROR A\n");
+    print ok;
+    print int_sm.state1;
+    print int_sm.state2;
     return false;
-  ;
+  }
 
-  ok = comp_sm <- :do;
-  if ok or comp_sm.nested.state1 != 0 or comp_sm.nested.state2 != 0:
-    Print("ERROR\n");
-    return false;
-  ;
+  // ok = comp_sm <- :do;
+  // if ok or comp_sm.nested.state1 != 0 or comp_sm.nested.state2 != 0 {
+  //   Print("\n\nERROR B\n");
+  //   print ok;
+  //   print comp_sm.nested.state1;
+  //   print comp_sm.nested.state2;
+  //   return false;
+  // }
 
   return true;
 }

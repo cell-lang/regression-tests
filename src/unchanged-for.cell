@@ -32,15 +32,15 @@ reactive UnchangedFor {
 Bool RunUnchangedForTest((Ta, Nat, Bool, Bool, Bool, Bool)* test_data) {
   a : UnchangedFor;
 
-  for i, dt, eb, eu1, eu2, eu @ j <- test_data:
+  for i, dt, eb, eu1, eu2, eu @ j <- test_data {
     a.i = i;
 
     elapsed a dt;
-    loop
+    do
       done = apply a;
     while not done;
 
-    if a.b != eb or a.u1 != eu1 or a.u2 != eu2 or a.u != eu:
+    if a.b != eb or a.u1 != eu1 or a.u2 != eu2 or a.u != eu {
       Print("Error\n");
       print (i, dt, eb, eu1, eu2, eu);
       print a.b;
@@ -51,8 +51,8 @@ Bool RunUnchangedForTest((Ta, Nat, Bool, Bool, Bool, Bool)* test_data) {
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

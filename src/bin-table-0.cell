@@ -193,121 +193,121 @@ Bool RunAllBinTableColsPermsTests() {
   test_data = bin_table_cols_perms_test_data;
 
   // Inserting
-  for t <- test_data:
+  for t <- test_data {
     ok = a <- t;
-    if not ok:
+    if not ok {
       Print("ERROR (1)\n");
       return false;
-    ;
-    if not a.is_ok:
+    }
+    if not a.is_ok {
       Print("ERROR (2)\n");
       return false;
-    ;
-  ;
+    }
+  }
 
   // Testing projections
-  for n, s <- test_data:
+  for n, s <- test_data {
     sss = rand_sort(a.projection(n));
-    if |sss| != 1:
+    if |sss| != 1 {
       Print("ERROR (2.1)\n");
       return false;
-    ;
+    }
     ss = rand_sort(sss(0));
-    if |ss| != 1:
+    if |ss| != 1 {
       Print("ERROR (2.2)\n");
       return false;
-    ;
-    if ss(0) != s:
+    }
+    if ss(0) != s {
       Print("ERROR (2.3)\n");
       return false;
-    ;
+    }
 
     nss = rand_sort(a.projection(s));
-    if |nss| != 1:
+    if |nss| != 1 {
       Print("ERROR (2.4)\n");
       return false;
-    ;
+    }
     ns = rand_sort(nss(0));
-    if |ns| != 1:
+    if |ns| != 1 {
       Print("ERROR (2.5)\n");
       return false;
-    ;
-    if ns(0) != n:
+    }
+    if ns(0) != n {
       Print("ERROR (2.6)\n");
       return false;
-    ;
+    }
 
     // Print(".");
-  ;
+  }
 
   // Deleting by first column
   t = test_data(8);
   ok = a <- t(0);
-  if not ok:
+  if not ok {
     Print("ERROR (3)\n");
     return false;
-  ;
-  if not a.is_ok:
+  }
+  if not a.is_ok {
     Print("ERROR (4)\n");
     return false;
-  ;
+  }
 
   // Deleting by second column
   t = test_data(3);
   ok = a <- t(1);
-  if not ok:
+  if not ok {
     Print("ERROR (5)\n");
     return false;
-  ;
-  if not a.is_ok:
+  }
+  if not a.is_ok {
     Print("ERROR (6)\n");
     return false;
-  ;
+  }
 
   // Deleting by all columns
   t = test_data(7);
   ok = a <- :del(t);
-  if not ok:
+  if not ok {
     Print("ERROR (7)\n");
     return false;
-  ;
-  if not a.is_ok:
+  }
+  if not a.is_ok {
     Print("ERROR (8)\n");
     return false;
-  ;
+  }
 
   deleted = [8, 3, 7];
 
-  for n, s <- test_data:
+  for n, s <- test_data {
     rs01 = rand_sort(a.in(n, s));
     rs0 = rand_sort(a.in(n));
     rs1 = rand_sort(a.in(s));
-    if rs01 != rs0 or rs01 != rs1:
+    if rs01 != rs0 or rs01 != rs1 {
       Print("ERROR (9)\n");
       return false;
-    ;
-    if |rs01| != 1:
+    }
+    if |rs01| != 1 {
       Print("ERROR (10)\n");
       return false;
-    ;
-    if rs01(0) != not in(n, deleted):
+    }
+    if rs01(0) != not in(n, deleted) {
       Print("ERROR (11)\n");
       return false;
-    ;
+    }
 
-    if not in(n, deleted):
+    if not in(n, deleted) {
       ns = rand_sort(a.lookup(s));
       ss = rand_sort(a.lookup(n));
-      if |ns| != 1 or |ss| != 1:
+      if |ns| != 1 or |ss| != 1 {
         Print("ERROR (12)\n");
         return false;
-      ;
-      if ns(0) != n or ss(0) != s:
+      }
+      if ns(0) != n or ss(0) != s {
         Print("ERROR (13)\n");
         return false;
-      ;
-    ;
-  ;
+      }
+    }
+  }
 
   return true;
 }
@@ -318,11 +318,11 @@ Bool RunAllBinTableColsPermsTests() {
 Bool conflict(T+ t1, T+ t2, [[+Nat]] keys) {
   assert |t1| == |t2|;
 
-  for k <- isort(keys):
+  for k <- isort(keys) {
     k1 = (f : f @ i <- t1, k(i));
     k2 = (f : f @ i <- t2, k(i));
     return true if k1 == k2;
-  ;
+  }
   return false;
 
   T* isort([T] ks) = rand_sort(ks);
@@ -339,21 +339,21 @@ Bool RunBinTableKeyCheckTests(<insert_a, insert_b, insert_c, insert_d> msg, [[+N
 
   curr_tuples = [];
 
-  for n <- ns; s <- ss:
+  for n <- ns; s <- ss {
     nt = (n, s);
     exp_ok = not (t <- curr_tuples : conflict(nt, t, keys));
     ok = a <- msg(nt);
-    if ok != exp_ok:
+    if ok != exp_ok {
       Print("ERROR ERROR ERROR\n");
       print curr_tuples;
       print nt;
       print exp_ok;
       print ok;
       return false;
-    ;
+    }
     // Print("OK\n");
     curr_tuples = [t : t <- curr_tuples | t <- [nt]] if ok;
-  ;
+  }
 
   return true;
 }
@@ -368,14 +368,14 @@ Bool RunBinTableKeyCheckTests(<insert_a, insert_b, insert_c, insert_d> msg, [[+N
 
 
 Bool RunAllBinTableKeyCheckTests() {
-  for m, ks <- rand_sort([(m, ks) : m, ks <- bin_rels_keys_by_msg]):
+  for m, ks <- rand_sort([(m, ks) : m, ks <- bin_rels_keys_by_msg]) {
     ok = RunBinTableKeyCheckTests(m, ks);
-    if not ok:
+    if not ok {
       Print("ERROR ERROR ERROR!\n");
       print (m, ks);
       return false;
-    ;
-  ;
+    }
+  }
   return true;
 }
 
@@ -390,34 +390,34 @@ Bool RunBinTableUpdateTests(<update_a, update_b, update_c, update_d> msg, [[+Nat
 
   curr_tuples = [];
 
-  for n <- ns; s <- ss:
+  for n <- ns; s <- ss {
     nt = (n, s);
     exp_tuples = [t : t <- curr_tuples, not conflict(nt, t, keys)];
     exp_tuples = [t : t <- exp_tuples | t <- [nt]];
     ok = a <- msg(nt);
-    if not ok:
+    if not ok {
       Print("ERROR (1)\n");
       print curr_tuples;
       print nt;
       return false;
-    ;
+    }
     new_tuples = match (msg)
       update_a  = [(n1, s1) : n1, s1 <- a.bin_rel_a],
       update_b  = [(n1, s1) : n1, s1 <- a.bin_rel_b],
       update_c  = [(n1, s1) : n1, s1 <- a.bin_rel_c],
       update_d  = [(n1, s1) : n1, s1 <- a.bin_rel_d];
 
-    if new_tuples != exp_tuples:
+    if new_tuples != exp_tuples {
       Print("ERROR (2)\n");
       print curr_tuples;
       print nt;
       print exp_tuples;
       print new_tuples;
       return false;
-    ;
+    }
     curr_tuples = new_tuples;
     // Print(".");
-  ;
+  }
 
   return true;
 }
@@ -432,13 +432,13 @@ Bool RunBinTableUpdateTests(<update_a, update_b, update_c, update_d> msg, [[+Nat
 
 
 Bool RunAllBinTableUpdateTests() {
-  for m, ks <- rand_sort([(m, ks) : m, ks <- bin_rels_update_keys_by_msg]):
+  for m, ks <- rand_sort([(m, ks) : m, ks <- bin_rels_update_keys_by_msg]) {
     ok = RunBinTableUpdateTests(m, ks);
-    if not ok:
+    if not ok {
       Print("\nERROR: Binary table update tests\n");
       print (m, ks);
       return false;
-    ;
-  ;
+    }
+  }
   return true;
 }

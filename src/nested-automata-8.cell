@@ -104,15 +104,14 @@ reactive Test2 {
 Bool RunNestedAutomata8Test1() {
   ta : Test1;
 
-  for input, incr, ec, enc <- test_1_data:
+  for input, incr, ec, enc <- test_1_data {
     ta.my_input = input;
-    if incr != nothing:
+    if incr != nothing
       ta.increment = match (incr) just(n?) = n;
-    ;
     done = apply ta;
     assert done;
 
-    if ta.my_counter != ec or ta.nested_counter != enc:
+    if ta.my_counter != ec or ta.nested_counter != enc {
       Print("ERROR (1)\n");
       print (input, incr, enc, ec);
       print ta.my_counter;
@@ -123,8 +122,8 @@ Bool RunNestedAutomata8Test1() {
     //   print (input, enc, ec);
     //   print ta.my_counter;
     //   print ta.nested_counter;
-    ;
-  ;
+    }
+  }
   return true;
 }
 
@@ -132,15 +131,14 @@ Bool RunNestedAutomata8Test1() {
 Bool RunNestedAutomata8Test2() {
   ta : Test2;
 
-  for input, incr, ec, enc <- test_2_data:
+  for input, incr, ec, enc <- test_2_data {
     ta.my_input = input;
-    if incr != nothing:
+    if incr != nothing
       ta.increment = match (incr) just(n?) = n;
-    ;
     done = apply ta;
     assert done;
 
-    if ta.my_counter != ec or ta.nested_counter != enc:
+    if ta.my_counter != ec or ta.nested_counter != enc {
       Print("ERROR (2)\n");
       print (input, incr, enc, ec);
       print ta.my_counter;
@@ -150,8 +148,8 @@ Bool RunNestedAutomata8Test2() {
     //   Print("OK (2)\n");
       // print (input, enc, ec);
       // print ta;
-    ;
-  ;
+    }
+  }
   return true;
 }
 

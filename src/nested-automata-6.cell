@@ -60,12 +60,12 @@ reactive NestedAutomata6 {
 Bool RunAllNestedAutomata6Tests() {
   ta: NestedAutomata6;
 
-  for input, enc, ec <- nested_automata_6_test_data:
+  for input, enc, ec <- nested_automata_6_test_data {
     ta.my_input = input;
     done = apply ta;
     assert done;
 
-    if ta.my_counter != ec or ta.nested_counter != enc:
+    if ta.my_counter != ec or ta.nested_counter != enc {
       Print("ERROR\n");
       print (input, enc, ec);
       print ta.my_counter;
@@ -73,8 +73,8 @@ Bool RunAllNestedAutomata6Tests() {
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

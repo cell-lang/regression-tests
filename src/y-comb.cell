@@ -47,17 +47,17 @@ PrintUndefError(Any yc, Any ryc) {
 Bool RunBasicYCombTest() {
   yc : YComb;
 
-  for ia, ib, eo <- y_comb_data:
+  for ia, ib, eo <- y_comb_data {
     yc.ia = ia;
     yc.ib = ib;
     done = apply yc;
     assert done;
 
-    if not yc.o?? or yc.o != eo:
+    if not yc.o?? or yc.o != eo {
       PrintError(eo, yc.o);
       return false;
-    ;
-  ;
+    }
+  }
 
   return true;
 }
@@ -70,7 +70,7 @@ Bool RunNullYCombTest(Nat run_idx) {
   ia_def = false;
   ib_def = false;
 
-  for ia, ib, eo <- y_comb_data:
+  for ia, ib, eo <- y_comb_data {
     ia_def = ia_def or one_in(3);
     ib_def = ib_def or one_in(3);
 
@@ -79,32 +79,32 @@ Bool RunNullYCombTest(Nat run_idx) {
     done = apply yc;
     assert done;
 
-    if ia_def:
+    if ia_def
       ryc.ia = ia;
-    ;
-    if ib_def:
+
+    if ib_def
       ryc.ib = ib;
-    ;
+
     done = apply ryc;
     assert done;
 
-    if not yc.o?? or yc.o != eo:
+    if not yc.o?? or yc.o != eo {
       // PrintError(eo, yc.o);
       Print("\nError!\n");
       print yc.o;
       print eo;
       return false;
-    ;
+    }
 
-    if ryc.o?? and ryc.o != yc.o:
+    if ryc.o?? and ryc.o != yc.o {
       // PrintUndefError(yc, ryc);
       Print("\nError! Version with undefined values doesn't match the reference version\n");
       print ryc.o;
       print yc.o;
       print run_idx;
       return false;
-    ;
-  ;
+    }
+  }
 
   return true;
 }
@@ -113,9 +113,9 @@ Bool RunNullYCombTest(Nat run_idx) {
 Bool RunAllYCombTests() {
   ok = RunBasicYCombTest();
   return false if not ok;
-  for i < 1000:
+  for i < 1000 {
     ok = RunNullYCombTest(i);
     return false if not ok;
-  ;
+  }
   return true;
 }

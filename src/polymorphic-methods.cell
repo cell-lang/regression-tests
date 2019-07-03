@@ -12,9 +12,9 @@ Reset reset(Int n)  = :reset(n);
 Incr increment  = :increment;
 Decr decrement  = :decrement;
 
-PolyMsg accumulate(Int n) = if   n ==  1  then increment
-                            elif n == -1  then decrement
-                                          else :accumulate(n);
+PolyMsg accumulate(Int n) = if n ==  1  then increment      else
+                            if n == -1  then decrement      else
+                                            :accumulate(n);
 
 
 Int variation(PolyMsg msg) =
@@ -206,12 +206,12 @@ reactive PolymorphicMethods2 {
 Bool RunPolymorphicMethodsTestA((Ta, Int, Int)* test_data) {
   ta : PolymorphicMethods1;
 
-  for input, ec, enc <- test_data:
+  for input, ec, enc <- test_data {
     ta.my_input = input;
     done = apply ta;
     assert done;
 
-    if ta.my_counter != ec or ta.nested_counter != enc:
+    if ta.my_counter != ec or ta.nested_counter != enc {
       Print("ERROR\n");
       print (input, ec, enc);
       print ta.my_counter;
@@ -219,8 +219,8 @@ Bool RunPolymorphicMethodsTestA((Ta, Int, Int)* test_data) {
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
   return true;
 }
 
@@ -228,12 +228,12 @@ Bool RunPolymorphicMethodsTestA((Ta, Int, Int)* test_data) {
 Bool RunPolymorphicMethodsTestB((Ta, Int, Int)* test_data) {
   ta : PolymorphicMethods2;
 
-  for input, ec, enc <- test_data:
+  for input, ec, enc <- test_data {
     ta.my_input = input;
     done = apply ta;
     assert done;
 
-    if ta.my_counter != ec or ta.nested_counter != enc:
+    if ta.my_counter != ec or ta.nested_counter != enc {
       Print("ERROR\n");
       print (input, ec, enc);
       print ta.my_counter;
@@ -241,8 +241,8 @@ Bool RunPolymorphicMethodsTestB((Ta, Int, Int)* test_data) {
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
   return true;
 }
 

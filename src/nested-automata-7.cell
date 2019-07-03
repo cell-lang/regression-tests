@@ -61,15 +61,14 @@ reactive NestedAutomata7 {
 Bool RunAllNestedAutomata7Tests() {
   ta : NestedAutomata7;
 
-  for input, incr, ec, enc<- nested_automata_7_test_data:
+  for input, incr, ec, enc<- nested_automata_7_test_data {
     ta.my_input = input;
-    if incr != nothing:
+    if incr != nothing
       ta.increment = match (incr) just(n?) = n;
-    ;
     done = apply ta;
     assert done;
 
-    if ta.my_counter != ec or ta.nested_counter != enc:
+    if ta.my_counter != ec or ta.nested_counter != enc {
       Print("ERROR\n");
       print (input, incr, ec, enc);
       print ta.my_counter;
@@ -77,8 +76,8 @@ Bool RunAllNestedAutomata7Tests() {
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

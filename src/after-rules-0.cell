@@ -26,25 +26,25 @@ reactive AfterTest0 {
 Bool RunAfter0Test0((Ta, Nat, Bool)* test_data) {
   ta : AfterTest0;
 
-  for i, dt, eu1 @ j <- test_data:
+  for i, dt, eu1 @ j <- test_data {
     ta.i = i;
 
     elapsed ta dt;
-    loop
+    do
       done = apply ta;
     while not done;
 
 
-    if ta.u1 != eu1:
+    if ta.u1 != eu1 {
       Print("Error\n");
       print ((i, dt, eu1), j);
       print ta.u1;
       print ta.u2;
       return false;
+    }
     // else
     //   Print("OK\n");
-    ;
-  ;
+  }
 
   return true;
 }
@@ -56,19 +56,19 @@ Bool RunAfter0Test1() {
   curr_watched_value = :none;
   time_since_change = 0;
   elapsed_time = 0;
-  for 100:
+  for 100 {
     new_input_value = rand_elem([:a0, :a1, :a2, :a3, :a4, :a5, :a6, :a7, :a8, :a9]);
     ta.i = new_input_value;
     new_watched_value = if new_input_value :: <a0, a2, a4, a6, a8> then :even else :odd;
     time_since_change = 0 if curr_watched_value != new_watched_value;
-    for 100:
+    for 100 {
       elapsed ta elapsed_time;
-      loop
+      do
         done = apply ta;
       while not done;
       exp_u2 = _lt_(_mod_(time_since_change, 20), 5);
 
-      if ta.u2 != exp_u2:
+      if ta.u2 != exp_u2 {
         Print("ERROR!\n");
 
         print "new_input_value";
@@ -91,13 +91,13 @@ Bool RunAfter0Test1() {
         return false;
       // else
       //   Print(".");
-      ;
+      }
 
       curr_watched_value = new_watched_value;
       elapsed_time = _rand_nat_(40);
       time_since_change = _add_(time_since_change, elapsed_time);
-    ;
-  ;
+    }
+  }
   return true;
 }
 

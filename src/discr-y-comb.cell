@@ -34,28 +34,27 @@ reactive DiscrYComb {
 Bool RunBasicDiscYCombTests() {
   yc : DiscrYComb;
 
-  for ia, ib, eo <- discr_y_comb_test_data:
-    if ia != :none:
+  for ia, ib, eo <- discr_y_comb_test_data {
+    if ia != :none
       yc.ia = ia;
-    ;
-    if ib != :none:
+
+    if ib != :none
       yc.ib = ib;
-    ;
 
     done = apply yc;
     assert done;
 
     ok = if yc.o? then yc.o == eo else eo == :none;
 
-    if not ok:
+    if not ok {
       Print("Error!\n");
       print (ia, ib, eo);
       print yc.o;
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

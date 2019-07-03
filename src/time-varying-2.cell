@@ -101,20 +101,19 @@ reactive TimeVarying2 {
 Bool RunTimeVaryingTest2((Maybe[Ta], Nat, Bool, Nat, Bool, Nat, Bool, Nat, Bool, Nat)* test_data) {
   a : TimeVarying2;
 
-  for mi, dt, eo1, ec1, eo2, ec2, eo3, ec3, eo4, ec4 @ j <- test_data:
-    if mi != nothing:
+  for mi, dt, eo1, ec1, eo2, ec2, eo3, ec3, eo4, ec4 @ j <- test_data {
+    if mi != nothing
       a.i = match (mi) just(i?) = i;
-    ;
 
     elapsed a dt;
-    loop
+    do
       done = apply a;
     while not done;
 
     if  a.o1 != eo1 or a.c1 != ec1 or
          a.o2 != eo2 or a.c2 != ec2 or
          a.o3 != eo3 or a.c3 != ec3 or
-         a.o4 != eo4 or a.c4 != ec4:
+         a.o4 != eo4 or a.c4 != ec4 {
       Print("Error\n");
       print (mi, dt, eo1, ec1, eo2, ec2, eo3, ec3, eo4, ec4);
       print a.o1;
@@ -129,8 +128,8 @@ Bool RunTimeVaryingTest2((Maybe[Ta], Nat, Bool, Nat, Bool, Nat, Bool, Nat, Bool,
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

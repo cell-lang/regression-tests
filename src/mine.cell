@@ -29,7 +29,7 @@ reactive Mine {
 
     // if (high_sensor_underwater)
     //   needs_draining = true;
-    // elif (not low_sensor_underwater)
+    // else if (not low_sensor_underwater)
     //   needs_draining = false;
 
 
@@ -63,7 +63,7 @@ reactive Mine {
 Bool RunBasicMineTest() {
   mine : Mine;
 
-  for lsu, hsu, ml, cl, al, po, en, ed <- mine_test_data:
+  for lsu, hsu, ml, cl, al, po, en, ed <- mine_test_data {
     mine.low_sensor_underwater = lsu;
     mine.high_sensor_underwater = hsu;
     mine.methane_level = ml;
@@ -74,27 +74,23 @@ Bool RunBasicMineTest() {
     assert done;
 
     errors = ();
-    if mine.pump_must_be_on != po:
+    if mine.pump_must_be_on != po
       errors = (errors | "Pump-On error detected. Expected value: " & if po then "ON" else "OFF");
-    ;
-    if mine.evacuation_needed != en:
+
+    if mine.evacuation_needed != en
       errors = (errors | "Evacuation-Needed error detected. Expected value: " & if en then "ON" else "OFF");
-    ;
-    if mine.error_detected != ed:
+
+    if mine.error_detected != ed
       errors = (errors | "Error-Detected error detected. Expected value:" & if ed then "ON" else "OFF");
-    ;
-    if errors != ():
+
+    if errors != () {
       Print("\n");
-      for e <- errors:
+      for e <- errors
         Print(e & "\n");
-      ;
-    // else
-    //   Print("OK\n");
-    ;
-    if errors != ():
+    }
+    if errors != ()
       return false;
-    ;
-  ;
+  }
 
   return true;
 }
@@ -110,7 +106,7 @@ Bool RunNullMineTest() {
   cl_def = one_in(3);
   al_def = one_in(3);
 
-  for lsu, hsu, ml, cl, al, po, en, ed <- mine_test_data:
+  for lsu, hsu, ml, cl, al, po, en, ed <- mine_test_data {
     ref_mine.low_sensor_underwater = lsu;
     ref_mine.high_sensor_underwater = hsu;
     ref_mine.methane_level = ml;
@@ -120,21 +116,20 @@ Bool RunNullMineTest() {
     done = apply ref_mine;
     assert done;
 
-    if lsu_def:
+    if lsu_def
       mine.low_sensor_underwater = lsu;
-    ;
-    if hsu_def:
+
+    if hsu_def
       mine.high_sensor_underwater = hsu;
-    ;
-    if ml_def:
+
+    if ml_def
       mine.methane_level = ml;
-    ;
-    if cl_def:
+
+    if cl_def
       mine.co_level = cl;
-    ;
-    if al_def:
+
+    if al_def
       mine.airflow_level = al;
-    ;
 
     done = apply mine;
     assert done;
@@ -152,34 +147,28 @@ Bool RunNullMineTest() {
 
     errors = ();
 
-    if mine.pump_must_be_on?? and mine.pump_must_be_on != ref_mine.pump_must_be_on:
+    if mine.pump_must_be_on?? and mine.pump_must_be_on != ref_mine.pump_must_be_on
       errors = (errors | "\nError: pump_must_be_on = " & printed(mine.pump_must_be_on));
-    ;
 
-    if mine.evacuation_needed?? and mine.evacuation_needed != ref_mine.evacuation_needed:
+    if mine.evacuation_needed?? and mine.evacuation_needed != ref_mine.evacuation_needed
       errors = (errors | "\nError: evacuation_needed = " & printed(mine.evacuation_needed));
-    ;
 
-    if mine.error_detected?? and mine.error_detected != ref_mine.error_detected:
+    if mine.error_detected?? and mine.error_detected != ref_mine.error_detected
       errors = (errors | "\nError: error_detected = " & printed(mine.error_detected));
-    ;
 
-    if errors != ():
+    if errors != () {
       Print("\n");
-      for e <- errors:
+      for e <- errors
         Print(e & "\n");
-      ;
       return false;
-    // else
-    //   Print(".");
-    ;
+    }
 
     lsu_def = lsu_def or one_in(3);
     hsu_def = hsu_def or one_in(3);
     ml_def = ml_def or one_in(3);
     cl_def = cl_def or one_in(3);
     al_def = al_def or one_in(3);
-  ;
+  }
 
   return true;
 }
@@ -188,9 +177,9 @@ Bool RunNullMineTest() {
 Bool RunAllMineTests() {
   ok = RunBasicMineTest();
   return false if not ok;
-  for i < 1000:
+  for i < 1000 {
     ok = RunNullMineTest();
     return false if not ok;
-  ;
+  }
   return true;
 }

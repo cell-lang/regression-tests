@@ -38,13 +38,13 @@ Bool RunAllFullHistoryTests() {
   eh = ();
   ehs = 0;
 
-  for i <- full_history_test_data:
+  for i <- full_history_test_data {
     eh = (eh | i);
     ehs = _add_(ehs, 1);
     fhc.i = i;
     done = apply fhc;
     assert done;
-    if fhc.h != eh or fhc.hs != ehs:
+    if fhc.h != eh or fhc.hs != ehs {
       Print("ERROR!\n");
       print fhc.h;
       print fhc.hs;
@@ -52,8 +52,8 @@ Bool RunAllFullHistoryTests() {
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

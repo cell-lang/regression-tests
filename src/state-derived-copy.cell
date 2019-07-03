@@ -26,19 +26,19 @@ reactive StateDerivedCopy {
 Bool RunAllStateDerivedCopyTests() {
   c : StateDerivedCopy;
 
-  for i1, i2 <- state_derived_copy_test_data:
+  for i1, i2 <- state_derived_copy_test_data {
     c.i1 = i1;
     c.i2 = i2;
     done = apply c;
     assert done;
-    if c.o != (:a0, :b0):
+    if c.o != (:a0, :b0) {
       Print("Error\n");
       print c.o;
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

@@ -59,13 +59,13 @@ Bool RunAllNestedAutomata2Tests() {
   eh = ();
   ehs = 0;
 
-  for i, s1, s2 <- nested_automata_2_test_data:
+  for i, s1, s2 <- nested_automata_2_test_data {
     eh = (eh | i) if i != :a2;
     ehs = _add_(ehs, 1) if i != :a2;
     ta.i = i;
     done = apply ta;
     assert done;
-    if ta.h != eh or ta.hs != ehs:
+    if ta.h != eh or ta.hs != ehs {
       Print("ERROR!\n");
       print ta.h;
       print ta.hs;
@@ -73,8 +73,8 @@ Bool RunAllNestedAutomata2Tests() {
       print ta.fib;
       print (eh, ehs);
       return false;
-    ;
-    if ta.fi? != s2 or ta.fib? != s2:
+    }
+    if ta.fi? != s2 or ta.fib? != s2 {
       Print("DISCRETE SET/UNSET ERROR!\n");
       print ta.h;
       print ta.hs;
@@ -82,8 +82,8 @@ Bool RunAllNestedAutomata2Tests() {
       print ta.fib;
       print s2;
       return false;
-    ;
-    if s2 and (ta.fi != i or ta.fib != (i)):
+    }
+    if s2 and (ta.fi != i or ta.fib != (i)) {
       Print("DISCRETE VALUE ERROR!\n");
       print ta.h;
       print ta.hs;
@@ -91,10 +91,10 @@ Bool RunAllNestedAutomata2Tests() {
       print ta.fib;
       print s2;
       return false;
-    ;
+    }
     // Print("OK\n");
     // print ta;
-  ;
+  }
 
   return true;
 }

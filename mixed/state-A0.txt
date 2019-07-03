@@ -29,7 +29,7 @@
   a_string_seq_unary_rel: [("it"), ("she", "it"), ("he", "she", "it"), ("you", "he", "she", "it"), ("I", "you", "he", "she", "it")],
   an_any_point_unary_rel: [point(x: 9, y: 64), polar(ro: 2.71828, theta: 1.73205), polar(ro: 3.14159, theta: 1.41421)],
 
-  a_symb_float_binary_rel: (e: 2.71828, pi: 3.14159, sqrt2: 1.41421, sqrt3: 1.73205),
+  a_symb_float_binary_rel: [e -> 2.71828, pi -> 3.14159, sqrt2 -> 1.41421, sqrt3 -> 1.73205],
   a_bool_int_binary_rel: [false, -1; false, 2; true, -72305; true, 0; true, 1],
   a_string_bool_seq_binary_rel: ["" -> (), "010" -> (false, true, false), "100110" -> (true, false, false, true, true, false)],
   an_int_seq_time_span_binary_rel: [(0, 1, 2, 3) -> msecs(123), (9, 8, 7, 6, 5) -> msecs(98765)],

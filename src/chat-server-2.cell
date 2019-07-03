@@ -15,24 +15,18 @@ using ChatServer2CoreState {
 
 using ChatServer2CoreState {
   LoginCheck login_check(UserId user_id, String name) =
-    if logged_in(user_id)
-      then :already_logged_in
-    elif already_in_use(name)
-      then :name_already_in_use
-    else
-      :ok;
+    if logged_in(user_id)   then :already_logged_in   else
+    if already_in_use(name) then :name_already_in_use else
+                                 :ok;
 
   LogoutCheck logout_check(UserId user_id) = if logged_in(user_id) then :ok else :not_logged_in;
 
   JoinRoomCheck join_room_check(UserId user_id) = if logged_in(user_id) then :ok else :not_logged_in;
 
   LeaveRoomCheck leave_room_check(UserId user_id, RoomId room_id) =
-    if not logged_in(user_id)
-      then :not_logged_in
-    elif not joined(user_id, room_id)
-      then :not_in_room
-    else
-      :ok;
+    if not logged_in(user_id)       then :not_logged_in else
+    if not joined(user_id, room_id) then :not_in_room   else
+                                         :ok;
 
   ActionCheck action_check(ChatServerCoreAction action) =
     login()   = login_check(action.user, action.name),
@@ -95,20 +89,14 @@ using ChatServer2 {
     leave()   = core_state.leave_room_check(action.user, action.room);
 
   SendMsgToUserCheck action_check(SendMsgToUser msg) =
-    if not core_state.logged_in(msg.sender)
-      then :not_logged_in
-    elif not core_state.already_in_use(msg.receiver)
-      then :unknown_receiver
-    else
-      :ok;
+    if not core_state.logged_in(msg.sender)        then :not_logged_in    else
+    if not core_state.already_in_use(msg.receiver) then :unknown_receiver else
+                                                        :ok;
 
   SendMsgToRoomCheck action_check(SendMsgToRoom msg) =
-    if not core_state.logged_in(msg.sender)
-      then :not_logged_in
-    elif not core_state.joined(msg.sender, msg.target)
-      then :not_in_room
-    else
-      :ok;
+    if not core_state.logged_in(msg.sender)          then :not_logged_in else
+    if not core_state.joined(msg.sender, msg.target) then :not_in_room   else
+                                                          :ok;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +115,7 @@ using ChatServer2 {
 
   do(Disconnect msg) {
     channel = msg.channel;
-    delete pending_inputs(channel, ());
+    delete pending_inputs(channel, ()); ## BUG? WHY ISN'T IT delete pending_inputs(channel, *) ?
     core_state <- logout(user: channel);
   }
 
@@ -137,19 +125,20 @@ using ChatServer2 {
     new_data = msg.data;
     pend_data = pending_inputs(channel);
 
-    if new_data == ascii_newline:
+    if new_data == ascii_newline {
       update pending_inputs(channel, ());
       maybe_msg = try_parse_msg(pend_data, channel);
-      if maybe_msg != nothing:
+      if maybe_msg != nothing {
         do(value(maybe_msg));
-      else
+      }
+      else {
         insert data_to_send(msg_counter, (channel, "ERROR syntax error"));
         set msg_counter = nat(msg_counter + 1);
-      ;
-
-    else
+      }
+    }
+    else {
       update pending_inputs(channel, (pend_data | new_data));
-    ;
+    }
   }
 
 
@@ -230,11 +219,11 @@ using ChatServer2 {
     insert data_to_send(msg_counter, (msg.sender, resp_msg));
     counter = nat(msg_counter + 1);
 
-    if check_res == :ok:
+    if check_res == :ok {
       fwd_msg = "GOTUSERMSG " & core_state.username(msg.sender) & " " & msg.msg_text;
       insert data_to_send(counter, (core_state.username(!!, msg.receiver), fwd_msg));
       counter = nat(counter + 1);
-    ;
+    }
 
     set msg_counter = counter;
   }
@@ -251,14 +240,13 @@ using ChatServer2 {
     insert data_to_send(msg_counter, (msg.sender, resp_msg));
     counter = nat(msg_counter + 1);
 
-    if check_res == :ok:
+    if check_res == :ok {
       fwd_msg = "GOTROOMMSG " & core_state.username(msg.sender) & " #" & msg.target & " " & msg.msg_text;
       receivers = [r : r <- core_state.joined(?, msg.target)];
-      for r @ i <- rand_sort(receivers):
+      for r @ i <- rand_sort(receivers)
         insert data_to_send(nat(counter + i), (r, fwd_msg));
-      ;
       counter = nat(counter + |receivers|);
-    ;
+    }
 
     set msg_counter = counter;
   }
@@ -298,48 +286,48 @@ Bool RunAllChatServer2Tests() {
   sorted_users = rand_sort(set((u : u, unused_var <- chat_server_test_data_1)));
   conn_ids = merge(([u -> i] : u @ i <- sorted_users));
 
-  for i < |conn_ids|:
+  for i < |conn_ids| {
     cs.message = connect(i);
     done = apply cs;
     assert done;
-  ;
+  }
 
-  for u, s <- chat_server_test_data_1:
+  for u, s <- chat_server_test_data_1 {
     cid = conn_ids[u];
-    for ch <- _untag_(s):
+    for ch <- _untag_(s) {
       cs.message = received(cid, ch);
       done = apply cs;
       assert done;
-    ;
+    }
     cs.message = received(cid, ascii_newline);
     done = apply cs;
     assert done;
-  ;
+  }
 
-  for i < |conn_ids|:
+  for i < |conn_ids| {
     cs.message = disconnect(i);
     done = apply cs;
     assert done;
-  ;
+  }
 
-  if cs.data_to_send != chat_server_exp_res_1:
+  if cs.data_to_send != chat_server_exp_res_1 {
     Print("ERROR (1)\n");
     print cs.data_to_send;
     print chat_server_exp_res_1;
     return false;
-  ;
+  }
 
-  for i < cs.msg_counter:
+  for i < cs.msg_counter {
     cs.message = sent(i);
     done = apply cs;
     assert done;
-    if |cs.data_to_send| != cs.msg_counter - i - 1:
+    if |cs.data_to_send| != cs.msg_counter - i - 1 {
       Print("ERROR (2)\n");
       print i;
       print cs.data_to_send;
       return false;
-    ;
-  ;
+    }
+  }
 
   assert cs.data_to_send == [];
   return true;

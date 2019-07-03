@@ -49,7 +49,7 @@ Bool RunAllBasicInheritanceTests() {
   t : TwiceDerived;
   i : InputOverriding;
 
-  for in_a, in_b, eba, ebb, eda, edb, eta, etb, eia, eib <- basic_inheritance_test_data:
+  for in_a, in_b, eba, ebb, eda, edb, eta, etb, eia, eib <- basic_inheritance_test_data {
     b.in_a = in_a;
     b.in_b = in_b;
     d.in_a = in_a;
@@ -68,40 +68,40 @@ Bool RunAllBasicInheritanceTests() {
     done = apply i;
     assert done;
 
-    if b.out_a != eba or b.out_b != ebb:
+    if b.out_a != eba or b.out_b != ebb {
       Print("ERROR: Base\n");
       print (eba, ebb);
       print b.out_a;
       print b.out_b;
       return false;
-    ;
+    }
 
-    if d.out_a != eda or d.out_b != edb:
+    if d.out_a != eda or d.out_b != edb {
       Print("ERROR: Derived\n");
       print (eda, edb);
       print b.out_a;
       print b.out_b;
       return false;
-    ;
+    }
 
-    if t.out_a != eta or t.out_b != etb:
+    if t.out_a != eta or t.out_b != etb {
       Print("ERROR: TwiceDerived\n");
       print (eta, etb);
       print b.out_a;
       print b.out_b;
       return false;
-    ;
+    }
 
-    if i.out_a != eia or i.out_b != eib:
+    if i.out_a != eia or i.out_b != eib {
       Print("ERROR: InputOverriding\n");
       print (eia, eib);
       print b.out_a;
       print b.out_b;
       return false;
-    ;
+    }
 
     // Print("OK\n");
-  ;
+  }
 
   return true;
 }

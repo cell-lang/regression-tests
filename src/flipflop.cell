@@ -7,10 +7,10 @@ reactive FlipFlop on, off -> state {
     state : Bool;
 
   state:
-    state : Bool  = if   on and off then undefined
-                    elif on         then true
-                    elif off        then false
-                                    else init_state;
+    state : Bool  = if on and off then undefined   else
+                    if on         then true        else
+                    if off        then false       else
+                                       init_state;
 
   static:
     init_state = false;
@@ -90,29 +90,29 @@ Bool RunBasicFlipFlopTest((<on, off, same, none>, Bool)* test_data) {
   assert done;
   done = apply fcp;
   assert done;
-  if fc.state != false or fcp.state != false:
+  if fc.state != false or fcp.state != false {
     Print("ERROR: INITIAL UPDATE FAILED SOMEHOW!\n");
     print fc.state;
     print fcp.state;
     return false;
-  ;
+  }
 
-  for a, er <- test_data:
+  for a, er <- test_data {
     fc.action = a;
     fcp.action = a;
     done = apply fc;
     assert done;
     done = apply fcp;
     assert done;
-    if fc.state != er or fcp.state != er:
+    if fc.state != er or fcp.state != er {
       Print("ERROR! ERROR! ERROR!\n");
       print fc.state;
       print fcp.state;
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

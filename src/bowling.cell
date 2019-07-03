@@ -4,10 +4,10 @@ Nat* frames_offsets(Nat* throws) {
   len = |throws|;
   offsets = ();
   i = 0;
-  while i < len and |offsets| < 10:
+  while i < len and |offsets| < 10 {
     offsets = (offsets | i);
     i = nat(i + if throws(i) == 10 then 1 else 2);
-  ;
+  }
   return offsets;
 }
 
@@ -70,18 +70,18 @@ reactive Bowling {
 Bool RunBasicBowlingTest(Nat* throws, Nat* expected_partial_scores, Nat expected_score) {
   b : Bowling;
 
-  for t <- throws:
+  for t <- throws {
     b.throw = t;
     done = apply b;
     assert done;
 
-    if not b.throw_copy? or b.throw_copy != t:
+    if not b.throw_copy? or b.throw_copy != t {
       print "ERROR: throw_copy";
       print b.throw_copy;
       print t;
       return false;
-    ;
-  ;
+    }
+  }
 
 
   actual_partial_scores = subseq(b.cumulative_scores, 0, |expected_partial_scores|);
@@ -90,10 +90,10 @@ Bool RunBasicBowlingTest(Nat* throws, Nat* expected_partial_scores, Nat expected
   pss_ok = actual_partial_scores == expected_partial_scores;
   s_ok = b.score == expected_score;
 
-  if ts_ok and pss_ok and s_ok:
+  if ts_ok and pss_ok and s_ok {
     // Print("OK\n");
     return true;
-  ;
+  }
 
   Print("ERROR!\n");
   print throws;
@@ -111,10 +111,10 @@ Bool RunBasicBowlingTest(Nat* throws, Nat* expected_partial_scores, Nat expected
 
 
 Bool RunBasicBowlingTests() {
-  for ts, pss, s <- bowling_test_data:
+  for ts, pss, s <- bowling_test_data {
     ok = RunBasicBowlingTest(ts, pss, s);
     return false if not ok;
-  ;
+  }
   return true;
 }
 

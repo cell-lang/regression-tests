@@ -18,7 +18,8 @@ class ReactAutoA_Tests {
     long[] anIntSeq = new long[] {100, 101, 102, 103, 104, 105};
     double[] aFloatSeq = new double[] {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
     long[] aTimeSpanSeq = new long[] {60, 3600, 86420};
-    String anIntToSymbMap = "[0 -> zero, 1 -> one, 2 -> two, 3 -> three]";
+    // String anIntToSymbMap = "[0 -> zero, 1 -> one, 2 -> two, 3 -> three]";
+    String anIntToSymbMap = "[1 -> one, 2 -> two, 0 -> zero, 3 -> three]";
 
     Rect aRect = new Rect();
     aRect.color = Blue.singleton;

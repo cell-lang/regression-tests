@@ -59,18 +59,18 @@ Bool RunNestedAutomata3Test(Bool rand_times) {
 
   ct = 0;
 
-  for i < 1000:
+  for i < 1000 {
     dt = if rand_times then _rand_nat_(45) else 1;
     ct = _add_(ct, dt);
 
     elapsed ta dt;
-    loop
+    do
       done = apply ta;
     while not done;
 
     ec = _div_(ct, 20);
 
-    if ta.counter_a != ec or ta.counter_b != ec:
+    if ta.counter_a != ec or ta.counter_b != ec {
       Print("ERROR!\n");
       print (i: i, dt: dt, ct: ct);
       print ta.counter_a;
@@ -78,8 +78,8 @@ Bool RunNestedAutomata3Test(Bool rand_times) {
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

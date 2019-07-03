@@ -16,7 +16,7 @@ Bool RunTernRelObjsTests() {
 
   all_rels = ();
 
-  for i < 20:
+  for i < 20 {
     a_few_triples = [(t(0), t(1), t(2), j) : t <- rel_objs_triples, j <- [0, 1], one_in(3)];
     a_rel = [s, n, p : t <- a_few_triples, (s?, n?, p?, _) ?= t];
 
@@ -24,20 +24,20 @@ Bool RunTernRelObjsTests() {
 
     text = printed(a_rel);
 
-    if not a_rel :: [String, Int, Point]:
+    if not a_rel :: [String, Int, Point] {
       Print("Error (run-time type checking 1)\n");
       return false;
-    ;
-    if a_rel != [] and not a_rel :: [+String, Int, Point]:
+    }
+    if a_rel != [] and not a_rel :: [+String, Int, Point] {
       Print("Error (run-time type checking 2)\n");
       return false;
-    ;
+    }
     cannot_be = a_rel :: [Int, String, Point] or
                 a_rel :: [String, Point, Int] or
                 a_rel :: [Int, Point, String] or
                 a_rel :: [Point, String, Int] or
                 a_rel :: [Point, Int, String];
-    if a_rel != [] and cannot_be:
+    if a_rel != [] and cannot_be {
       Print("Error (RTTC 3)\n");
       print a_rel;
       print a_rel :: [Int, String, Point];
@@ -46,22 +46,22 @@ Bool RunTernRelObjsTests() {
       print a_rel :: [Point, String, Int];
       print a_rel :: [Point, Int, String];
       return false;
-    ;
+    }
 
     just_the_triples = [(s, n, p) : t <- a_few_triples, (s?, n?, p?, _) ?= t];
     errors = [t : t <- rel_objs_triples, just_the_triples(t) != a_rel(t(0), t(1), t(2))];
-    if errors != []:
+    if errors != [] {
       Print("Error!\n");
       print just_the_triples;
       print a_rel;
       print errors;
       return false;
-    ;
+    }
 
-    for an_s <- ss:
+    for an_s <- ss {
       prj = [n, p : n, p <- a_rel(an_s, ?, ?)];
       ref_prj = [n, p : t <- a_few_triples, (s?, n?, p?, _) ?= t, s == an_s];
-      if prj != ref_prj:
+      if prj != ref_prj {
         Print("Error (1)!\n");
         print a_few_triples;
         print a_rel;
@@ -69,13 +69,13 @@ Bool RunTernRelObjsTests() {
         print prj;
         print ref_prj;
         return false;
-      ;
-    ;
+      }
+    }
 
-    for an_n <- ns:
+    for an_n <- ns {
       prj = [s, p : s, p <- a_rel(?, an_n, ?)];
       ref_prj = [s, p : t <- a_few_triples, (s?, n?, p?, _) ?= t, n == an_n];
-      if prj != ref_prj:
+      if prj != ref_prj {
         Print("Error (2)!\n");
         print a_few_triples;
         print a_rel;
@@ -83,13 +83,13 @@ Bool RunTernRelObjsTests() {
         print prj;
         print ref_prj;
         return false;
-      ;
-    ;
+      }
+    }
 
-    for a_p <- ps:
+    for a_p <- ps {
       prj = [s, n : s, n <- a_rel(?, ?, a_p)];
       ref_prj = [s, n : t <- a_few_triples, (s?, n?, p?, _) ?= t, p == a_p];
-      if prj != ref_prj:
+      if prj != ref_prj {
         Print("Error (3)!\n");
         print a_few_triples;
         print a_rel;
@@ -97,14 +97,14 @@ Bool RunTernRelObjsTests() {
         print prj;
         print ref_prj;
         return false;
-      ;
-    ;
+      }
+    }
 
-    for an_s <- ss:
-      for an_n <- ns:
+    for an_s <- ss
+      for an_n <- ns {
         prj = [p : p <- a_rel(an_s, an_n, ?)];
         ref_prj = [p : t <- a_few_triples, (s?, n?, p?, _) ?= t, s == an_s, n == an_n];
-        if prj != ref_prj:
+        if prj != ref_prj {
           Print("Error (1/2)!\n");
           print a_few_triples;
           print a_rel;
@@ -112,15 +112,14 @@ Bool RunTernRelObjsTests() {
           print prj;
           print ref_prj;
           return false;
-        ;
-      ;
-    ;
+        }
+      }
 
-    for an_s <- ss:
-      for a_p <- ps:
+    for an_s <- ss
+      for a_p <- ps {
         prj = [n : n <- a_rel(an_s, ?, a_p)];
         ref_prj = [n : t <- a_few_triples, (s?, n?, p?, _) ?= t, s == an_s, p == a_p];
-        if prj != ref_prj:
+        if prj != ref_prj {
           Print("Error (1/3)!\n");
           print a_few_triples;
           print a_rel;
@@ -128,15 +127,14 @@ Bool RunTernRelObjsTests() {
           print prj;
           print ref_prj;
           return false;
-        ;
-      ;
-    ;
+        }
+      }
 
-    for an_n <- ns:
-      for a_p <- ps:
+    for an_n <- ns
+      for a_p <- ps {
         prj = [s : s <- a_rel(?, an_n, a_p)];
         ref_prj = [s : t <- a_few_triples, (s?, n?, p?, _) ?= t, n == an_n, p == a_p];
-        if prj != ref_prj:
+        if prj != ref_prj {
           Print("Error (2/3)!\n");
           print a_few_triples;
           print a_rel;
@@ -144,12 +142,11 @@ Bool RunTernRelObjsTests() {
           print prj;
           print ref_prj;
           return false;
-        ;
-      ;
-    ;
+        }
+      }
 
     // Print(".");
-  ;
+  }
 
   return true;
 }
@@ -161,7 +158,7 @@ Bool RunBinRelObjsTests1() {
 
   all_rels = ();
 
-  for i < 20:
+  for i < 20 {
     a_few_pairs = [(t(0), t(2), j) : t <- rel_objs_triples, j <- [0, 1], one_in(2)];
     a_rel = [s, p : t <- a_few_pairs, (s?, p?, _) ?= t];
 
@@ -169,33 +166,33 @@ Bool RunBinRelObjsTests1() {
 
     text = printed(a_rel);
 
-    if not a_rel :: [String, Point]:
+    if not a_rel :: [String, Point] {
       Print("Error (RTTC 1)\n");
       return false;
-    ;
-    if a_rel != [] and not a_rel :: [+String, Point]:
+    }
+    if a_rel != [] and not a_rel :: [+String, Point] {
       Print("Error (RTTC 2)\n");
       return false;
-    ;
-    if a_rel != [] and a_rel :: [Point, String]:
+    }
+    if a_rel != [] and a_rel :: [Point, String] {
       Print("Error (RTTC 3)\n");
       return false;
-    ;
+    }
 
     just_the_pairs = [(s, p) : t <- a_few_pairs, (s?, p?, _) ?= t];
     errors = [t : t <- rel_objs_triples, just_the_pairs((t(0), t(2))) != a_rel(t(0), t(2))];
-    if errors != []:
+    if errors != [] {
       Print("Error!\n");
       print just_the_pairs;
       print a_rel;
       print errors;
       return false;
-    ;
+    }
 
-    for an_s <- ss:
+    for an_s <- ss {
       prj = [p : p <- a_rel(an_s, ?)];
       ref_prj = [p : t <- a_few_pairs, (s?, p?, _) ?= t, s == an_s];
-      if prj != ref_prj:
+      if prj != ref_prj {
         Print("Error (1)!\n");
         print a_few_pairs;
         print a_rel;
@@ -203,13 +200,13 @@ Bool RunBinRelObjsTests1() {
         print prj;
         print ref_prj;
         return false;
-      ;
-    ;
+      }
+    }
 
-    for a_p <- ps:
+    for a_p <- ps {
       prj = [s : s <- a_rel(?, a_p)];
       ref_prj = [s : t <- a_few_pairs, (s?, p?, _) ?= t, p == a_p];
-      if prj != ref_prj:
+      if prj != ref_prj {
         Print("Error (2)!\n");
         print a_few_pairs;
         print a_rel;
@@ -217,11 +214,11 @@ Bool RunBinRelObjsTests1() {
         print prj;
         print ref_prj;
         return false;
-      ;
-    ;
+      }
+    }
 
     // Print(".");
-  ;
+  }
 
   return true;
 }
@@ -229,9 +226,8 @@ Bool RunBinRelObjsTests1() {
 
 Bool RunAllRelObjsTests() {
   ok = RunTernRelObjsTests();
-  if not ok:
+  if not ok
     return false;
-  ;
   // Print("\n------------------\n");
   ok = RunBinRelObjsTests1();
   // Print("\n");

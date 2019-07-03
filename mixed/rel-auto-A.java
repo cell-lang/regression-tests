@@ -4,18 +4,25 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.FileReader;
+import java.io.Writer;
+import java.io.PrintWriter;
 
 
 class RelAutoA_Tests {
-  public static void run(String file, boolean setState) throws IOException {
+  public static void run(String filename, boolean loadState) throws IOException {
     RelAutoA testDb = new RelAutoA();
 
-    if (file != null) {
-      String content = new String(Files.readAllBytes(Paths.get(file)));
-      if (setState)
-        testDb.setState(content);
-      else
+    if (filename != null) {
+      if (loadState) {
+        try (java.io.FileReader reader = new java.io.FileReader(filename)) {
+          testDb.load(reader);
+        }
+      }
+      else {
+        String content = new String(Files.readAllBytes(Paths.get(filename)));
         testDb.execute(content);
+      }
     }
     else
       testDb.execute("my_msg");
@@ -391,11 +398,8 @@ class RelAutoA_Tests {
 
     System.out.println("\n");
 
-    Value state = testDb.readState();
-
-    // FileOutputStream file = new FileOutputStream(outFnName);
-    OutputStreamWriter writer = new OutputStreamWriter(System.out);
-    state.print(writer);
+    Writer writer = new PrintWriter(System.out);
+    testDb.save(writer);
     writer.write("\n\n");
     writer.flush();
   }

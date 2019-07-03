@@ -98,19 +98,20 @@ using ChatServer0 {
     new_data = msg.data;
     pend_data = pending_inputs[channel];
 
-    if new_data == ascii_newline:
+    if new_data == ascii_newline {
       set pending_inputs = update(pending_inputs, channel, ());
       maybe_msg = try_parse_msg(pending_inputs[channel], channel);
-      if maybe_msg != nothing:
+      if maybe_msg != nothing {
         do(value(maybe_msg));
-      else
+      }
+      else {
         set data_to_send = data_to_send & [msg_counter -> (channel, "ERROR syntax error")];
         set msg_counter = nat(msg_counter + 1);
-      ;
-
-    else
+      }
+    }
+    else {
       set pending_inputs = update(pending_inputs, channel, (pend_data | new_data));
-    ;
+    }
   }
 
 
@@ -129,9 +130,9 @@ using ChatServer0 {
 
     core_state <- msg if not (already_logged_in or name_already_taken);
 
-    resp_msg = if   already_logged_in    then "ERROR already logged in"
-               elif name_already_taken   then "ERROR name already in use"
-                                         else "OK";
+    resp_msg = if already_logged_in   then "ERROR already logged in"   else
+               if name_already_taken  then "ERROR name already in use" else
+                                           "OK";
 
     set data_to_send = update(data_to_send, msg_counter, (user, resp_msg));
     set msg_counter = nat(msg_counter + 1);
@@ -166,9 +167,9 @@ using ChatServer0 {
 
     core_state <- msg if has_joined_room;
 
-    resp_msg = if   not is_logged_in    then "ERROR not logged in"
-               elif not has_joined_room then "ERROR never joined room"
-                                        else "OK";
+    resp_msg = if not is_logged_in    then "ERROR not logged in"     else
+               if not has_joined_room then "ERROR never joined room" else
+                                           "OK";
 
     set data_to_send = update(data_to_send, msg_counter, (user, resp_msg));
     set msg_counter  = nat(msg_counter + 1);
@@ -183,18 +184,18 @@ using ChatServer0 {
     is_logged_in = core_state.user_names(sender, *);
     target_exists = core_state.user_ids(receiver, *);
 
-    resp_msg = if   not is_logged_in  then "ERROR not logged in"
-               elif not target_exists then "ERROR unknown user"
-                                      else "OK";
+    resp_msg = if not is_logged_in  then "ERROR not logged in" else
+               if not target_exists then "ERROR unknown user"  else
+                                         "OK";
 
     new_data_to_send = [msg_counter -> (sender, resp_msg)];
     msgs_sent = 1;
 
-    if is_logged_in and target_exists:
+    if is_logged_in and target_exists {
       fwd_msg = "GOTUSERMSG " & core_state.user_names[sender] & " " & msg_text;
       new_data_to_send = new_data_to_send & [nat(msg_counter + msgs_sent) -> (core_state.user_ids[receiver], fwd_msg)];
       msgs_sent = msgs_sent + 1;
-    ;
+    }
 
     set data_to_send = data_to_send & new_data_to_send;
     set msg_counter = nat(msg_counter + msgs_sent);
@@ -209,19 +210,19 @@ using ChatServer0 {
     is_logged_in = core_state.user_names(sender, *);
     has_joined_room = is_logged_in and core_state.user_rooms[sender](target);
 
-    resp_msg = if   not is_logged_in      then "ERROR not logged in"
-               elif not has_joined_room   then "ERROR never joined room"
-                                          else "OK";
+    resp_msg = if not is_logged_in    then "ERROR not logged in"     else
+               if not has_joined_room then "ERROR never joined room" else
+                                           "OK";
 
     new_data_to_send = [msg_counter -> (sender, resp_msg)];
     msgs_sent = 1;
 
-    if is_logged_in:
+    if is_logged_in {
       fwd_msg = "GOTROOMMSG " & core_state.user_names[sender] & " #" & target & " " & msg_text;
       receivers = rand_sort(lookup(core_state.room_users, target, []));
       new_data_to_send = new_data_to_send & merge(([nat(msg_counter + i + 1) -> (r, fwd_msg)] : r @ i <- receivers));
       msgs_sent = msgs_sent + |receivers|;
-    ;
+    }
 
     set data_to_send = data_to_send & new_data_to_send;
     set msg_counter = nat(msg_counter + msgs_sent);
@@ -237,42 +238,40 @@ Bool RunAllChatServer0Tests() {
   sorted_users = rand_sort(set((u : u, unused_var <- chat_server_test_data_1)));
   conn_ids = merge(([u -> i] : u @ i <- sorted_users));
 
-  for i < |conn_ids|:
+  for i < |conn_ids|
     ok = cs <- connect(i);
-  ;
 
-  for u, s <- chat_server_test_data_1:
+  for u, s <- chat_server_test_data_1 {
     cid = conn_ids[u];
-    for ch <- _untag_(s):
+    for ch <- _untag_(s)
       ok = cs <- received(cid, ch);
-    ;
     ok = cs <- received(cid, ascii_newline);
     // print s;
     // print cs;
-  ;
+  }
 
-  for i < |conn_ids|:
+  for i < |conn_ids| {
     ok = cs <- disconnect(i);
     // print cs;
-  ;
+  }
 
-  if cs.data_to_send != chat_server_exp_res_1:
+  if cs.data_to_send != chat_server_exp_res_1 {
     Print("ERROR (1)\n");
     print cs.data_to_send;
     print chat_server_exp_res_1;
     return false;
-  ;
+  }
 
-  for i < cs.msg_counter:
+  for i < cs.msg_counter {
     ok = cs <- sent(i);
     // print cs;
-    if |cs.data_to_send| != cs.msg_counter - i - 1:
+    if |cs.data_to_send| != cs.msg_counter - i - 1 {
       Print("ERROR (2)\n");
       print i;
       print cs.data_to_send;
       return false;
-    ;
-  ;
+    }
+  }
 
   assert cs.data_to_send == [];
   return true;

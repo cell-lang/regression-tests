@@ -43,16 +43,15 @@ Bool RunBasicSamplerTest(SamplerTestSample* test_data) {
 
   els = nothing;
 
-  for ia, ib, ts, ecs <- test_data:
-    if ia != nothing:
+  for ia, ib, ts, ecs <- test_data {
+    if ia != nothing
       s.ia = ia;
-    ;
-    if ib != nothing:
+
+    if ib != nothing
       s.ib = ib;
-    ;
-    if ts != nothing:
+
+    if ts != nothing
       s.take_sample = ts;
-    ;
 
     done = apply s;
     assert done;
@@ -62,7 +61,7 @@ Bool RunBasicSamplerTest(SamplerTestSample* test_data) {
     cs_ok = if ecs != nothing then s.curr_sample? and s.curr_sample == ecs else not s.curr_sample?;
     ls_ok = s.last_sample == els;
 
-    if not cs_ok or not ls_ok:
+    if not cs_ok or not ls_ok {
       Print("ERROR ERROR ERROR!\n");
       print (cs_ok, ls_ok);
       print (ecs, els);
@@ -71,8 +70,8 @@ Bool RunBasicSamplerTest(SamplerTestSample* test_data) {
       return false;
     // else
     //   Print("OK\n");
-    ;
-  ;
+    }
+  }
 
   return true;
 }

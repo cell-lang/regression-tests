@@ -20,17 +20,17 @@ reactive Filter {
 Bool RunBasicFilterTest() {
   f : Filter;
 
-  for i, eo <- filter_test_data:
+  for i, eo <- filter_test_data {
     f.i = i;
     done = apply f;
     assert done;
 
-    if f.o != eo:
+    if f.o != eo {
       Print("Filter test error. \nExpected output: " & printed(eo) & "\nActual output:");
       print f.o;
       return false;
-    ;
-  ;
+    }
+  }
   return true;
 }
 
@@ -41,12 +41,12 @@ Bool RunNullFilterTest() {
 
   i_def = false;
 
-  for i, eo <- filter_test_data:
+  for i, eo <- filter_test_data {
     i_def = i_def or one_in(3);
 
-    if i_def:
+    if i_def
       f.i = i;
-    ;
+
     done = apply f;
     assert done;
 
@@ -54,11 +54,11 @@ Bool RunNullFilterTest() {
     done = apply rf;
     assert done;
 
-    if f.o?? and f.o != rf.o:
+    if f.o?? and f.o != rf.o {
       Print("Filter null test error. Reference output: " & printed(rf.o) & ", actual one: " & printed(f.o));
       return false;
-    ;
-  ;
+    }
+  }
 
   return true;
 }
@@ -68,10 +68,10 @@ Bool RunAllFilterTests() {
   ok = RunBasicFilterTest();
   return false if not ok;
 
-  for i < 1000:
+  for i < 1000 {
     ok = RunNullFilterTest();
     return false if not ok;
-  ;
+  }
 
   return true;
 }
