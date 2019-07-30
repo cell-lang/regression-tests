@@ -65,12 +65,10 @@ using ChatServer0CoreState {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-schema ChatServer0 {
+schema ChatServer0 : ChatServer0CoreState {
   pending_inputs : [Nat -> Byte*]         = [];
   data_to_send   : [Nat -> (Nat, String)] = [];
   msg_counter    : Nat                    = 0;
-
-  core_state : ChatServer0CoreState;
 }
 
 
@@ -88,8 +86,8 @@ using ChatServer0 {
   do(Disconnect msg) {
     channel = msg.channel;
     set pending_inputs = remove_key(pending_inputs, channel);
-    is_logged_in = core_state.user_names(channel, *);
-    core_state <- logout(user: channel) if is_logged_in;
+    is_logged_in = user_names(channel, *);
+    super <- logout(user: channel) if is_logged_in;
   }
 
 
@@ -125,10 +123,10 @@ using ChatServer0 {
     user = msg.user;
     name = msg.name;
 
-    already_logged_in = core_state.user_names(user, *);
-    name_already_taken = core_state.user_ids(name, *);
+    already_logged_in = user_names(user, *);
+    name_already_taken = user_ids(name, *);
 
-    core_state <- msg if not (already_logged_in or name_already_taken);
+    super <- msg if not (already_logged_in or name_already_taken);
 
     resp_msg = if already_logged_in   then "ERROR already logged in"   else
                if name_already_taken  then "ERROR name already in use" else
@@ -140,16 +138,16 @@ using ChatServer0 {
 
 
   do(Logout msg) {
-    core_state <- msg if core_state.user_names(msg.user, *);
+    super <- msg if user_names(msg.user, *);
   }
 
 
   do(JoinRoom msg) {
     user = msg.user;
 
-    is_logged_in = core_state.user_names(user, *);
+    is_logged_in = user_names(user, *);
 
-    core_state <- msg if is_logged_in;
+    super <- msg if is_logged_in;
 
     resp_msg = if is_logged_in then "OK" else "ERROR not logged in";
 
@@ -162,10 +160,10 @@ using ChatServer0 {
     user = msg.user;
     room = msg.room;
 
-    is_logged_in = core_state.user_names(user, *);
-    has_joined_room = is_logged_in and core_state.user_rooms[user](room);
+    is_logged_in = user_names(user, *);
+    has_joined_room = is_logged_in and user_rooms[user](room);
 
-    core_state <- msg if has_joined_room;
+    super <- msg if has_joined_room;
 
     resp_msg = if not is_logged_in    then "ERROR not logged in"     else
                if not has_joined_room then "ERROR never joined room" else
@@ -181,8 +179,8 @@ using ChatServer0 {
     receiver = msg.receiver;
     msg_text = msg.msg_text;
 
-    is_logged_in = core_state.user_names(sender, *);
-    target_exists = core_state.user_ids(receiver, *);
+    is_logged_in = user_names(sender, *);
+    target_exists = user_ids(receiver, *);
 
     resp_msg = if not is_logged_in  then "ERROR not logged in" else
                if not target_exists then "ERROR unknown user"  else
@@ -192,8 +190,8 @@ using ChatServer0 {
     msgs_sent = 1;
 
     if is_logged_in and target_exists {
-      fwd_msg = "GOTUSERMSG " & core_state.user_names[sender] & " " & msg_text;
-      new_data_to_send = new_data_to_send & [nat(msg_counter + msgs_sent) -> (core_state.user_ids[receiver], fwd_msg)];
+      fwd_msg = "GOTUSERMSG " & user_names[sender] & " " & msg_text;
+      new_data_to_send = new_data_to_send & [nat(msg_counter + msgs_sent) -> (user_ids[receiver], fwd_msg)];
       msgs_sent = msgs_sent + 1;
     }
 
@@ -207,8 +205,8 @@ using ChatServer0 {
     target = msg.target;
     msg_text = msg.msg_text;
 
-    is_logged_in = core_state.user_names(sender, *);
-    has_joined_room = is_logged_in and core_state.user_rooms[sender](target);
+    is_logged_in = user_names(sender, *);
+    has_joined_room = is_logged_in and user_rooms[sender](target);
 
     resp_msg = if not is_logged_in    then "ERROR not logged in"     else
                if not has_joined_room then "ERROR never joined room" else
@@ -218,8 +216,8 @@ using ChatServer0 {
     msgs_sent = 1;
 
     if is_logged_in {
-      fwd_msg = "GOTROOMMSG " & core_state.user_names[sender] & " #" & target & " " & msg_text;
-      receivers = rand_sort(lookup(core_state.room_users, target, []));
+      fwd_msg = "GOTROOMMSG " & user_names[sender] & " #" & target & " " & msg_text;
+      receivers = rand_sort(lookup(room_users, target, []));
       new_data_to_send = new_data_to_send & merge(([nat(msg_counter + i + 1) -> (r, fwd_msg)] : r @ i <- receivers));
       msgs_sent = msgs_sent + |receivers|;
     }
@@ -233,46 +231,50 @@ using ChatServer0 {
 ////////////////////////////////////////////////////////////////////////////////
 
 Bool RunAllChatServer0Tests() {
-  cs : ChatServer0;
+  core          : ChatServer0CoreState;
+  server(core)  : ChatServer0;
 
   sorted_users = rand_sort(set((u : u, unused_var <- chat_server_test_data_1)));
   conn_ids = merge(([u -> i] : u @ i <- sorted_users));
 
-  for i < |conn_ids|
-    ok = cs <- connect(i);
+  for i < |conn_ids| {
+    ok = server <- connect(i);
+    assert ok;
+  }
 
   for u, s <- chat_server_test_data_1 {
     cid = conn_ids[u];
-    for ch <- _untag_(s)
-      ok = cs <- received(cid, ch);
-    ok = cs <- received(cid, ascii_newline);
-    // print s;
-    // print cs;
+    for ch <- _untag_(s) {
+      ok = server <- received(cid, ch);
+      assert ok;
+    }
+    ok = server <- received(cid, ascii_newline);
+    assert ok;
   }
 
   for i < |conn_ids| {
-    ok = cs <- disconnect(i);
-    // print cs;
+    ok = server <- disconnect(i);
+    assert ok;
   }
 
-  if cs.data_to_send != chat_server_exp_res_1 {
+  if server.data_to_send != chat_server_exp_res_1 {
     Print("ERROR (1)\n");
-    print cs.data_to_send;
+    print server.data_to_send;
     print chat_server_exp_res_1;
     return false;
   }
 
-  for i < cs.msg_counter {
-    ok = cs <- sent(i);
-    // print cs;
-    if |cs.data_to_send| != cs.msg_counter - i - 1 {
+  for i < server.msg_counter {
+    ok = server <- sent(i);
+    assert ok;
+    if |server.data_to_send| != server.msg_counter - i - 1 {
       Print("ERROR (2)\n");
       print i;
-      print cs.data_to_send;
+      print server.data_to_send;
       return false;
     }
   }
 
-  assert cs.data_to_send == [];
+  assert server.data_to_send == [];
   return true;
 }

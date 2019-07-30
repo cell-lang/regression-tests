@@ -40,12 +40,10 @@ schema Flights {
 }
 
 
-schema Travels {
+schema Travels : Flights {
   budget    : Money      = euro_cents(0);
   favorites : CountryId* = ();
   visited   : CountryId* = ();
-
-  flights   : Flights;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,8 +58,7 @@ type FlightsData = (
 type TravelsData = (
     budget    : Money,
     favorites : CountryId*,
-    visited   : CountryId*,
-    flights   : FlightsData
+    visited   : CountryId*
   );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +95,6 @@ Travels.PopulateTravels {
   set budget = this.data.budget;
   set favorites = this.data.favorites;
   set visited = this.data.visited;
-  flights <- populate_flights(data: this.data.flights);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -161,8 +157,7 @@ FlightsData flights_data = (
 TravelsData travels_data = (
     budget:     euro_cents(120000),
     favorites:  (country_id(2)),
-    visited:    (country_id(i) : i <= 2),
-    flights:    flights_data
+    visited:    (country_id(i) : i <= 2)
   );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -211,8 +206,7 @@ FlightsData flights_data_2 = (
 TravelsData travels_data_2 = (
     budget:     euro_cents(180000),
     favorites:  (country_id(i) : i <- (2, 6)),
-    visited:    (id : id, code, name <- countries_2),
-    flights:    flights_data_2
+    visited:    (id : id, code, name <- countries_2)
   );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -304,8 +298,7 @@ Flights flights_state(FlightsData data) = (
 Travels travels_state(TravelsData data) = (
     budget:     data.budget,
     favorites:  data.favorites,
-    visited:    data.visited,
-    flights:    flights_state(data.flights)
+    visited:    data.visited
   );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -405,14 +398,10 @@ Bool RunFlightsTests() {
 
 
 Bool RunTravelsTests() {
-  tdb : Travels;
+  fsdb      : Flights;
+  tdb(fsdb) : Travels;
 
-  d0 = (
-    budget:    euro_cents(0),
-    favorites: (),
-    visited:   (),
-    flights:   (countries: (), airports: (), routes: (), flights: ())
-  );
+  d0 = (budget: euro_cents(0), favorites: (), visited: ());
   d1 = travels_data;
   d2 = travels_data_2;
 
@@ -463,13 +452,13 @@ Bool RunTravelsTests() {
   }
 
   ok = tdb <- populate_travels(data: d2);
-  if ok {
+  if not ok {
     Print("\n\nERROR! (Travels: 8)\n");
     return false;
   }
 
   s = read tdb;
-  if s != s1 {
+  if s != s2 {
     Print("\n\nERROR! (Travels: 9)\n");
     return false;
   }

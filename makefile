@@ -31,7 +31,7 @@ tests.jar:
 	mkdir tmp
 	mkdir tmp/gen/
 	# java -jar ~/bin/cellc-java.jar project.txt tmp/gen/
-	java -jar ../java/bin/cellcd-java.jar -anra project.txt tmp/gen/
+	java -jar ../java/bin/cellcd-java.jar project.txt tmp/gen/
 	javac -g -d tmp/ tmp/gen/*.java
 	jar cfe tmp/tests.jar net.cell_lang.Generated -C tmp net/
 

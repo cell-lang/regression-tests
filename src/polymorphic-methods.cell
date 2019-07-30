@@ -30,52 +30,64 @@ PolyMsg sequential_combine(PolyMsg msg1, PolyMsg msg2) =
 
 ////////////////////////////////////////////////////////////////////////////////
 
-schema PolymorphicMethodsInnerCounter {
-  a_counter : Int = 0;
-}
+// schema PolymorphicMethodsInnerCounter {
+//   a_counter : Int = 0;
+// }
 
 
-PolymorphicMethodsInnerCounter.Reset {
-  run(this);
-}
+// PolymorphicMethodsInnerCounter.Reset {
+//   run(this);
+// }
 
-PolymorphicMethodsInnerCounter.Incr {
-  set a_counter = _add_(a_counter, 1);
-}
+// PolymorphicMethodsInnerCounter.Incr {
+//   set a_counter = _add_(a_counter, 1);
+// }
 
-PolymorphicMethodsInnerCounter.Decr {
-  set a_counter = _sub_(a_counter, 1);
-}
+// PolymorphicMethodsInnerCounter.Decr {
+//   set a_counter = _sub_(a_counter, 1);
+// }
 
-PolymorphicMethodsInnerCounter.Acc {
-  run(this);
-}
+// PolymorphicMethodsInnerCounter.Acc {
+//   run(this);
+// }
 
 
-using PolymorphicMethodsInnerCounter {
-  run(Reset msg) {
-    set a_counter = _untag_(msg);
-  }
+// using PolymorphicMethodsInnerCounter {
+//   run(Reset msg) {
+//     set a_counter = _untag_(msg);
+//   }
 
-  run(Incr msg) {
-    set a_counter = _add_(a_counter, 1);
-  }
+//   run(Incr msg) {
+//     set a_counter = _add_(a_counter, 1);
+//   }
 
-  run(Decr msg) {
-    set a_counter = _sub_(a_counter, 1);
-  }
+//   run(Decr msg) {
+//     set a_counter = _sub_(a_counter, 1);
+//   }
 
-  run(Acc msg) {
-    set a_counter = _add_(a_counter, _untag_(msg));
-  }
+//   run(Acc msg) {
+//     set a_counter = _add_(a_counter, _untag_(msg));
+//   }
 
-  reset() {
-    set a_counter = 0;
-  }
+//   reset() {
+//     set a_counter = 0;
+//   }
 
-  set_counter(Nat value) {
-    set a_counter = value;
-  }
+//   set_counter(Nat value) {
+//     set a_counter = value;
+//   }
+// }
+
+type PolymorphicMethodsInnerCounter = (a_counter : Int);
+
+
+PolymorphicMethodsInnerCounter next_state(PolymorphicMethodsInnerCounter state, PolyMsg msg) {
+  value = match (msg)
+    reset(n?)       = n,
+    increment       = _add_(state.a_counter, 1),
+    decrement       = _sub_(state.a_counter, 1),
+    accumulate(n?)  = _add_(state.a_counter, n);
+  return (a_counter: value);
 }
 
 
@@ -88,7 +100,7 @@ reactive PolymorphicMethodsSomeCounter {
     a_counter : Int;
 
   state:
-    inner_counter : PolymorphicMethodsInnerCounter;
+    inner_counter : PolymorphicMethodsInnerCounter = (a_counter: 0);
 
   rules:
     other_msg := :accumulate(2) when an_input == :a1 or an_input == :a3 or an_input == :a5;
@@ -97,7 +109,7 @@ reactive PolymorphicMethodsSomeCounter {
     final_msg := other_msg : other_msg, not msg;
     final_msg := sequential_combine(other_msg, msg);
 
-    inner_counter <- final_msg;
+    inner_counter = next_state(inner_counter, final_msg);
 
     a_counter = inner_counter.a_counter;
 }
