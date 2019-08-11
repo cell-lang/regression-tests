@@ -1,5 +1,4 @@
 type Money  = euro_cents(Nat), dollar_cents(Nat);
-type Time   = epoc_time(Nat);
 
 type CountryId  = country_id(Nat);
 type AirportId  = airport_id(Nat);
@@ -11,7 +10,6 @@ type CountryCode  = string(Nat, Nat);
 
 Money euro_cents(Nat n)   = :euro_cents(n);
 Money dollar_cents(Nat n) = :dollar_cents(n);
-Time  epoc_time(Nat n)    = :epoc_time(n);
 
 CountryId country_id(Nat n) = :country_id(n);
 AirportId airport_id(Nat n) = :airport_id(n);
@@ -242,7 +240,7 @@ TravelsData travels_data_2 = (
     dt = nat(min_epoc_time + _rand_nat_(1000));
     at = nat(dt + _rand_nat_(20));
     p = nat(99 + 100 * _rand_nat_(40));
-    data = (flight_id(i), r,  epoc_time(dt), epoc_time(at), euro_cents(p));
+    data = (flight_id(i), r,  :time(dt), :time(at), euro_cents(p));
     fs = (fs | data);
   }
   fail if fs == ();
