@@ -1,5 +1,6 @@
 package net.cell_lang;
 
+import java.util.Map;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -30,14 +31,14 @@ class RelAutoA_Tests {
     boolean boolOutput = testDb.aBoolVar();
     long longOutput = testDb.anIntVar();
     double doubleOutput = testDb.aFloatVar();
-    Value symbOutput = testDb.aSymbVar();
+    String symbOutput = testDb.aSymbVar();
 
     String str = testDb.aStringVar();
     boolean[] bools = testDb.aBoolSeqVar();
     long[] longs = testDb.anIntSeqVar();
     double[] doubles = testDb.aFloatSeqVar();
 
-    System.out.printf("%s - %d - %f - %s - %s\n", boolOutput ? "true" : "false", longOutput, doubleOutput, symbOutput.toString(), str);
+    System.out.printf("%s - %d - %f - %s - %s\n", boolOutput ? "true" : "false", longOutput, doubleOutput, symbOutput, str);
     for (int i=0 ; i < bools.length ; i++)
       System.out.printf("%d ", bools[i] ? 1 : 0);
     System.out.println("");
@@ -124,9 +125,9 @@ class RelAutoA_Tests {
     System.out.println("]\n");
 
     System.out.print("[");
-    Value[] values = testDb.aSymbUnaryRel();
-    for (int i=0 ; i < values.length ; i++)
-      System.out.printf("%s%s", i == 0 ? "" : ", ", values[i].toString());
+    String[] symbs = testDb.aSymbUnaryRel();
+    for (int i=0 ; i < symbs.length ; i++)
+      System.out.printf("%s%s", i == 0 ? "" : ", ", symbs[i]);
     System.out.println("]\n");
 
     System.out.print("[");
@@ -171,11 +172,11 @@ class RelAutoA_Tests {
     System.out.println("");
 
     System.out.print("[");
-    Value[][] symbVV = testDb.aSymbSeqUnaryRel();
+    String[][] symbVV = testDb.aSymbSeqUnaryRel();
     for (int i=0 ; i < symbVV.length ; i++) {
-      Value[] symbV = symbVV[i];
+      String[] symbV = symbVV[i];
       for (int j=0 ; j < symbV.length ; j++)
-        System.out.printf("%s%s", j == 0 ? "" : ", ", symbV[j].toString());
+        System.out.printf("%s%s", j == 0 ? "" : ", ", symbV[j]);
       System.out.print("; ");
     }
     System.out.println("]\n");
@@ -208,9 +209,9 @@ class RelAutoA_Tests {
     System.out.println("");
 
     System.out.print("[");
-    Value_Double[] valueDoubleR = testDb.aSymbFloatBinaryRel();
-    for (int i=0 ; i < valueDoubleR.length ; i++)
-      System.out.printf("%s(%s, %.6f)", i == 0 ? "" : ", ", valueDoubleR[i].item1.toString(), valueDoubleR[i].item2);
+    String_Double[] stringDoubleR = testDb.aSymbFloatBinaryRel();
+    for (int i=0 ; i < stringDoubleR.length ; i++)
+      System.out.printf("%s(%s, %.6f)", i == 0 ? "" : ", ", stringDoubleR[i].item1, stringDoubleR[i].item2);
     System.out.println("]\n\n");
 
     String[] symbV = new String[] {"pi", "e", "sqrt2", "sqrt3", "sqrt5", "non-key"};
@@ -334,7 +335,7 @@ class RelAutoA_Tests {
 
     System.out.println("");
 
-    Value_Double[] symbDoubleV = testDb.symbsAndFloats();
+    String_Double[] symbDoubleV = testDb.symbsAndFloats();
     for (int i=0 ; i < symbDoubleV.length ; i++)
       System.out.printf("(%s, %.5f) ", symbDoubleV[i].item1, symbDoubleV[i].item2);
     System.out.println("\n");
@@ -347,8 +348,8 @@ class RelAutoA_Tests {
     System.out.println(testDb.hasStringBoolSeqPair("010", new boolean[] {true, false, false, true, true, false}) ? 1 : 0);
     System.out.println(testDb.hasStringBoolSeqPair("100110", new boolean[] {false, true, false}) ? 1 : 0);
 
-    Value value = testDb.anIntToSymbMapVar();
-    System.out.println("\n" + value.toString() + "\n");
+    Map<Long, String> intSymbMap = testDb.anIntToSymbMapVar();
+    System.out.println("\n" + intSymbMap.toString() + "\n");
 
     // System.out.print("msecs(123) -> ");
     // try {
@@ -377,7 +378,7 @@ class RelAutoA_Tests {
     System.out.println(testDb.anIntStringFloatSeqTernaryRel(0, "sqrt(2) - sqrt(3)", new double[] {141421e-5, 173205e-5}) ? 1 : 0);
     System.out.println("");
 
-    Value_Long_Bool_Seq[] stringLongBoolsR = testDb.aSymbIntBoolSeqTernaryRel();
+    String_Long_Bool_Seq[] stringLongBoolsR = testDb.aSymbIntBoolSeqTernaryRel();
     for (int i=0 ; i < stringLongBoolsR.length ; i++) {
       System.out.printf("%s, %d, (", stringLongBoolsR[i].item1.toString(), stringLongBoolsR[i].item2);
       for (int j=0 ; j < stringLongBoolsR[i].item3.length ; j++)

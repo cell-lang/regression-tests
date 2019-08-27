@@ -282,29 +282,29 @@ TernTableColsPerms.del_012(Nat, String, Point) {
 
 
 using TernTableColsPerms {
-  [(Nat, String, Point)] rel_a_dump = [(n, s, p) : n, s, p <- tern_rel_a];
-  [(Nat, String, Point)] rel_b_dump = [(n, s, p) : n, s, p <- tern_rel_b];
-  [(Nat, String, Point)] rel_c_dump = [(n, s, p) : n, s, p <- tern_rel_c];
-  [(Nat, String, Point)] rel_d_dump = [(n, s, p) : n, s, p <- tern_rel_d];
-  [(Nat, String, Point)] rel_e_dump = [(n, s, p) : n, s, p <- tern_rel_e];
-  [(Nat, String, Point)] rel_f_dump = [(n, s, p) : n, s, p <- tern_rel_f];
-  [(Nat, String, Point)] rel_g_dump = [(n, s, p) : n, s, p <- tern_rel_g];
-  [(Nat, String, Point)] rel_h_dump = [(n, s, p) : n, s, p <- tern_rel_h];
-  [(Nat, String, Point)] rel_i_dump = [(n, s, p) : n, s, p <- tern_rel_i];
-  [(Nat, String, Point)] rel_j_dump = [(n, s, p) : n, s, p <- tern_rel_j];
-  [(Nat, String, Point)] rel_k_dump = [(n, s, p) : n, s, p <- tern_rel_k];
+  [(Nat, String, Point)] rel_a_dump = [(n, s, p) : n s p <- tern_rel_a];
+  [(Nat, String, Point)] rel_b_dump = [(n, s, p) : n s p <- tern_rel_b];
+  [(Nat, String, Point)] rel_c_dump = [(n, s, p) : n s p <- tern_rel_c];
+  [(Nat, String, Point)] rel_d_dump = [(n, s, p) : n s p <- tern_rel_d];
+  [(Nat, String, Point)] rel_e_dump = [(n, s, p) : n s p <- tern_rel_e];
+  [(Nat, String, Point)] rel_f_dump = [(n, s, p) : n s p <- tern_rel_f];
+  [(Nat, String, Point)] rel_g_dump = [(n, s, p) : n s p <- tern_rel_g];
+  [(Nat, String, Point)] rel_h_dump = [(n, s, p) : n s p <- tern_rel_h];
+  [(Nat, String, Point)] rel_i_dump = [(n, s, p) : n s p <- tern_rel_i];
+  [(Nat, String, Point)] rel_j_dump = [(n, s, p) : n s p <- tern_rel_j];
+  [(Nat, String, Point)] rel_k_dump = [(n, s, p) : n s p <- tern_rel_k];
 
-  [(Nat, String, Point)] rel_a_dump_2 = [(n, s, p) : n, s, p <- tern_rel_a];
-  [(Nat, String, Point)] rel_b_dump_2 = [(n, s, p) : n, s, p <- tern_rel_b];
-  [(Nat, String, Point)] rel_c_dump_2 = [(n, s, p) : n, s, p <- tern_rel_c];
-  [(Nat, String, Point)] rel_d_dump_2 = [(n, s, p) : n, s, p <- tern_rel_d];
-  [(Nat, String, Point)] rel_e_dump_2 = [(n, s, p) : n, s, p <- tern_rel_e];
-  [(Nat, String, Point)] rel_f_dump_2 = [(n, s, p) : n, s, p <- tern_rel_f];
-  [(Nat, String, Point)] rel_g_dump_2 = [(n, s, p) : n, s, p <- tern_rel_g];
-  [(Nat, String, Point)] rel_h_dump_2 = [(n, s, p) : n, s, p <- tern_rel_h];
-  [(Nat, String, Point)] rel_i_dump_2 = [(n, s, p) : n, s, p <- tern_rel_i];
-  [(Nat, String, Point)] rel_j_dump_2 = [(n, s, p) : n, s, p <- tern_rel_j];
-  [(Nat, String, Point)] rel_k_dump_2 = [(n, s, p) : n, s, p <- tern_rel_k];
+  [(Nat, String, Point)] rel_a_dump_2 = [(n, s, p) : n s p <- tern_rel_a];
+  [(Nat, String, Point)] rel_b_dump_2 = [(n, s, p) : n s p <- tern_rel_b];
+  [(Nat, String, Point)] rel_c_dump_2 = [(n, s, p) : n s p <- tern_rel_c];
+  [(Nat, String, Point)] rel_d_dump_2 = [(n, s, p) : n s p <- tern_rel_d];
+  [(Nat, String, Point)] rel_e_dump_2 = [(n, s, p) : n s p <- tern_rel_e];
+  [(Nat, String, Point)] rel_f_dump_2 = [(n, s, p) : n s p <- tern_rel_f];
+  [(Nat, String, Point)] rel_g_dump_2 = [(n, s, p) : n s p <- tern_rel_g];
+  [(Nat, String, Point)] rel_h_dump_2 = [(n, s, p) : n s p <- tern_rel_h];
+  [(Nat, String, Point)] rel_i_dump_2 = [(n, s, p) : n s p <- tern_rel_i];
+  [(Nat, String, Point)] rel_j_dump_2 = [(n, s, p) : n s p <- tern_rel_j];
+  [(Nat, String, Point)] rel_k_dump_2 = [(n, s, p) : n s p <- tern_rel_k];
 
   [[(Nat, String, Point)]] rel_dumps = [
       rel_a_dump,
@@ -519,45 +519,45 @@ using TernTableColsPerms {
 
 
   [+[(String, Point)]] projection(Nat n) = [
-      [(s, p) : s, p <- tern_rel_a(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_b(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_c(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_d(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_e(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_f(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_g(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_h(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_i(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_j(n, ?, ?)],
-      [(s, p) : s, p <- tern_rel_k(n, ?, ?)]
+      [(s, p) : s p <- tern_rel_a(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_b(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_c(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_d(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_e(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_f(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_g(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_h(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_i(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_j(n, ?, ?)],
+      [(s, p) : s p <- tern_rel_k(n, ?, ?)]
     ];
 
   [+[(Nat, Point)]] projection(String s) = [
-      [(n, p) : n, p <- tern_rel_a(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_b(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_c(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_d(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_e(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_f(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_g(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_h(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_i(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_j(?, s, ?)],
-      [(n, p) : n, p <- tern_rel_k(?, s, ?)]
+      [(n, p) : n p <- tern_rel_a(?, s, ?)],
+      [(n, p) : n p <- tern_rel_b(?, s, ?)],
+      [(n, p) : n p <- tern_rel_c(?, s, ?)],
+      [(n, p) : n p <- tern_rel_d(?, s, ?)],
+      [(n, p) : n p <- tern_rel_e(?, s, ?)],
+      [(n, p) : n p <- tern_rel_f(?, s, ?)],
+      [(n, p) : n p <- tern_rel_g(?, s, ?)],
+      [(n, p) : n p <- tern_rel_h(?, s, ?)],
+      [(n, p) : n p <- tern_rel_i(?, s, ?)],
+      [(n, p) : n p <- tern_rel_j(?, s, ?)],
+      [(n, p) : n p <- tern_rel_k(?, s, ?)]
     ];
 
   [+[(Nat, String)]] projection(Point p) = [
-      [(n, s) : n, s <- tern_rel_a(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_b(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_c(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_d(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_e(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_f(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_g(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_h(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_i(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_j(?, ?, p)],
-      [(n, s) : n, s <- tern_rel_k(?, ?, p)]
+      [(n, s) : n s <- tern_rel_a(?, ?, p)],
+      [(n, s) : n s <- tern_rel_b(?, ?, p)],
+      [(n, s) : n s <- tern_rel_c(?, ?, p)],
+      [(n, s) : n s <- tern_rel_d(?, ?, p)],
+      [(n, s) : n s <- tern_rel_e(?, ?, p)],
+      [(n, s) : n s <- tern_rel_f(?, ?, p)],
+      [(n, s) : n s <- tern_rel_g(?, ?, p)],
+      [(n, s) : n s <- tern_rel_h(?, ?, p)],
+      [(n, s) : n s <- tern_rel_i(?, ?, p)],
+      [(n, s) : n s <- tern_rel_j(?, ?, p)],
+      [(n, s) : n s <- tern_rel_k(?, ?, p)]
     ];
 }
 
@@ -822,7 +822,7 @@ Bool RunTernTableKeyCheckTests(TernTableInsertOp msg, [[+Nat]] keys) {
 
 
 Bool RunAllTernTableKeyCheckTests() {
-  for m, ks <- rand_sort([(m, ks) : m, ks <- tern_rels_keys_by_msg]) {
+  for m, ks <- rand_sort([(m, ks) : m ks <- tern_rels_keys_by_msg]) {
     ok = RunTernTableKeyCheckTests(m, ks);
     if not ok {
       Print("ERROR ERROR ERROR!\n");
@@ -867,17 +867,17 @@ Bool RunTernTableUpdateTests(TernTableUpdateOp msg, [[+Nat]] keys) {
       return false;
     }
     new_tuples = match (msg)
-      update_a  = [(n, s, p) : n, s, p <- a.tern_rel_a],
-      update_b  = [(n, s, p) : n, s, p <- a.tern_rel_b],
-      update_c  = [(n, s, p) : n, s, p <- a.tern_rel_c],
-      update_d  = [(n, s, p) : n, s, p <- a.tern_rel_d],
-      update_e  = [(n, s, p) : n, s, p <- a.tern_rel_e],
-      update_f  = [(n, s, p) : n, s, p <- a.tern_rel_f],
-      update_g  = [(n, s, p) : n, s, p <- a.tern_rel_g],
-      update_h  = [(n, s, p) : n, s, p <- a.tern_rel_h],
-      update_i  = [(n, s, p) : n, s, p <- a.tern_rel_i],
-      update_j  = [(n, s, p) : n, s, p <- a.tern_rel_j],
-      update_k  = [(n, s, p) : n, s, p <- a.tern_rel_k];
+      update_a  = [(n, s, p) : n s p <- a.tern_rel_a],
+      update_b  = [(n, s, p) : n s p <- a.tern_rel_b],
+      update_c  = [(n, s, p) : n s p <- a.tern_rel_c],
+      update_d  = [(n, s, p) : n s p <- a.tern_rel_d],
+      update_e  = [(n, s, p) : n s p <- a.tern_rel_e],
+      update_f  = [(n, s, p) : n s p <- a.tern_rel_f],
+      update_g  = [(n, s, p) : n s p <- a.tern_rel_g],
+      update_h  = [(n, s, p) : n s p <- a.tern_rel_h],
+      update_i  = [(n, s, p) : n s p <- a.tern_rel_i],
+      update_j  = [(n, s, p) : n s p <- a.tern_rel_j],
+      update_k  = [(n, s, p) : n s p <- a.tern_rel_k];
 
     if new_tuples != exp_tuples {
       Print("ERROR (2)\n");
@@ -911,7 +911,7 @@ Bool RunTernTableUpdateTests(TernTableUpdateOp msg, [[+Nat]] keys) {
 
 
 Bool RunAllTernTableUpdateTests() {
-  for m, ks <- rand_sort([(m, ks) : m, ks <- tern_rels_update_keys_by_msg]) {
+  for m, ks <- rand_sort([(m, ks) : m ks <- tern_rels_update_keys_by_msg]) {
     ok = RunTernTableUpdateTests(m, ks);
     if not ok {
       Print("ERROR: Ternary table update tests\n");

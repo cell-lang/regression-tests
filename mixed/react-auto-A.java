@@ -1,6 +1,8 @@
 package net.cell_lang;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 
 
 class ReactAutoA_Tests {
@@ -18,8 +20,13 @@ class ReactAutoA_Tests {
     long[] anIntSeq = new long[] {100, 101, 102, 103, 104, 105};
     double[] aFloatSeq = new double[] {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
     long[] aTimeSpanSeq = new long[] {60, 3600, 86420};
-    // String anIntToSymbMap = "[0 -> zero, 1 -> one, 2 -> two, 3 -> three]";
-    String anIntToSymbMap = "[1 -> one, 2 -> two, 0 -> zero, 3 -> three]";
+
+    HashMap<Long, String> anIntToSymbMap = new HashMap<Long, String>();
+    anIntToSymbMap.put(0L, "zero");
+    anIntToSymbMap.put(1L, "one");
+    anIntToSymbMap.put(2L, "two");
+    anIntToSymbMap.put(3L, "three");
+
 
     Rect aRect = new Rect();
     aRect.color = Blue.singleton;
@@ -99,9 +106,9 @@ class ReactAutoA_Tests {
       return;
     }
 
-    Value aSymbOutput = testAuto.aSymbOutput();
-    if (!aSymbOutput.toString().equals(aSymb)) {
-      System.out.printf("ERROR: ASymbOutput = %s, ASymb = %s\n", aSymbOutput.toString(), aSymb);
+    String aSymbOutput = testAuto.aSymbOutput();
+    if (!aSymbOutput.equals(aSymb)) {
+      System.out.printf("ERROR: ASymbOutput = %s, ASymb = %s\n", aSymbOutput, aSymb);
       return;
     }
 
@@ -206,8 +213,8 @@ class ReactAutoA_Tests {
       return;
     }
 
-    Value anIntToSymbMapOutput = testAuto.anIntToSymbMapOutput();
-    if (!anIntToSymbMapOutput.toString().equals(anIntToSymbMap)) {
+    Map<Long, String> anIntToSymbMapOutput = testAuto.anIntToSymbMapOutput();
+    if (!anIntToSymbMapOutput.equals(anIntToSymbMap)) {
       System.out.printf("ERROR: anIntToSymbMapOutput = %s, anIntToSymbMap = %s\n", anIntToSymbMapOutput.toString(), anIntToSymbMap);
       return;
     }

@@ -268,19 +268,19 @@ TravelsData travels_data_2 = (
 //                     );
 
 Flights flights_state(FlightsData data) = (
-    country:      [t(0) : t <~ data.countries],
-    airport:      [t(0) : t <~ data.airports],
-    flight:       [t(0) : t <~ data.flights],
-    code:         [t(0) -> t(1) : t <~ data.countries],
-    name:         [id, name : id, name <- [t(0) -> t(2) : t <~ data.countries] |
-                              id, name <- [t(0) -> t(1) : t <~ data.airports]],
-    location:     [t(0) -> t(2) : t <~ data.airports],
-    route:        [t(0) -> t(1) : t <~ data.flights],
-    departure:    [t(0) -> t(2) : t <~ data.flights],
-    arrival:      [t(0) -> t(3) : t <~ data.flights],
-    price:        [t(0) -> t(4) : t <~ data.flights],
-    flight_route: [t(0), t(1), t(2) : t <~ data.routes],
-    departing:    [t(1), t(0) : t <~ data.routes]
+    country:      [t(0) : t <- data.countries],
+    airport:      [t(0) : t <- data.airports],
+    flight:       [t(0) : t <- data.flights],
+    code:         [t(0) -> t(1) : t <- data.countries],
+    name:         [id, name : id name <- [t(0) -> t(2) : t <- data.countries] |
+                              id name <- [t(0) -> t(1) : t <- data.airports]],
+    location:     [t(0) -> t(2) : t <- data.airports],
+    route:        [t(0) -> t(1) : t <- data.flights],
+    departure:    [t(0) -> t(2) : t <- data.flights],
+    arrival:      [t(0) -> t(3) : t <- data.flights],
+    price:        [t(0) -> t(4) : t <- data.flights],
+    flight_route: [t(0), t(1), t(2) : t <- data.routes],
+    departing:    [t(1), t(0) : t <- data.routes]
   );
 
 ////////////////////////////////////////////////////////////////////////////////

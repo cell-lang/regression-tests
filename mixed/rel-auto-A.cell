@@ -63,7 +63,7 @@ using RelAutoA {
   TimeSpan  alt_lookup(Int* ints)       = lookup_by_ints(ints);
   Int*      alt_lookup(TimeSpan tspan)  = lookup_by_timespan(tspan);
 
-  [(Atom, Float)] symbs_and_floats = [(s, f) : s, f <- a_symb_float_binary_rel];
+  [(Atom, Float)] symbs_and_floats = [(s, f) : s f <- a_symb_float_binary_rel];
 
   Bool has_string_bool_seq_pair(String s, Bool* bs) = a_string_bool_seq_binary_rel(s, bs);
 }
@@ -175,11 +175,11 @@ RelAutoA.SetRelAutoAState {
   for x <- rand_sort([a : a <- this.a_string_seq_unary_rel])  insert a_string_seq_unary_rel(x);
   for x <- rand_sort([a : a <- this.an_any_point_unary_rel])  insert an_any_point_unary_rel(x);
 
-  for x, y <- rand_sort([(a, b) : a, b <- this.a_symb_float_binary_rel])          insert a_symb_float_binary_rel(x, y);
-  for x, y <- rand_sort([(a, b) : a, b <- this.a_bool_int_binary_rel])            insert a_bool_int_binary_rel(x, y);
-  for x, y <- rand_sort([(a, b) : a, b <- this.a_string_bool_seq_binary_rel])     insert a_string_bool_seq_binary_rel(x, y);
-  for x, y <- rand_sort([(a, b) : a, b <- this.an_int_seq_time_span_binary_rel])  insert an_int_seq_time_span_binary_rel(x, y);
+  for x, y <- rand_sort([(a, b) : a b <- this.a_symb_float_binary_rel])          insert a_symb_float_binary_rel(x, y);
+  for x, y <- rand_sort([(a, b) : a b <- this.a_bool_int_binary_rel])            insert a_bool_int_binary_rel(x, y);
+  for x, y <- rand_sort([(a, b) : a b <- this.a_string_bool_seq_binary_rel])     insert a_string_bool_seq_binary_rel(x, y);
+  for x, y <- rand_sort([(a, b) : a b <- this.an_int_seq_time_span_binary_rel])  insert an_int_seq_time_span_binary_rel(x, y);
 
-  for x, y, z <- rand_sort([(a, b, c) : a, b, c <- this.a_symb_int_bool_seq_ternary_rel])       insert a_symb_int_bool_seq_ternary_rel(x, y, z);
-  for x, y, z <- rand_sort([(a, b, c) : a, b, c <- this.an_int_string_float_seq_ternary_rel])   insert an_int_string_float_seq_ternary_rel(x, y, z);
+  for x, y, z <- rand_sort([(a, b, c) : a b c <- this.a_symb_int_bool_seq_ternary_rel])       insert a_symb_int_bool_seq_ternary_rel(x, y, z);
+  for x, y, z <- rand_sort([(a, b, c) : a b c <- this.an_int_string_float_seq_ternary_rel])   insert an_int_string_float_seq_ternary_rel(x, y, z);
 }

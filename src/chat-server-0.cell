@@ -234,7 +234,7 @@ Bool RunAllChatServer0Tests() {
   core          : ChatServer0CoreState;
   server(core)  : ChatServer0;
 
-  sorted_users = rand_sort(set((u : u, unused_var <- chat_server_test_data_1)));
+  sorted_users = rand_sort(set((u : u, _ <- chat_server_test_data_1)));
   conn_ids = merge(([u -> i] : u @ i <- sorted_users));
 
   for i < |conn_ids| {

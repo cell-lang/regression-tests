@@ -59,7 +59,7 @@ Bool RunTernRelObjsTests() {
     }
 
     for an_s <- ss {
-      prj = [n, p : n, p <- a_rel(an_s, ?, ?)];
+      prj = [n, p : n p <- a_rel(an_s, ?, ?)];
       ref_prj = [n, p : t <- a_few_triples, (s?, n?, p?, _) ?= t, s == an_s];
       if prj != ref_prj {
         Print("Error (1)!\n");
@@ -73,7 +73,7 @@ Bool RunTernRelObjsTests() {
     }
 
     for an_n <- ns {
-      prj = [s, p : s, p <- a_rel(?, an_n, ?)];
+      prj = [s, p : s p <- a_rel(?, an_n, ?)];
       ref_prj = [s, p : t <- a_few_triples, (s?, n?, p?, _) ?= t, n == an_n];
       if prj != ref_prj {
         Print("Error (2)!\n");
@@ -87,7 +87,7 @@ Bool RunTernRelObjsTests() {
     }
 
     for a_p <- ps {
-      prj = [s, n : s, n <- a_rel(?, ?, a_p)];
+      prj = [s, n : s n <- a_rel(?, ?, a_p)];
       ref_prj = [s, n : t <- a_few_triples, (s?, n?, p?, _) ?= t, p == a_p];
       if prj != ref_prj {
         Print("Error (3)!\n");
