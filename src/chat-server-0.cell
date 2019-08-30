@@ -86,7 +86,7 @@ using ChatServer0 {
   do(Disconnect msg) {
     channel = msg.channel;
     set pending_inputs = remove_key(pending_inputs, channel);
-    is_logged_in = user_names(channel, *);
+    is_logged_in = user_names(channel, _);
     super <- logout(user: channel) if is_logged_in;
   }
 
@@ -123,8 +123,8 @@ using ChatServer0 {
     user = msg.user;
     name = msg.name;
 
-    already_logged_in = user_names(user, *);
-    name_already_taken = user_ids(name, *);
+    already_logged_in = user_names(user, _);
+    name_already_taken = user_ids(name, _);
 
     super <- msg if not (already_logged_in or name_already_taken);
 
@@ -138,14 +138,14 @@ using ChatServer0 {
 
 
   do(Logout msg) {
-    super <- msg if user_names(msg.user, *);
+    super <- msg if user_names(msg.user, _);
   }
 
 
   do(JoinRoom msg) {
     user = msg.user;
 
-    is_logged_in = user_names(user, *);
+    is_logged_in = user_names(user, _);
 
     super <- msg if is_logged_in;
 
@@ -160,7 +160,7 @@ using ChatServer0 {
     user = msg.user;
     room = msg.room;
 
-    is_logged_in = user_names(user, *);
+    is_logged_in = user_names(user, _);
     has_joined_room = is_logged_in and user_rooms[user](room);
 
     super <- msg if has_joined_room;
@@ -179,8 +179,8 @@ using ChatServer0 {
     receiver = msg.receiver;
     msg_text = msg.msg_text;
 
-    is_logged_in = user_names(sender, *);
-    target_exists = user_ids(receiver, *);
+    is_logged_in = user_names(sender, _);
+    target_exists = user_ids(receiver, _);
 
     resp_msg = if not is_logged_in  then "ERROR not logged in" else
                if not target_exists then "ERROR unknown user"  else
@@ -205,7 +205,7 @@ using ChatServer0 {
     target = msg.target;
     msg_text = msg.msg_text;
 
-    is_logged_in = user_names(sender, *);
+    is_logged_in = user_names(sender, _);
     has_joined_room = is_logged_in and user_rooms[sender](target);
 
     resp_msg = if not is_logged_in    then "ERROR not logged in"     else

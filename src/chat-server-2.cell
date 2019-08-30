@@ -6,9 +6,9 @@ schema ChatServer2CoreState {
 ////////////////////////////////////////////////////////////////////////////////
 
 using ChatServer2CoreState {
-  Bool logged_in(UserId user_id)    = username(user_id, *);
+  Bool logged_in(UserId user_id)    = username(user_id, _);
 
-  Bool already_in_use(String name)  = username(*, name);
+  Bool already_in_use(String name)  = username(_, name);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ using ChatServer2 {
 
   do(Disconnect msg) {
     channel = msg.channel;
-    delete pending_inputs(channel, ()); ## BUG? WHY ISN'T IT delete pending_inputs(channel, *) ?
+    delete pending_inputs(channel, ()); ## BUG? WHY ISN'T IT delete pending_inputs(channel, _) ?
     super <- logout(user: channel);
   }
 
@@ -219,7 +219,7 @@ using ChatServer2 {
 
     if check_res == :ok {
       fwd_msg = "GOTUSERMSG " & username(msg.sender) & " " & msg.msg_text;
-      insert data_to_send(counter, (username(!!, msg.receiver), fwd_msg));
+      insert data_to_send(counter, (username(!, msg.receiver), fwd_msg));
       counter = nat(counter + 1);
     }
 

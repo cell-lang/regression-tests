@@ -8,9 +8,9 @@ schema ChatServer1CoreState {
 ////////////////////////////////////////////////////////////////////////////////
 
 using ChatServer1CoreState {
-  Bool is_logged_in(UserId user) = user_names(user, *);
+  Bool is_logged_in(UserId user) = user_names(user, _);
 
-  Bool user_exists(String user) = user_ids(user, *);
+  Bool user_exists(String user) = user_ids(user, _);
 
   Bool user_has_joined_room(UserId user, RoomId room) {
     rooms_joined = user_rooms[user];
@@ -20,7 +20,7 @@ using ChatServer1CoreState {
 
   LoginCheck login_check(UserId user, String name) =
     if is_logged_in(user) then :already_logged_in   else
-    if user_ids(name, *)  then :name_already_in_use else
+    if user_ids(name, _)  then :name_already_in_use else
                                :ok;
 
 
@@ -143,7 +143,7 @@ using ChatServer1 {
   do(Disconnect msg) {
     channel = msg.channel;
     set pending_inputs = remove_key(pending_inputs, channel);
-    is_logged_in = user_names(channel, *);
+    is_logged_in = user_names(channel, _);
     super <- logout(user: channel) if is_logged_in;
   }
 
@@ -195,7 +195,7 @@ using ChatServer1 {
 
 
   do(Logout msg) {
-    super <- msg if user_names(msg.user, *);
+    super <- msg if user_names(msg.user, _);
   }
 
 

@@ -123,17 +123,17 @@ using BinTableColsPerms {
     ];
 
   [Bool] in(Nat n) = [
-      bin_rel_a(n, *),
-      bin_rel_b(n, *),
-      bin_rel_c(n, *),
-      bin_rel_d(n, *)
+      bin_rel_a(n, _),
+      bin_rel_b(n, _),
+      bin_rel_c(n, _),
+      bin_rel_d(n, _)
     ];
 
   [Bool] in(String s) = [
-      bin_rel_a(*, s),
-      bin_rel_b(*, s),
-      bin_rel_c(*, s),
-      bin_rel_d(*, s)
+      bin_rel_a(_, s),
+      bin_rel_b(_, s),
+      bin_rel_c(_, s),
+      bin_rel_d(_, s)
     ];
 
 
@@ -145,10 +145,10 @@ using BinTableColsPerms {
     ];
 
   [Nat] lookup(String s) = [
-      bin_rel_a(!!, s),
-      bin_rel_b(!!, s),
-      bin_rel_c(!!, s),
-      bin_rel_d(!!, s)
+      bin_rel_a(!, s),
+      bin_rel_b(!, s),
+      bin_rel_c(!, s),
+      bin_rel_d(!, s)
     ];
 
   [+[Nat]] projection(String s) = [

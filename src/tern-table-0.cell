@@ -348,87 +348,87 @@ using TernTableColsPerms {
     ];
 
   [Bool] in(Nat n) = [
-      tern_rel_a(n, *, *),
-      tern_rel_b(n, *, *),
-      tern_rel_c(n, *, *),
-      tern_rel_d(n, *, *),
-      tern_rel_e(n, *, *),
-      tern_rel_f(n, *, *),
-      tern_rel_g(n, *, *),
-      tern_rel_h(n, *, *),
-      tern_rel_i(n, *, *),
-      tern_rel_j(n, *, *),
-      tern_rel_k(n, *, *)
+      tern_rel_a(n, _, _),
+      tern_rel_b(n, _, _),
+      tern_rel_c(n, _, _),
+      tern_rel_d(n, _, _),
+      tern_rel_e(n, _, _),
+      tern_rel_f(n, _, _),
+      tern_rel_g(n, _, _),
+      tern_rel_h(n, _, _),
+      tern_rel_i(n, _, _),
+      tern_rel_j(n, _, _),
+      tern_rel_k(n, _, _)
     ];
 
   [Bool] in(String s) = [
-      tern_rel_a(*, s, *),
-      tern_rel_b(*, s, *),
-      tern_rel_c(*, s, *),
-      tern_rel_d(*, s, *),
-      tern_rel_e(*, s, *),
-      tern_rel_f(*, s, *),
-      tern_rel_g(*, s, *),
-      tern_rel_h(*, s, *),
-      tern_rel_i(*, s, *),
-      tern_rel_j(*, s, *),
-      tern_rel_k(*, s, *)
+      tern_rel_a(_, s, _),
+      tern_rel_b(_, s, _),
+      tern_rel_c(_, s, _),
+      tern_rel_d(_, s, _),
+      tern_rel_e(_, s, _),
+      tern_rel_f(_, s, _),
+      tern_rel_g(_, s, _),
+      tern_rel_h(_, s, _),
+      tern_rel_i(_, s, _),
+      tern_rel_j(_, s, _),
+      tern_rel_k(_, s, _)
     ];
 
   [Bool] in(Point p) = [
-      tern_rel_a(*, *, p),
-      tern_rel_b(*, *, p),
-      tern_rel_c(*, *, p),
-      tern_rel_d(*, *, p),
-      tern_rel_e(*, *, p),
-      tern_rel_f(*, *, p),
-      tern_rel_g(*, *, p),
-      tern_rel_h(*, *, p),
-      tern_rel_i(*, *, p),
-      tern_rel_j(*, *, p),
-      tern_rel_k(*, *, p)
+      tern_rel_a(_, _, p),
+      tern_rel_b(_, _, p),
+      tern_rel_c(_, _, p),
+      tern_rel_d(_, _, p),
+      tern_rel_e(_, _, p),
+      tern_rel_f(_, _, p),
+      tern_rel_g(_, _, p),
+      tern_rel_h(_, _, p),
+      tern_rel_i(_, _, p),
+      tern_rel_j(_, _, p),
+      tern_rel_k(_, _, p)
     ];
 
   [Bool] in(Nat n, String s) = [
-      tern_rel_a(n, s, *),
-      tern_rel_b(n, s, *),
-      tern_rel_c(n, s, *),
-      tern_rel_d(n, s, *),
-      tern_rel_e(n, s, *),
-      tern_rel_f(n, s, *),
-      tern_rel_g(n, s, *),
-      tern_rel_h(n, s, *),
-      tern_rel_i(n, s, *),
-      tern_rel_j(n, s, *),
-      tern_rel_k(n, s, *)
+      tern_rel_a(n, s, _),
+      tern_rel_b(n, s, _),
+      tern_rel_c(n, s, _),
+      tern_rel_d(n, s, _),
+      tern_rel_e(n, s, _),
+      tern_rel_f(n, s, _),
+      tern_rel_g(n, s, _),
+      tern_rel_h(n, s, _),
+      tern_rel_i(n, s, _),
+      tern_rel_j(n, s, _),
+      tern_rel_k(n, s, _)
     ];
 
   [Bool] in(Nat n, Point p) = [
-      tern_rel_a(n, *, p),
-      tern_rel_b(n, *, p),
-      tern_rel_c(n, *, p),
-      tern_rel_d(n, *, p),
-      tern_rel_e(n, *, p),
-      tern_rel_f(n, *, p),
-      tern_rel_g(n, *, p),
-      tern_rel_h(n, *, p),
-      tern_rel_i(n, *, p),
-      tern_rel_j(n, *, p),
-      tern_rel_k(n, *, p)
+      tern_rel_a(n, _, p),
+      tern_rel_b(n, _, p),
+      tern_rel_c(n, _, p),
+      tern_rel_d(n, _, p),
+      tern_rel_e(n, _, p),
+      tern_rel_f(n, _, p),
+      tern_rel_g(n, _, p),
+      tern_rel_h(n, _, p),
+      tern_rel_i(n, _, p),
+      tern_rel_j(n, _, p),
+      tern_rel_k(n, _, p)
     ];
 
   [Bool] in(String s, Point p) = [
-      tern_rel_a(*, s, p),
-      tern_rel_b(*, s, p),
-      tern_rel_c(*, s, p),
-      tern_rel_d(*, s, p),
-      tern_rel_e(*, s, p),
-      tern_rel_f(*, s, p),
-      tern_rel_g(*, s, p),
-      tern_rel_h(*, s, p),
-      tern_rel_i(*, s, p),
-      tern_rel_j(*, s, p),
-      tern_rel_k(*, s, p)
+      tern_rel_a(_, s, p),
+      tern_rel_b(_, s, p),
+      tern_rel_c(_, s, p),
+      tern_rel_d(_, s, p),
+      tern_rel_e(_, s, p),
+      tern_rel_f(_, s, p),
+      tern_rel_g(_, s, p),
+      tern_rel_h(_, s, p),
+      tern_rel_i(_, s, p),
+      tern_rel_j(_, s, p),
+      tern_rel_k(_, s, p)
     ];
 
 
@@ -447,31 +447,31 @@ using TernTableColsPerms {
     ];
 
   [String] lookup(Nat n, Point p) = [
-      tern_rel_a(n, !!, p),
-      tern_rel_b(n, !!, p),
-      tern_rel_c(n, !!, p),
-      tern_rel_d(n, !!, p),
-      tern_rel_e(n, !!, p),
-      tern_rel_f(n, !!, p),
-      tern_rel_g(n, !!, p),
-      tern_rel_h(n, !!, p),
-      tern_rel_i(n, !!, p),
-      tern_rel_j(n, !!, p),
-      tern_rel_k(n, !!, p)
+      tern_rel_a(n, !, p),
+      tern_rel_b(n, !, p),
+      tern_rel_c(n, !, p),
+      tern_rel_d(n, !, p),
+      tern_rel_e(n, !, p),
+      tern_rel_f(n, !, p),
+      tern_rel_g(n, !, p),
+      tern_rel_h(n, !, p),
+      tern_rel_i(n, !, p),
+      tern_rel_j(n, !, p),
+      tern_rel_k(n, !, p)
     ];
 
   [Nat] lookup(String s, Point p) = [
-      tern_rel_a(!!, s, p),
-      tern_rel_b(!!, s, p),
-      tern_rel_c(!!, s, p),
-      tern_rel_d(!!, s, p),
-      tern_rel_e(!!, s, p),
-      tern_rel_f(!!, s, p),
-      tern_rel_g(!!, s, p),
-      tern_rel_h(!!, s, p),
-      tern_rel_i(!!, s, p),
-      tern_rel_j(!!, s, p),
-      tern_rel_k(!!, s, p)
+      tern_rel_a(!, s, p),
+      tern_rel_b(!, s, p),
+      tern_rel_c(!, s, p),
+      tern_rel_d(!, s, p),
+      tern_rel_e(!, s, p),
+      tern_rel_f(!, s, p),
+      tern_rel_g(!, s, p),
+      tern_rel_h(!, s, p),
+      tern_rel_i(!, s, p),
+      tern_rel_j(!, s, p),
+      tern_rel_k(!, s, p)
     ];
 
   [+[Point]] projection(Nat n, String s) = [
