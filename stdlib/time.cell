@@ -1,0 +1,223 @@
+(Date, Int, Int, Int, Maybe[Date])* dates = (
+  (`1970-01-01`, 1970,  1,  1, just(:date(0))),
+  (`1970-01-02`, 1970,  1,  2, just(:date(1))),
+  (`1969-12-31`, 1969, 12, 31, just(:date(-1))),
+  (`1582-10-15`, 1582, 10, 15, just(:date(-141427))),
+  (`2000-01-01`, 2000,  1,  1, just(:date(10957))),
+  (`1970-01-01`, 1970,  1,  1, nothing),
+  (`1970-01-31`, 1970,  1, 31, nothing),
+  (`1970-02-01`, 1970,  2,  1, nothing),
+  (`1970-02-28`, 1970,  2, 28, nothing),
+  (`1969-12-31`, 1969, 12, 31, nothing),
+  (`1969-12-01`, 1969, 12,  1, nothing),
+  (`1969-11-30`, 1969, 11, 30, nothing),
+  (`1969-11-01`, 1969, 11,  1, nothing)
+);
+
+
+Bool RunDateTests() {
+  for dt, y, m, d, mdt <- dates {
+    res = date(y, m, d);
+    if res == nothing {
+      return false;
+    }
+    calc_date = value(res);
+    if calc_date != dt {
+      return false;
+    }
+    if mdt != nothing and value(mdt) != calc_date {
+      return false;
+    }
+
+    year, month, day = year_month_day(calc_date);
+    if year != y or month != m or day != d {
+      return false;
+    }
+  }
+
+  weekdays = (:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday);
+
+  for i < 100000 {
+    ref_date = :date(i);
+    year, month, day = year_month_day(ref_date);
+    res = date(year, month, day);
+    if res == nothing {
+      return false;
+    }
+    rec_date = value(res);
+    if rec_date != ref_date {
+      return false;
+    }
+
+    // January 1, 1970 was a Thursday
+    day_of_the_week = weekdays(_mod_(i + 3, 7));
+    if weekday(ref_date) != day_of_the_week {
+      return false;
+    }
+  }
+
+  for i < 100000 {
+    ref_date = :date(-i);
+    year, month, day = year_month_day(ref_date);
+    res = date(year, month, day);
+    if res == nothing {
+      return false;
+    }
+    rec_date = value(res);
+    if rec_date != ref_date {
+      return false;
+    }
+
+    // January 1, 1970 was a Thursday
+    day_of_the_week = weekdays(6 - _mod_(i + 3, 7));
+    if weekday(ref_date) != day_of_the_week {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+Bool RunTimeTests() {
+  for d = -10 .. 10 {
+    date = :date(d);
+    for h < 24 ; m < 60 ; s < 60
+      for ns <- (0, 1, 2, 999999997, 999999998, 999999999) {
+        res = time(date, h, m, s, ns);
+        if res == nothing {
+          Print("1 - ");
+          print (d, h, m, s, ns);
+          return false;
+        }
+        time = value(res);
+        if day(time) != date {
+          Print("2 - ");
+          print (d, h, m, s, ns);
+          print _untag_(time);
+          print date;
+          print day(time);
+          return false;
+        }
+        if hour(time) != h {
+          Print("3 - ");
+          return false;
+        }
+        if minute(time) != m {
+          Print("4 - ");
+          return false;
+        }
+        if second(time) != s {
+          Print("5 - ");
+          return false;
+        }
+        if nanosec(time) != ns {
+          Print("6 - ");
+          print (d, h, m, s, ns);
+          print _untag_(time);
+          print nanosec(time);
+          return false;
+        }
+      }
+  }
+
+  return true;
+}
+
+// times = (
+//   `1970-01-01 00:00:00`,
+//   `1970-01-01 23:59:59`,
+//   `1970-01-02 00:00:00`,
+//   `1970-01-02 23:59:59`,
+
+//   `1969-12-31 23:59:59`,
+//   `1969-12-31 00:00:00`,
+//   `1969-12-30 23:59:59`,
+//   `1969-12-30 00:00:00`,
+
+//   `1970-01-01 00:00:00.500`,
+//   `1970-01-01 00:00:00.999999999`,
+//   `1970-01-01 00:00:00.1`,
+//   `1970-01-01 00:00:00.02`,
+//   `1970-01-01 00:00:00.003`,
+//   `1970-01-01 00:00:00.0004`,
+//   `1970-01-01 00:00:00.00005`,
+//   `1970-01-01 00:00:00.000006`,
+//   `1970-01-01 00:00:00.0000007`,
+//   `1970-01-01 00:00:00.00000008`,
+//   `1970-01-01 00:00:00.000000009`,
+
+//   `1970-01-02 00:00:00`,
+//   `1970-01-02 00:00:00.123456789`,
+//   `2019-08-02 00:00:00`,
+//   `2019-08-02 00:00:00.987654321`,
+//   `1937-04-03 00:00:00`,
+//   `1937-04-03 00:00:00.123456789`
+// );
+
+
+// // print pairs;
+// // Print("\n");
+// // print dates;
+// print times;
+
+
+
+// print  9223372036854775807;
+// print -9223372036854775807;
+// // print -9223372036854775808;
+// print _sub_(-9223372036854775807, 1);
+
+// Print("\n");
+
+// print :time( 9223372036854775807);
+// print :time(-9223372036854775807);
+// // print :time(-9223372036854775808);
+// print :time(_sub_(-9223372036854775807, 1));
+
+
+// // print `1582-10-15`;
+// // print `9999-12-31`;
+
+
+// // print `1970-01-02 23:59:59`;
+// // print `1970-01-01 00:00:00.1`;
+
+// Print("\n");
+
+
+// print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%";
+
+// print `1970-01-01 00:00:00`           == :time(0);
+// print `1970-01-02 12:00:00`           == :time(129600000000000);
+// print `1969-12-31 23:59:59`           == :time(-1000000000);
+// print `1999-12-31 23:59:59`           == :time(946684799000000000);
+// print `2262-04-11 23:47:16.854775807` == :time(9223372036854775807);
+// print `1677-09-21 00:12:43.145224192` == :time(_sub_(-9223372036854775807, 1));
+
+
+
+
+
+// 2262-04-11 23:47:16 ->  9223372036
+//                         9223372036
+// 1677-09-21 00:12:44 -> -9224236036
+//                        -9223372036
+// 1677-09-21 00:12:43 -> -9223372037
+
+
+// print -9223372036854775808;
+// print  9223372036854775807;
+
+// print `2262-04-11 23:47:16.854775808`;
+// print `1677-09-21 00:12:43.145224191`;
+
+// print _untag_(`2262-04-11`);
+// print _untag_(`1677-09-21`);
+
+// print _untag_(`1970-01-01 23:47:16.854775807`);
+// print _untag_(`1970-01-01 00:12:43.145224192`);
+
+// print _untag_(`2262-04-11 23:47:16`);
+// print _untag_(`1677-09-21 00:12:44`);
+// print _untag_(`1677-09-21 00:12:43`);

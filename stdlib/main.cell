@@ -1,0 +1,44 @@
+Int Main(String* args) {
+
+  Print("  Date               ");
+  ok = RunDateTests();
+  if ok {
+    Print("OK\n");
+  }
+  else {
+    Print("ERROR\n");
+    return 1;
+  }
+
+  Print("  Time               ");
+  ok = RunTimeTests();
+  if ok {
+    Print("OK\n");
+  }
+  else {
+    Print("ERROR\n");
+    return 1;
+  }
+
+  Print("  Sorting            ");
+  ok = RunSortingTests();
+  if ok {
+    Print("OK\n");
+  }
+  else {
+    Print("ERROR\n");
+    return 1;
+  }
+
+  Print("  UTF-8              ");
+  ok = RunUTF8Tests();
+  if ok {
+    Print("OK\n");
+  }
+  else {
+    Print("ERROR\n");
+    return 1;
+  }
+
+  return 0;
+}

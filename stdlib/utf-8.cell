@@ -1,0 +1,25 @@
+// Result[Nat*, Nat] utf8_decode(Byte* bytes)
+// Maybe[Byte*] utf8_encode(Nat* chars)
+
+Bool RunUTF8Tests() {
+  for l < 100 {
+    for i < 1000 {
+      chs = (_rand_nat_(1114112) : _ < l);
+      res = utf8_encode(chs);
+      if res == nothing {
+        return false;
+      }
+      bs = value(res);
+      res = utf8_decode(bs);
+      if failed(res) {
+        return false;
+      }
+      rchs = result(res);
+      if rchs != chs {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}

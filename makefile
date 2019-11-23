@@ -27,9 +27,7 @@ mixed-tests.exe:
 	mcs -nowarn:219 mixed/*.cs tmp/generated.cs -out:tmp/mixed-tests.exe
 
 tests.jar:
-	rm -rf tmp/
-	mkdir tmp
-	mkdir tmp/gen/
+	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
 	java -jar ../java/bin/cellcd-java.jar project.txt tmp/gen/
 	javac -g -d tmp/ tmp/gen/*.java
 	jar cfe tmp/tests.jar net.cell_lang.Generated -C tmp net/
@@ -40,6 +38,12 @@ mixed-tests.jar:
 	java -jar ../java/bin/cellcd-java.jar -g mixed/project.txt tmp/gen/
 	javac -g -d tmp/ tmp/gen/*.java mixed/*.java
 	jar cfe tmp/mixed-tests.jar net.cell_lang.Main -C tmp net
+
+stdlib-tests.jar:
+	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
+	java -jar ../java/bin/cellcd-java.jar stdlib/project.txt tmp/gen/
+	javac -g -d tmp/ tmp/gen/*.java
+	jar cfe tmp/stdlib-tests.jar net.cell_lang.Generated -C tmp net/
 
 clean:
 	@rm -rf tmp/ debug/ generated.* Generated.* dump-*.txt interfaces.txt

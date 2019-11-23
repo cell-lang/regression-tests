@@ -1,0 +1,111 @@
+Bool RunSortingTests() {
+  for l < 100 {
+    for i < 1000 {
+      xs = (_rand_nat_(1000000) : _ < l);
+
+      ys = sorti(xs);
+      ref_ys = qsorti(xs);
+
+      if ys != ref_ys {
+        return false;
+      }
+    }
+  }
+
+  for l < 100 {
+    for i < 1000 {
+      xs = (_float_(_rand_nat_(1000000)) / (1 + _float_(_rand_nat_(1000000))) : _ < l);
+
+      ys = sortf(xs);
+      ref_ys = qsortf(xs);
+
+      if ys != ref_ys {
+        return false;
+      }
+    }
+  }
+
+  for l < 100 {
+    for i < 1000 {
+      xs = (rand_str(_rand_nat_(20)) : _ < l);
+
+      ys1 = sort(xs);
+      ys2 = sort(xs, $a < $b);
+      ref_ys = qsorts(xs);
+
+      if ys1 != ref_ys {
+        return false;
+      }
+
+      if ys2 != ref_ys {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+
+Bool (_<_)(String str1, String str2) = lt(str1, str2);
+Bool (_>_)(String str1, String str2) = lt(str2, str1);
+Bool (_<=_)(String str1, String str2) = lt(str1, str2) or str1 == str2;
+
+Bool lt(String str1, String str2) {
+  i = 0;
+  loop {
+    if i < length(str1) {
+      if i < length(str2) {
+        ch1 = str1[i];
+        ch2 = str2[i];
+        if ch1 < ch2
+          return true;
+        if ch1 > ch2
+          return false;
+      }
+      else {
+        assert length(str1) > length(str2);
+        return false;
+      }
+    }
+    else {
+      if i < length(str2) {
+        assert length(str1) < length(str2);
+        return true;
+      }
+      else {
+        assert str1 == str2;
+        return false;
+      }
+    }
+
+    i = i + 1;
+  }
+}
+
+
+String rand_str(Nat len) = string((_rand_nat_(1114112) : _ < len));
+
+
+Int* qsorti(Int* xs) {
+  return () if xs == ();
+  pivot = xs(0);
+  rest = _slice_(xs, 1, |xs|-1);
+  return qsorti((x : x <- rest, x <= pivot)) & (pivot) & qsorti((x : x @ i <- rest, x > pivot));
+}
+
+
+Float* qsortf(Float* xs) {
+  return () if xs == ();
+  pivot = xs(0);
+  rest = _slice_(xs, 1, |xs|-1);
+  return qsortf((x : x <- rest, x <= pivot)) & (pivot) & qsortf((x : x @ i <- rest, x > pivot));
+}
+
+
+String* qsorts(String* xs) {
+  return () if xs == ();
+  pivot = xs(0);
+  rest = _slice_(xs, 1, |xs|-1);
+  return qsorts((x : x <- rest, x <= pivot)) & (pivot) & qsorts((x : x @ i <- rest, x > pivot));
+}
