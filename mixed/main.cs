@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-using CellLang;
+using Cell.Generated;
 
 
 public static class MixedLanguageTests {

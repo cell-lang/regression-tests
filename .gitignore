@@ -1,2 +1,5 @@
 tmp/
 debug/
+dotnet/
+dotnet-mixed/
+dotnet-stdlib/

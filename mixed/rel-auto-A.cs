@@ -1,32 +1,40 @@
 using System;
 using System.IO;
 
-using CellLang;
+using Cell.Generated;
 
 
 public static class RelAutoA_Tests {
   public static void Run(string file, bool setState) {
-    Generated.RelAutoA testDb = new Generated.RelAutoA();
+    RelAutoA testDb = new RelAutoA();
 
     if (file != null) {
-      string content = File.ReadAllText(file);
-      if (setState)
-        testDb.SetState(content);
-      else
+      if (setState) {
+        StreamReader reader = new StreamReader(file);
+        try {
+          testDb.Load(reader);
+        }
+        catch (Exception e) {
+          Console.WriteLine("{0}", e);
+        }
+      }
+      else {
+        string content = File.ReadAllText(file);
         testDb.Execute(content);
+      }
     }
     else
       testDb.Execute("my_msg");
 
-    bool boolOutput = testDb.ABoolVar;
-    long longOutput = testDb.AnIntVar;
-    double doubleOutput = testDb.AFloatVar;
-    string symbOutput = testDb.ASymbVar;
+    bool boolOutput = testDb.ABoolVar();
+    long longOutput = testDb.AnIntVar();
+    double doubleOutput = testDb.AFloatVar();
+    string symbOutput = testDb.ASymbVar();
 
-    string str = testDb.AStringVar;
-    bool[] bools = testDb.ABoolSeqVar;
-    long[] longs = testDb.AnIntSeqVar;
-    double[] doubles = testDb.AFloatSeqVar;
+    string str = testDb.AStringVar();
+    bool[] bools = testDb.ABoolSeqVar();
+    long[] longs = testDb.AnIntSeqVar();
+    double[] doubles = testDb.AFloatSeqVar();
 
     Console.WriteLine("{0} - {1} - {2} - {3} - {4}", boolOutput ? "true" : "false", longOutput, doubleOutput, symbOutput, str);
     for (int i=0 ; i < bools.Length ; i++)
@@ -39,7 +47,7 @@ public static class RelAutoA_Tests {
       Console.Write("{0:0.000000} ", doubles[i]);
     Console.WriteLine("\n");
 
-    Tuple<double, string, long[]> tuple_3A = testDb.ATupleVar;
+    var tuple_3A = testDb.ATupleVar();
     double f0 = tuple_3A.Item1;
     str = tuple_3A.Item2;
     longs = tuple_3A.Item3;
@@ -49,46 +57,47 @@ public static class RelAutoA_Tests {
       Console.Write(" {0}", longs[i]);
     Console.WriteLine("");
 
-    Value val = testDb.ADateRecVar;
-    long day = val.Lookup("day").AsLong();
-    long month = val.Lookup("month").AsLong();
-    long year = val.Lookup("year").AsLong();
+    (long day, long year, long month) dateRec = testDb.ADateRecVar();
+    long day = dateRec.day;
+    long month = dateRec.month;
+    long year = dateRec.year;
     Console.WriteLine("{0}/{1:00}/{2}\n", day, month, year);
 
-    Value[] vals = testDb.APointSeqVar;
-    for (int i=0 ; i < vals.Length ; i++)
-      Console.Write("{0} ", vals[i].ToString());
+    (long x, long y)[] points = testDb.APointSeqVar();
+    for (int i=0 ; i < points.Length ; i++)
+      Console.Write("point(x: {0}, y: {1}) ", points[i].x, points[i].y);
     Console.WriteLine("");
 
-    long x = testDb.APointVar.Lookup("x").AsLong();
-    long y = testDb.APointVar.Lookup("y").AsLong();
-    Console.WriteLine("point(x: {0}, y: {1})", x, y);
+    (long x, long y) point = testDb.APointVar();
+    Console.WriteLine("point(x: {0}, y: {1})", point.x, point.y);
 
-    Tuple<long, long, long> tuple_3B = testDb.ADateVar;
-    day = tuple_3B.Item1;
-    month = tuple_3B.Item2;
-    year = tuple_3B.Item3;
+    var date = testDb.ADateVar();
+    day = date.Item1;
+    month = date.Item2;
+    year = date.Item3;
     Console.WriteLine("date({0}, {1}, {2})", day, month, year);
 
-    long time_span = testDb.ATimeSpanVar;
+    long time_span = testDb.ATimeSpanVar();
     Console.WriteLine("msecs({0})", time_span);
 
-    longs = testDb.ATimeSpanSeqVar;
+    longs = testDb.ATimeSpanSeqVar();
     for (int i=0 ; i < longs.Length ; i++)
       Console.Write("msecs({0}) ", longs[i]);
     Console.WriteLine("");
 
-    val = testDb.AnAnyPointVar;
-    Console.WriteLine(val.ToString());
+    AnyPoint anyPoint = testDb.AnAnyPointVar();
+    Console.WriteLine(anyPoint.ToString());
 
-    val = testDb.ARectVar;
-    double width = val.Lookup("width").AsDouble();
-    double height = val.Lookup("height").AsDouble();
-    string color = val.Lookup("color").AsSymb();
-    x = val.Lookup("bottom_left").Lookup("x").AsLong();
-    y = val.Lookup("bottom_left").Lookup("y").AsLong();
-    Console.WriteLine("(bottom_left: {0}, x: {1}, y: {2}, width: {3:0.000000}, height: {4:0.000000}, color: {5})\n",
-      val.Lookup("bottom_left").ToString(), x, y, width, height, color);
+    var rect = testDb.ARectVar();
+    double width = rect.width;
+    double height = rect.height;
+    Color color = rect.color;
+    long x = rect.bottomLeft.x;
+    long y = rect.bottomLeft.y;
+    Console.WriteLine(
+      "(bottom_left: point(x: {0}, y: {1}), x: {0}, y: {1}, width: {2:0.000000}, height: {3:0.000000}, color: {4})\n",
+      x, y, width, height, color
+    );
 
     int[] elems = new int[] {0, 1, -1, 100, -1000, 2, -2, 10, -100, 1000};
     for (int i=0 ; i < 10 ; i++)
@@ -126,9 +135,9 @@ public static class RelAutoA_Tests {
     Console.WriteLine("]\n");
 
     Console.Write("[");
-    vals = testDb.AnAnyPointUnaryRel();
-    for (int i=0 ; i < vals.Length ; i++)
-      Console.Write("{0}{1}", i == 0 ? "" : ", ", vals[i].ToString());
+    AnyPoint[] anyPoints = testDb.AnAnyPointUnaryRel();
+    for (int i=0 ; i < anyPoints.Length ; i++)
+      Console.Write("{0}{1}", i == 0 ? "" : ", ", anyPoints[i].ToString());
     Console.WriteLine("]\n");
 
     //////////////////////////////////////////////////////////////////////////////
@@ -174,12 +183,12 @@ public static class RelAutoA_Tests {
     string[][] strvv = testDb.AStringSeqUnaryRel();
     for (int i=0 ; i < strvv.Length ; i++) {
       strv = strvv[i];
-      for (int j=0 ; j < strv.Length ; j++)
-        Console.Write("{0}{1}", i == 0 ? "" : ", ", strv[j]);
+      for (int j=0 ; j < strv.Length ; j++) {
+        Console.Write("{0}{1}", j == 0 ? "" : ", ", strv[j]);
+      }
       Console.Write("; ");
     }
     Console.WriteLine("]\n");
-
 
     bool[] memb_tests = new bool[8];
 
@@ -199,7 +208,7 @@ public static class RelAutoA_Tests {
 
 
     Console.Write("[");
-    Tuple<string, double>[] pairs_SF = testDb.ASymbFloatBinaryRel();
+    var pairs_SF = testDb.ASymbFloatBinaryRel();
     for (int i=0 ; i < pairs_SF.Length ; i++)
       Console.Write("{0}({1}, {2:0.000000})", i == 0 ? "" : ", ", pairs_SF[i].Item1, pairs_SF[i].Item2);
     Console.WriteLine("]\n\n");
@@ -228,12 +237,12 @@ public static class RelAutoA_Tests {
     // }
     // puts("\n");
 
-    Tuple<bool, long>[] pairs_BI = testDb.ABoolIntBinaryRel();
+    var pairs_BI = testDb.ABoolIntBinaryRel();
     for (int i=0 ; i < pairs_BI.Length ; i++)
       Console.Write("({0}, {1}) ", pairs_BI[i].Item1 ? 1 : 0, pairs_BI[i].Item2);
     Console.WriteLine("");
 
-    Tuple<string, bool[]>[] pairs_SBS = testDb.AStringBoolSeqBinaryRel();
+    var pairs_SBS = testDb.AStringBoolSeqBinaryRel();
     for (int i=0 ; i < pairs_SBS.Length ; i++) {
       Console.Write("(\"{0}\", (", pairs_SBS[i].Item1);
       boolv = pairs_SBS[i].Item2;
@@ -243,7 +252,7 @@ public static class RelAutoA_Tests {
     }
     Console.WriteLine("");
 
-    Tuple<long[], long>[] pairs_ISTS = testDb.AnIntSeqTimeSpanBinaryRel();
+    var pairs_ISTS = testDb.AnIntSeqTimeSpanBinaryRel();
     for (int i=0 ; i < pairs_ISTS.Length ; i++) {
       Console.Write("((");
       long[] llongv = pairs_ISTS[i].Item1;
@@ -325,7 +334,7 @@ public static class RelAutoA_Tests {
 
     Console.WriteLine("");
 
-    Tuple<string, double>[] symb_float_pairs = testDb.SymbsAndFloats();
+    var symb_float_pairs = testDb.SymbsAndFloats();
     for (int i=0 ; i < symb_float_pairs.Length ; i++)
       Console.Write("({0}, {1:0.00000}) ", symb_float_pairs[i].Item1, symb_float_pairs[i].Item2);
     Console.WriteLine("\n");
@@ -338,25 +347,35 @@ public static class RelAutoA_Tests {
     Console.WriteLine(testDb.HasStringBoolSeqPair("010", new bool[] {true, false, false, true, true, false}) ? 1 : 0);
     Console.WriteLine(testDb.HasStringBoolSeqPair("100110", new bool[] {false, true, false}) ? 1 : 0);
 
-    val = testDb.AnIntToSymbMapVar;
-    Console.WriteLine("\n" + val.ToString() + "\n");
-
-    Console.Write("msecs(123) -> ");
-    try {
-      longs = testDb.AnIntSeqTimeSpanBinaryRel(123);
-      Console.Write("(");
-      for (int i=0 ; i < longs.Length ; i++)
-        Console.Write((i > 0 ? ", " : "") + longs[i]);
-      Console.WriteLine(")");
+    var intToSymbMap = testDb.AnIntToSymbMapVar();
+    Console.WriteLine();
+    Console.Write("[");
+    bool first = true;
+    foreach (var entry in intToSymbMap) {
+      if (!first)
+        Console.Write(", ");
+      first = false;
+      Console.Write("{0} -> {1}", entry.Key, entry.Value);
     }
-    catch {
-      Console.WriteLine("--");
-    }
-    Console.WriteLine("");
+    Console.WriteLine("]");
 
-    Tuple<long, string, double[]>[] triplev_I_S_FS = testDb.AnIntStringFloatSeqTernaryRel();
+    // Console.Write("msecs(123) -> ");
+    // try {
+    //   longs = testDb.AnIntSeqTimeSpanBinaryRel(123);
+    //   Console.Write("(");
+    //   for (int i=0 ; i < longs.Length ; i++)
+    //     Console.Write((i > 0 ? ", " : "") + longs[i]);
+    //   Console.WriteLine(")");
+    // }
+    // catch {
+    //   Console.WriteLine("--");
+    // }
+    // Console.WriteLine("");
+
+
+    var triplev_I_S_FS = testDb.AnIntStringFloatSeqTernaryRel();
     for (int i=0 ; i < triplev_I_S_FS.Length ; i++) {
-      Tuple<long, string, double[]> triple = triplev_I_S_FS[i];
+      var triple = triplev_I_S_FS[i];
       Console.Write("{0}, {1}, (", triple.Item1, triple.Item2);
       for (int j=0 ; j < triple.Item3.Length ; j++)
         Console.Write("{0}{1:0.00000}", j > 0 ? ", " : "", triple.Item3[j]);
@@ -369,9 +388,9 @@ public static class RelAutoA_Tests {
     Console.WriteLine(testDb.AnIntStringFloatSeqTernaryRel(0, "sqrt(2) - sqrt(3)", new double[] {141421e-5, 173205e-5}) ? 1 : 0);
     Console.WriteLine("");
 
-    Tuple<string, long, bool[]>[] triplev_S_I_BS = testDb.ASymbIntBoolSeqTernaryRel();
+    var triplev_S_I_BS = testDb.ASymbIntBoolSeqTernaryRel();
     for (int i=0 ; i < triplev_S_I_BS.Length ; i++) {
-      Tuple<string, long, bool[]> triple = triplev_S_I_BS[i];
+      var triple = triplev_S_I_BS[i];
       Console.Write("{0}, {1}, (", triple.Item1, triple.Item2);
       for (int j=0 ; j < triple.Item3.Length ; j++)
         Console.Write("{0}{1}", j > 0 ? ", " : "", triple.Item3[j] ? 1 : 0);
@@ -390,13 +409,8 @@ public static class RelAutoA_Tests {
     Console.Write((testDb.ASymbIntBoolSeqTernaryRel("four",   5, new bool[] {true, false, false}) ? 1 : 0) + " ");
 
     Console.WriteLine("\n");
-
-    Value state = testDb.ReadState();
-
-    StreamWriter stdOutWriter = new StreamWriter(Console.OpenStandardOutput());
-    stdOutWriter.AutoFlush = true;
-
-    state.Print(stdOutWriter);
+    using (StreamWriter writer = new StreamWriter(Console.OpenStandardOutput()))
+      testDb.Save(writer);
     Console.WriteLine("\n");
   }
 }

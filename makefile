@@ -26,6 +26,19 @@ mixed-tests.exe:
 	mv generated.cs interfaces.txt tmp/
 	mcs -nowarn:219 mixed/*.cs tmp/generated.cs -out:tmp/mixed-tests.exe
 
+tests.dll:
+	rm -rf tmp/ ; mkdir tmp/
+	dotnet run --project ../csharp/dotnet/ project.txt tmp/
+	mv tmp/*.cs dotnet/
+	dotnet build dotnet/
+
+mixed-tests.dll:
+	rm -rf tmp/ ; mkdir tmp/
+	dotnet run --project ../csharp/dotnet/ -d -g mixed/project.txt tmp/
+	#java -jar ../csharp/cellcd-cs.jar -d -g mixed/project.txt tmp/
+	mv tmp/*.cs dotnet-mixed/
+	dotnet build dotnet-mixed/
+
 tests.jar:
 	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
 	java -jar ../java/bin/cellcd-java.jar project.txt tmp/gen/
@@ -47,6 +60,8 @@ stdlib-tests.jar:
 
 clean:
 	@rm -rf tmp/ debug/ generated.* Generated.* dump-*.txt interfaces.txt
+	@rm -rf dotnet/generated.cs dotnet/facades.cs dotnet/bin/ dotnet/obj/
+	@rm -rf dotnet-mixed/generated.cs dotnet-mixed/facades.cs dotnet-mixed/bin/ dotnet-mixed/obj/
 	@mkdir debug
 	@touch debug/stack-trace.txt
 
