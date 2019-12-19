@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-using Cell.Generated;
+using Cell.Facades;
 
 
 public static class ReactAutoA_Tests {

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-using Cell.Generated;
+using Cell.Facades;
 
 
 public static class RelAutoA_Tests {
@@ -10,9 +10,9 @@ public static class RelAutoA_Tests {
 
     if (file != null) {
       if (setState) {
-        StreamReader reader = new StreamReader(file);
+        Stream stream = new FileStream(file, FileMode.Open);
         try {
-          testDb.Load(reader);
+          testDb.Load(stream);
         }
         catch (Exception e) {
           Console.WriteLine("{0}", e);
@@ -409,8 +409,7 @@ public static class RelAutoA_Tests {
     Console.Write((testDb.ASymbIntBoolSeqTernaryRel("four",   5, new bool[] {true, false, false}) ? 1 : 0) + " ");
 
     Console.WriteLine("\n");
-    using (StreamWriter writer = new StreamWriter(Console.OpenStandardOutput()))
-      testDb.Save(writer);
+    testDb.Save(Console.OpenStandardOutput());
     Console.WriteLine("\n");
   }
 }
