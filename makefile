@@ -39,6 +39,12 @@ mixed-tests.dll:
 	mv tmp/*.cs dotnet-mixed/
 	dotnet build dotnet-mixed/
 
+stdlib-tests.dll:
+	rm -rf tmp/ ; mkdir tmp
+	dotnet run --project ../csharp/dotnet/ -d stdlib/project.txt tmp/
+	mv tmp/generated.cs dotnet-stdlib/
+	dotnet build dotnet-stdlib/
+
 tests.jar:
 	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
 	java -jar ../java/bin/cellcd-java.jar project.txt tmp/gen/
@@ -62,6 +68,7 @@ clean:
 	@rm -rf tmp/ debug/ generated.* Generated.* dump-*.txt interfaces.txt
 	@rm -rf dotnet/generated.cs dotnet/facades.cs dotnet/bin/ dotnet/obj/
 	@rm -rf dotnet-mixed/generated.cs dotnet-mixed/facades.cs dotnet-mixed/bin/ dotnet-mixed/obj/
+	@rm -rf dotnet-stdlib/generated.cs dotnet-stdlib/bin/ dotnet-stdlib/obj/
 	@mkdir debug
 	@touch debug/stack-trace.txt
 

@@ -1,6 +1,15 @@
 Int Main(String* args) {
+  Print("  Tree-based sets and maps   ");
+  ok = RunTreeBasedSetsAndMapsTests();
+  if ok {
+    Print("OK\n");
+  }
+  else {
+    Print("ERROR\n");
+    return 1;
+  }
 
-  Print("  Date               ");
+  Print("  Date                       ");
   ok = RunDateTests();
   if ok {
     Print("OK\n");
@@ -10,7 +19,7 @@ Int Main(String* args) {
     return 1;
   }
 
-  Print("  Time               ");
+  Print("  Time                       ");
   ok = RunTimeTests();
   if ok {
     Print("OK\n");
@@ -20,7 +29,7 @@ Int Main(String* args) {
     return 1;
   }
 
-  Print("  Sorting            ");
+  Print("  Sorting                    ");
   ok = RunSortingTests();
   if ok {
     Print("OK\n");
@@ -30,7 +39,7 @@ Int Main(String* args) {
     return 1;
   }
 
-  Print("  UTF-8              ");
+  Print("  UTF-8                      ");
   ok = RunUTF8Tests();
   if ok {
     Print("OK\n");

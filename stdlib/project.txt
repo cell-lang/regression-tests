@@ -4,6 +4,8 @@
 ../compiler/src/stdlib/sorting.cell
 ../compiler/src/stdlib/utf-8.cell
 
+stdlib/tree-based.cell
+
 stdlib/time.cell
 stdlib/sorting.cell
 stdlib/utf-8.cell

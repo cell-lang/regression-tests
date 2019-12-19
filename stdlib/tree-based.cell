@@ -1,0 +1,242 @@
+NzNat nz_nat(Int n) = if n :: NzNat then n else undefined;
+
+
+Bool one_in(Int n) {
+  max = _sub_(n, 1);
+  fail if not max :: NzNat;
+  return _rand_nat_(max) == 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+[Any] generate_values(Int depth, [+Symbol] symbols, [+Int] ints, [Float] floats, Int max_size) {
+  return [x : x <- symbols | x <- ints | x <- floats | x <- [(), []]] if depth == 0;
+
+  subvalues = generate_values(depth - 1, symbols, ints, floats, max_size);
+  sequences = generate_sequences(subvalues, max_size);
+  sets = [[x : x <- s] : s <- sequences];
+  bin_rels  = generate_binary_relations(subvalues, max_size);
+  // tern_rels = generate_ternary_relations(subvalues, max_size);
+
+  values = [v : v <- subvalues | v <- sequences | v <- sets | v <- bin_rels];
+  tagged_values = [t(v) : t <- symbols, v <- values];
+
+  return [v : v <- values | v <- tagged_values];
+
+
+  [Any+] generate_sequences([Any] subvalues, Int max_size) {
+    return [(v) : v <- subvalues] if max_size == 1;
+    smaller_seqs = generate_sequences(subvalues, max_size - 1);
+    max_size_seqs = [(s | v) : s <- smaller_seqs, v <- subvalues];
+    return [s : s <- smaller_seqs | s <- max_size_seqs];
+  }
+
+
+  [[+Any, Any]] generate_binary_relations([Any] subvalues, Int max_size) {
+    return [[v1 -> v2] : v1 <- subvalues, v2 <- subvalues] if max_size == 1;
+    smaller_rels = generate_binary_relations(subvalues, max_size - 1);
+    return [
+      [x, y : x y <- r | x y <- [v1 -> v2]]
+      : r <- smaller_rels, v1 <- subvalues, v2 <- subvalues
+    ];
+  }
+
+
+  [[+Any, Any, Any]] generate_ternary_relations([Any] subvalues, Int max_size) {
+    return [[v1, v2, v3;] : v1 <- subvalues, v2 <- subvalues, v3 <- subvalues] if max_size == 1;
+    smaller_rels = generate_ternary_relations(subvalues, _sub_(max_size, 1));
+    return [
+      [x, y, z : x y z <- r | x y z <- [v1, v2, v3;]]
+      : r <- smaller_rels, v1 <- subvalues, v2 <- subvalues, v3 <- subvalues
+    ];
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+[Any -> Any] put([Any -> Any] map, Any key, Any value) =
+  [k -> v : k v <- map | k v <- [key -> value], k != key or v == value];
+
+[Any -> Any] drop([Any -> Any] map, Any key) =
+  [k -> v : k v <- map, k != key];
+
+
+// Bool map_eq([Any -> Any] tree_map, [Any -> Any] array_map) {
+//   return false if |tree_map| != |array_map|;
+//   for k, v <- array_map:
+//     return false if not tree_map(k, v);
+//     return false if tree_map(k) != v;
+//   ;
+//   return true;
+// }
+
+// Bool map_eq([Any -> Any] tree_map, [Any -> Any] array_map) = tree_map == array_map;
+
+
+Bool map_eq([Any -> Any] tree_map, [Any -> Any] array_map) {
+  assert |tree_map| == |array_map|;
+  for k v <- array_map {
+    assert tree_map(k, v);
+    assert tree_map(k) == v;
+  }
+  return true;
+}
+
+
+TestMaps(Any* values, NzNat pack_freq) {
+  max_idx = nz_nat(|values| - 1);
+
+  map = [];
+  ref_map = [];
+
+  for i < 1000 {
+    key = values(_rand_nat_(max_idx));
+    value = values(_rand_nat_(max_idx));
+
+    if map != [] and map(key, _)
+      if one_in(10) {
+        map = _put_(map, key, map(key));
+      }
+      else {
+        map = _drop_(map, key);
+        ref_map = drop(ref_map, key);
+      }
+    else {
+      if one_in(3)
+        map = _drop_(map, key);
+
+      map = _put_(map, key, value);
+      ref_map = put(ref_map, key, value);
+    }
+
+    assert map_eq(map, ref_map);
+
+    for k <- values {
+      assert |map| == |ref_map|;
+      if map == [] {
+        assert |map| == 0;
+        assert ref_map == [];
+      }
+      else {
+        if map(k, _) {
+          assert map(k, _);
+          assert ref_map(k, _);
+          assert map(k) == ref_map(k);
+        }
+        else {
+          assert not map(k, _);
+          assert not ref_map(k, _);
+
+          // if ref_map(k, *) {
+          //   print "-------------------------------------------------";
+          //   print k;
+          //   print map;
+          //   print ref_map;
+          //   print map(k, *);
+          //   print ref_map(k, *);
+          // }
+        }
+      }
+    }
+
+    if one_in(pack_freq) == 0 {
+      map = [k -> v : k v <- map];
+      assert map == ref_map;
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+[T] insert([T] set, T elt) = [e : e <- set | e <- [elt]];
+[T] remove([T] set, T elt) = [e : e <- set, e != elt];
+
+
+Bool set_eq([Any] tree_set, [Any] array_set) {
+  assert |tree_set| == |array_set|;
+  for e <- array_set
+    assert tree_set(e);
+  return true;
+}
+
+
+TestSets(Any* values, NzNat pack_freq) {
+  max_idx = nz_nat(|values| - 1);
+
+  set = [];
+  ref_set = [];
+
+  for i < 1000 {
+    elt = values(_rand_nat_(max_idx));
+
+    if set != [] and set(elt)
+      if one_in(10) {
+        set = _insert_(set, elt);
+      }
+      else {
+        set = _remove_(set, elt);
+        ref_set = remove(ref_set, elt);
+      }
+    else {
+      if one_in(3)
+        set = _remove_(set, elt);
+      set = _insert_(set, elt);
+      ref_set = insert(ref_set, elt);
+    }
+
+    assert set_eq(set, ref_set);
+
+    for e <- values {
+      assert |set| == |ref_set|;
+      if set == [] {
+        assert |set| == 0;
+        assert ref_set == [];
+      }
+      else {
+        if set(e) {
+          assert set(e);
+          assert ref_set(e);
+        }
+        else {
+          assert not set(e);
+          assert not ref_set(e);
+        }
+      }
+    }
+
+    if one_in(pack_freq) == 0 {
+      set = [e : e <- set];
+      assert set == ref_set;
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+Bool RunTreeBasedSetsAndMapsTests() {
+  // symbols = [:alpha, :beta, :gamma, :delta, :epsilon];
+  // ints = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
+  // floats = [-0.5, -0.2, -0.1, 0.0, 0.1, 1.0, 5.0];
+
+  symbols = [:alpha, :beta, :gamma];
+  ints = [-2, -1, 0, 1, 2];
+  floats = [-0.2, 0.0, 0.1, 0.5];
+
+  values = _isort_(generate_values(1, symbols, ints, floats, 2));
+  values = (values(_rand_nat_(nz_nat(|values| - 1))) : i < 100);
+
+  TestMaps(values, 1000000000000000);
+  TestSets(values, 1000000000000000);
+
+  for i = 1..100 {
+    TestMaps(values, nz_nat(20 * i));
+    TestSets(values, nz_nat(20 * i));
+    // Print(".");
+  }
+
+  return true;
+}
+
