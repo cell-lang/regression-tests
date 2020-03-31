@@ -1,0 +1,42 @@
+type Symbol = <+>;
+type Int    = <*..*>;
+type Float  = <!>;
+
+type Any  = Symbol, Int, Float, Any*, [Any], [Any, Any], [Any, Any, Any], <+>(Any);
+
+type Bool   = true, false;
+type Nat    = <0..*>;
+
+type String = string(Nat*);
+type Date   = date(Int);
+type Time   = time(Int);
+
+////////////////////////////////////////////////////////////////////////////////
+
+schema RelAuto {
+  date : Date = `2020-01-01`;
+  time : Time = `2020-01-01 00:00:00`;
+
+  date_epoch_delta : Int  = _untag_(`2020-01-01`);
+  time_epoch_delta : Int  = _untag_(`2020-01-01 00:00:00`);
+}
+
+
+RelAuto.set_date(date: Date) {
+  set date = this.date;
+  set date_epoch_delta = _untag_(this.date);
+}
+
+
+RelAuto.set_time(time: Time) {
+  set time = this.time;
+  set time_epoch_delta = _untag_(this.time);
+}
+
+
+using RelAuto {
+  Date date = date;
+  Time time = time;
+  Int date_epoch_delta = date_epoch_delta;
+  Int time_epoch_delta = time_epoch_delta;
+}

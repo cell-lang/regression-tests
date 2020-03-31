@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>mixed_date_time</RootNamespace>
+    <NoWarn>CS0162, CS0168, CS0219</NoWarn>
+  </PropertyGroup>
+
+</Project>
