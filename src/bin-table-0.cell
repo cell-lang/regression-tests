@@ -194,7 +194,7 @@ Bool RunAllBinTableColsPermsTests() {
 
   // Inserting
   for t <- test_data {
-    ok = a <- t;
+    ok = Send(a, t);
     if not ok {
       Print("ERROR (1)\n");
       return false;
@@ -242,7 +242,7 @@ Bool RunAllBinTableColsPermsTests() {
 
   // Deleting by first column
   t = test_data(8);
-  ok = a <- t(0);
+  ok = Send(a, t(0));
   if not ok {
     Print("ERROR (3)\n");
     return false;
@@ -254,7 +254,7 @@ Bool RunAllBinTableColsPermsTests() {
 
   // Deleting by second column
   t = test_data(3);
-  ok = a <- t(1);
+  ok = Send(a, t(1));
   if not ok {
     Print("ERROR (5)\n");
     return false;
@@ -266,7 +266,7 @@ Bool RunAllBinTableColsPermsTests() {
 
   // Deleting by all columns
   t = test_data(7);
-  ok = a <- :del(t);
+  ok = Send(a, :del(t));
   if not ok {
     Print("ERROR (7)\n");
     return false;
@@ -342,7 +342,7 @@ Bool RunBinTableKeyCheckTests(<insert_a, insert_b, insert_c, insert_d> msg, [[+N
   for n <- ns; s <- ss {
     nt = (n, s);
     exp_ok = not (t <- curr_tuples : conflict(nt, t, keys));
-    ok = a <- msg(nt);
+    ok = Send(a, msg(nt));
     if ok != exp_ok {
       Print("ERROR ERROR ERROR\n");
       print curr_tuples;
@@ -394,7 +394,7 @@ Bool RunBinTableUpdateTests(<update_a, update_b, update_c, update_d> msg, [[+Nat
     nt = (n, s);
     exp_tuples = [t : t <- curr_tuples, not conflict(nt, t, keys)];
     exp_tuples = [t : t <- exp_tuples | t <- [nt]];
-    ok = a <- msg(nt);
+    ok = Send(a, msg(nt));
     if not ok {
       Print("ERROR (1)\n");
       print curr_tuples;

@@ -51,7 +51,7 @@ Bool RunAllTransaction0Tests() {
   int_sm   : IntSM;
   // comp_sm  : CompSM;
 
-  ok = int_sm <- :do;
+  ok = Send(int_sm, :do);
   if ok or int_sm.state1 != 0 or int_sm.state2 != 0 {
     Print("\n\nERROR A\n");
     print ok;

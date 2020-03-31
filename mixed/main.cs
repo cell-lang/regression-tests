@@ -11,6 +11,8 @@ public static class MixedLanguageTests {
       return;
     }
 
+    // RelAutoA
+
     RelAutoA_Tests.Run(args[0] + "/state-A0.txt", true);
 
     Console.Write("\n\n");
@@ -22,6 +24,10 @@ public static class MixedLanguageTests {
     Console.WriteLine("");
     Console.WriteLine("");
 
+    // RelAutoB
+    RelAutoB_Tests.Run();
+
+    // ReacAutoA
     ReactAutoA_Tests.Run();
   }
 }

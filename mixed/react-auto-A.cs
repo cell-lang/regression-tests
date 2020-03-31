@@ -1,7 +1,8 @@
 using System;
 using System.IO;
 
-using Cell.Facades;
+using Cell.Automata;
+using Cell.Typedefs;
 
 
 public static class ReactAutoA_Tests {
@@ -14,7 +15,7 @@ public static class ReactAutoA_Tests {
     double aFloat = 3.14159;
     string aString = "Imagine there's no heaven...";
     long aTimeSpan = 60000;
-    var aRect = (color: Blue.singleton, width: 4.16, height: 0.81, bottomLeft: (x: 25, y: 9));
+    var aRect = (color: "blue", width: 4.16, height: 0.81, bottomLeft: (x: 25, y: 9));
     // string aRect = "(color: blue, width: 4.16, height: 0.81, bottom_left: point(x: 25, y: 9))";
     var aDateRec = (day: 15, year: 2007, month: 3);
     // string aDateRec = "(day: 15, year: 2007, month: 3)";
@@ -23,11 +24,9 @@ public static class ReactAutoA_Tests {
     var aPoint = (x: 12, y: 7);
     // string aPoint = "point(x: 12, y: 7)";
 
-    Polar polar = new Polar();
-    polar.ro = 6.28318;
-    polar.theta = 1.73205;
+    Polar polar = new Polar(ro: 6.28318, theta: 1.73205);
     AnyPoint anAnyPoint = polar;
-    // string anAnyPoint = "polar(ro: 6.28318, theta: 1.73205)";
+    string anAnyPoint_str = "polar(ro: 6.28318, theta: 1.73205)";
 
     var aTuple = (2.71828, "It's easy if you try...", new long[] {1, 1, 2, 6, 24});
     bool[] aBoolSeq = new bool[] {true, false, false, true};
@@ -53,7 +52,7 @@ public static class ReactAutoA_Tests {
     // testAuto.SetInput(ReactAutoA.Input.A_DATE_INPUT, _aDate);
     testAuto.APointInput = aPoint;
     // testAuto.SetInput(ReactAutoA.Input.A_POINT_INPUT, aPoint);
-    testAuto.AnAnyPointInput = anAnyPoint;
+    testAuto.AnAnyPointInput = anAnyPoint_str;
     // testAuto.SetInput(ReactAutoA.Input.AN_ANY_POINT_INPUT, anAnyPoint);
     testAuto.ATupleInput = aTuple;
     // testAuto.SetInput(ReactAutoA.Input.A_TUPLE_INPUT, _aTuple);
@@ -99,7 +98,13 @@ public static class ReactAutoA_Tests {
     }
 
     var outRect = testAuto.ARectOutput;
-    if (outRect != aRect) {
+    if (
+      outRect.color != aRect.color ||
+      outRect.width != aRect.width ||
+      outRect.height != aRect.height ||
+      outRect.bottomLeft.x != aRect.bottomLeft.x ||
+      outRect.bottomLeft.y != aRect.bottomLeft.y
+    ) {
       Console.WriteLine("ERROR: ARectOutput = {0}, aRect = {1}", outRect, aRect);
       return;
     }
@@ -126,7 +131,7 @@ public static class ReactAutoA_Tests {
     }
 
     var outPoint = testAuto.APointOutput;
-    if (outPoint != aPoint) {
+    if (outPoint.x != aPoint.x || outPoint.y != aPoint.y) {
       Console.WriteLine("ERROR: APointOutput = {0}, APoint = {1}", outPoint, aPoint);
       return;
     }
@@ -181,11 +186,12 @@ public static class ReactAutoA_Tests {
       return;
     }
 
+    // (long, string)[] AnIntToSymbMapOutput;
     string str = "[";
     foreach (var entry in testAuto.AnIntToSymbMapOutput) {
       if (str != "[")
         str += ", ";
-      str += string.Format("{0} -> {1}", entry.Key, entry.Value);
+      str += string.Format("{0} -> {1}", entry.Item1, entry.Item2);
     }
     str += "]";
     if (str != anIntToSymbMap) {

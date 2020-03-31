@@ -1,4 +1,4 @@
-package net.cell_lang;
+// package net.cell_lang;
 
 import java.util.Map;
 import java.nio.file.Paths;
@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.io.FileReader;
 import java.io.Writer;
 import java.io.PrintWriter;
+
+import net.cell_lang.*;
 
 
 class RelAutoA_Tests {
@@ -75,7 +77,7 @@ class RelAutoA_Tests {
     long y = aPointVar.y;
     System.out.println(aPointVar.toString());
 
-    Date date = testDb.aDateVar();
+    DateTagTuple date = testDb.aDateVar();
     day = date.item1;
     month = date.item2;
     year = date.item3;
@@ -209,7 +211,7 @@ class RelAutoA_Tests {
     System.out.println("");
 
     System.out.print("[");
-    String_Double[] stringDoubleR = testDb.aSymbFloatBinaryRel();
+    String_Double_1[] stringDoubleR = testDb.aSymbFloatBinaryRel();
     for (int i=0 ; i < stringDoubleR.length ; i++)
       System.out.printf("%s(%s, %.6f)", i == 0 ? "" : ", ", stringDoubleR[i].item1, stringDoubleR[i].item2);
     System.out.println("]\n\n");
@@ -238,12 +240,12 @@ class RelAutoA_Tests {
     // }
     // puts("\n");
 
-    Bool_Long[] boolLongR = testDb.aBoolIntBinaryRel();
+    Boolean_Long[] boolLongR = testDb.aBoolIntBinaryRel();
     for (int i=0 ; i < boolLongR.length ; i++)
       System.out.printf("(%d, %d) ", boolLongR[i].item1 ? 1 : 0, boolLongR[i].item2);
     System.out.println("");
 
-    String_Bool_Seq[] stringBoolsR = testDb.aStringBoolSeqBinaryRel();
+    String_Boolean_Seq[] stringBoolsR = testDb.aStringBoolSeqBinaryRel();
     for (int i=0 ; i < stringBoolsR.length ; i++) {
       System.out.printf("(\"%s\", (", stringBoolsR[i].item1);
       boolv = stringBoolsR[i].item2;
@@ -335,7 +337,7 @@ class RelAutoA_Tests {
 
     System.out.println("");
 
-    String_Double[] symbDoubleV = testDb.symbsAndFloats();
+    String_Double_1[] symbDoubleV = testDb.symbsAndFloats();
     for (int i=0 ; i < symbDoubleV.length ; i++)
       System.out.printf("(%s, %.5f) ", symbDoubleV[i].item1, symbDoubleV[i].item2);
     System.out.println("\n");
@@ -378,7 +380,7 @@ class RelAutoA_Tests {
     System.out.println(testDb.anIntStringFloatSeqTernaryRel(0, "sqrt(2) - sqrt(3)", new double[] {141421e-5, 173205e-5}) ? 1 : 0);
     System.out.println("");
 
-    String_Long_Bool_Seq[] stringLongBoolsR = testDb.aSymbIntBoolSeqTernaryRel();
+    String_Long_Boolean_Seq[] stringLongBoolsR = testDb.aSymbIntBoolSeqTernaryRel();
     for (int i=0 ; i < stringLongBoolsR.length ; i++) {
       System.out.printf("%s, %d, (", stringLongBoolsR[i].item1.toString(), stringLongBoolsR[i].item2);
       for (int j=0 ; j < stringLongBoolsR[i].item3.length ; j++)
