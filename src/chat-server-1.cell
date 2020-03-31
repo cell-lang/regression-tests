@@ -295,22 +295,22 @@ Bool RunAllChatServer1Tests() {
   conn_ids = merge(([u -> i] : u @ i <- sorted_users));
 
   for i < |conn_ids| {
-    ok = server <- connect(i);
+    ok = Send(server, connect(i));
     assert ok;
   }
 
   for u, s <- chat_server_test_data_1 {
     cid = conn_ids[u];
     for ch <- _untag_(s) {
-      ok = server <- received(cid, ch);
+      ok = Send(server, received(cid, ch));
       assert ok;
     }
-    ok = server <- received(cid, ascii_newline);
+    ok = Send(server, received(cid, ascii_newline));
     assert ok;
   }
 
   for i < |conn_ids| {
-    ok = server <- disconnect(i);
+    ok = Send(server, disconnect(i));
     assert ok;
   }
 
@@ -322,7 +322,7 @@ Bool RunAllChatServer1Tests() {
   }
 
   for i < server.msg_counter {
-    ok = server <- sent(i);
+    ok = Send(server, sent(i));
     assert ok;
     if |server.data_to_send| != server.msg_counter - i - 1 {
       Print("ERROR (2)\n");

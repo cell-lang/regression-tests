@@ -1,8 +1,10 @@
 Int Main(String* args) {
   Print("  Tree-based sets and maps   ");
+  start = Ticks();
   ok = RunTreeBasedSetsAndMapsTests();
+  end = Ticks();
   if ok {
-    Print("OK\n");
+    Print("OK  " & time_str(end - start) & "ms\n");
   }
   else {
     Print("ERROR\n");
@@ -10,9 +12,11 @@ Int Main(String* args) {
   }
 
   Print("  Date                       ");
+  start = Ticks();
   ok = RunDateTests();
+  end = Ticks();
   if ok {
-    Print("OK\n");
+    Print("OK  " & time_str(end - start) & "ms\n");
   }
   else {
     Print("ERROR\n");
@@ -20,9 +24,11 @@ Int Main(String* args) {
   }
 
   Print("  Time                       ");
+  start = Ticks();
   ok = RunTimeTests();
+  end = Ticks();
   if ok {
-    Print("OK\n");
+    Print("OK  " & time_str(end - start) & "ms\n");
   }
   else {
     Print("ERROR\n");
@@ -30,9 +36,11 @@ Int Main(String* args) {
   }
 
   Print("  Sorting                    ");
+  start = Ticks();
   ok = RunSortingTests();
+  end = Ticks();
   if ok {
-    Print("OK\n");
+    Print("OK  " & time_str(end - start) & "ms\n");
   }
   else {
     Print("ERROR\n");
@@ -40,9 +48,11 @@ Int Main(String* args) {
   }
 
   Print("  UTF-8                      ");
+  start = Ticks();
   ok = RunUTF8Tests();
+  end = Ticks();
   if ok {
-    Print("OK\n");
+    Print("OK  " & time_str(end - start) & "ms\n");
   }
   else {
     Print("ERROR\n");
@@ -50,4 +60,12 @@ Int Main(String* args) {
   }
 
   return 0;
+}
+
+
+String time_str(Int time) {
+  str = _print_(time);
+  while length(str) < 6
+    str = " " & str;
+  return str;
 }

@@ -27,18 +27,38 @@ type TimeSpan = msecs(Nat);
 type Color  = white, black, red, green, blue, yellow, bronze;
 type Rect   = (bottom_left: Point, width: Float, height: Float, color: Color);
 
-type DateRec  = (day: Nat, month: Nat, year: Nat);
-type Date     = date(Nat, Nat, Nat);
+type DateRec      = (day: Nat, month: Nat, year: Nat);
+type DateTagTuple = date(Nat, Nat, Nat);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-type Atom           = <+>;
+type Symbol         = <+>;
 type Int            = <*..*>;
 type Float          = <!>;
 
+type Any            = Symbol, Int, Float, Any*, [Any], [Any, Any], [Any, Any, Any], <+>(Any);
+
 type Bool           = true, false;
+type True           = true;
+type False          = false;
+
 type Nat            = <0..*>;
+type NzNat          = <1..*>;
 
 type Bit            = <0..1>;
 type Byte           = <0..255>;
+type Int32          = < -2147483648 .. 2147483647 >;
+
 type String         = string(Nat*);
+type Ascii          = string(<0..127>*);
+
+type Nothing        = nothing;
+type Just[T]        = just(T);
+type Maybe[T]       = Nothing, Just[T];
+
+type Success[T]     = success(T);
+type Failure[T]     = failure(T);
+type Result[R, E]   = success(R), failure(E);
+
+type Date           = date(Int);
+type Time           = time(Int);

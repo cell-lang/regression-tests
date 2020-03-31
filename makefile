@@ -1,3 +1,36 @@
+run-all-tests:
+	make -s clean
+	make --no-print-directory tests.jar
+	java -jar tmp/tests.jar
+	@echo ; echo
+	make -s clean
+	make --no-print-directory mixed-tests.jar
+	java -jar tmp/mixed-tests.jar mixed/ > tmp/output.txt
+	cmp tmp/output.txt reference/java-0.5.4.txt
+	@echo ; echo
+	make -s clean
+	make --no-print-directory stdlib-tests.jar
+	time java -jar tmp/stdlib-tests.jar
+	@echo ; echo
+	make -s clean
+	make --no-print-directory mixed-date-time-tests.jar
+	java -jar tmp/mixed-date-time-tests.jar
+	@echo ; echo
+	make -s clean
+	make --no-print-directory tests.dll
+	dotnet/bin/Debug/netcoreapp3.1/tests
+	@echo ; echo
+	make -s clean
+	make --no-print-directory mixed-tests.dll
+	dotnet-mixed/bin/Debug/netcoreapp3.1/dotnet-mixed mixed > tmp/output.txt
+	cmp tmp/output.txt reference/csharp-0.5.4.txt
+	@echo ; echo
+	make -s clean
+	make --no-print-directory stdlib-tests.dll
+	time dotnet-stdlib/bin/Debug/netcoreapp3.1/dotnet-stdlib
+	@echo ; echo
+	make -s clean
+
 tests:
 	rm -rf tmp/
 	mkdir tmp
@@ -28,22 +61,22 @@ mixed-tests.exe:
 
 tests.dll:
 	rm -rf tmp/ ; mkdir tmp/
-	dotnet ../csharp/bin/cellc-cs.dll -d project.txt tmp/
+	../csharp/bin/cellc-cs -d project.txt tmp/
 	mv tmp/*.cs dotnet/
 	dotnet build dotnet/
 
 mixed-tests.dll:
 	rm -rf tmp/ ; mkdir tmp/
-	dotnet ../csharp/bin/cellc-cs.dll -d -g mixed/project.txt tmp/
-	#java -jar ../csharp/cellcd-cs.jar -d -g mixed/project.txt tmp/
+	../csharp/bin/cellc-cs -d -g mixed/gen-list.txt mixed/project.txt tmp/
+# 	../csharp/cellc-cs -d -g mixed/gen-list.txt mixed/project.txt tmp/
 	mv tmp/*.cs dotnet-mixed/
 	dotnet build dotnet-mixed/
 
 stdlib-tests.dll:
 	rm -rf tmp/ ; mkdir tmp
-	dotnet ../csharp/bin/cellc-cs.dll -d stdlib/project.txt tmp/
+	dotnet ../csharp/bin/cellc-cs.dll stdlib/project.txt tmp/
 	mv tmp/*.cs dotnet-stdlib/
-	dotnet build dotnet-stdlib/
+	dotnet build -c Release dotnet-stdlib/
 
 tests.jar:
 	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
@@ -54,11 +87,11 @@ tests.jar:
 	jar cfe tmp/tests.jar net.cell_lang.Generated -C tmp net/
 
 mixed-tests.jar:
-	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
+	rm -rf tmp/ ; mkdir tmp tmp/gen/ tmp/cls/
 	java -jar ../java/bin/cellc-java.jar -g mixed/project.txt tmp/gen/
 # 	java -jar ../java/bin/cellcd-java.jar -g mixed/project.txt tmp/gen/
-	javac -g -d tmp/ tmp/gen/*.java mixed/*.java
-	jar cfe tmp/mixed-tests.jar net.cell_lang.Main -C tmp net
+	javac -g -d tmp/cls/ tmp/gen/*.java mixed/*.java
+	jar cfe tmp/mixed-tests.jar Main -C tmp/cls/ .
 
 stdlib-tests.jar:
 	rm -rf tmp/ ; mkdir tmp ; mkdir tmp/gen/
@@ -90,6 +123,6 @@ update-tests.jar:
 	jar cfe tmp/tests.jar net.cell_lang.Generated -C tmp net/
 
 update-mixed-tests.jar:
-	rm -f tmp/mixed-tests.jar
-	javac -g -d tmp/ tmp/gen/*.java mixed/*.java
-	jar cfe tmp/mixed-tests.jar net.cell_lang.Main -C tmp net
+	rm -rf tmp/mixed-tests.jar tmp/cls/*
+	javac -g -d tmp/cls/ tmp/gen/*.java mixed/*.java
+	jar cfe tmp/mixed-tests.jar Main -C tmp/cls/ .

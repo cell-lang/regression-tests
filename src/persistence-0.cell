@@ -46,12 +46,37 @@ schema Travels : Flights {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+type FlightsState = (
+  country : [CountryId],
+  code    : [CountryId -> CountryCode],
+
+  airport  : [AirportId],
+  location : [AirportId -> CountryId],
+
+  name : [CountryId, String; AirportId, String],
+
+  flight_route : [RouteId, AirportId, AirportId],
+
+  departing : [AirportId, RouteId],
+
+  flight    : [FlightId],
+  route     : [FlightId -> RouteId],
+  departure : [FlightId -> Time],
+  arrival   : [FlightId -> Time],
+  price     : [FlightId -> Money]
+);
+
+
+type TravelsState = (budget : Money, favorites : CountryId*, visited : CountryId*);
+
+
 type FlightsData = (
     countries : (CountryId, CountryCode, String)*,
     airports  : (AirportId, String, CountryId)*,
     routes    : (RouteId, AirportId, AirportId)*,
     flights   : (FlightId, RouteId, Time, Time, Money)*
   );
+
 
 type TravelsData = (
     budget    : Money,
@@ -267,7 +292,7 @@ TravelsData travels_data_2 = (
 //                       departing:    [AirportId, RouteId]
 //                     );
 
-Flights flights_state(FlightsData data) = (
+FlightsState flights_state(FlightsData data) = (
     country:      [t(0) : t <- data.countries],
     airport:      [t(0) : t <- data.airports],
     flight:       [t(0) : t <- data.flights],
@@ -293,7 +318,7 @@ Flights flights_state(FlightsData data) = (
 //   );
 
 
-Travels travels_state(TravelsData data) = (
+TravelsState travels_state(TravelsData data) = (
     budget:     data.budget,
     favorites:  data.favorites,
     visited:    data.visited
@@ -312,80 +337,80 @@ Bool RunFlightsTests() {
   s1 = flights_state(d1);
   s2 = flights_state(d2);
 
-  s = read fsdb;
+  s = Copy(fsdb);
   if s != s0 {
     Print("\n\nERROR! (A)\n");
     return false;
   }
 
-  ok = fsdb <- populate_flights(data: d1);
+  ok = Send(fsdb, populate_flights(data: d1));
   if not ok {
     Print("\n\nERROR! (B)\n");
     return false;
   }
 
-  s = read fsdb;
+  s = Copy(fsdb);
   if s != s1 {
     Print("\n\nERROR! (C)\n");
     return false;
   }
 
-  ok = write fsdb <- s2;
+  ok = Set(fsdb, s2);
   if not ok {
     Print("\n\nERROR! (D)\n");
     return false;
   }
 
-  s = read fsdb;
+  s = Copy(fsdb);
   if s != s2 {
     Print("\n\nERROR! (E)\n");
     return false;
   }
 
-  ok = write fsdb <- s1;
+  ok = Set(fsdb, s1);
   if not ok {
     Print("\n\nERROR! (F)\n");
     print s1;
     return false;
   }
 
-  s = read fsdb;
+  s = Copy(fsdb);
   if s != s1 {
     Print("\n\nERROR! (G)\n");
     return false;
   }
 
-  ok = fsdb <- populate_flights(data: d2);
+  ok = Send(fsdb, populate_flights(data: d2));
   if ok {
     Print("\n\nERROR! (H)\n");
     return false;
   }
 
-  s = read fsdb;
+  s = Copy(fsdb);
   if s != s1 {
     Print("\n\nERROR! (I)\n");
     return false;
   }
 
-  ok = write fsdb <- s0;
+  ok = Set(fsdb, s0);
   if not ok {
     Print("\n\nERROR! (L)\n");
     return false;
   }
 
-  s = read fsdb;
+  s = Copy(fsdb);
   if s != s0 {
     Print("\n\nERROR! (M)\n");
     return false;
   }
 
-  ok = fsdb <- populate_flights(data: d2);
+  ok = Send(fsdb, populate_flights(data: d2));
   if not ok {
     Print("\n\nERROR! (N)\n");
     return false;
   }
 
-  s = read fsdb;
+  s = Copy(fsdb);
   if s != s2 {
     Print("\n\nERROR! (O)\n");
     return false;
@@ -407,79 +432,79 @@ Bool RunTravelsTests() {
   s1 = travels_state(d1);
   s2 = travels_state(d2);
 
-  s = read tdb;
+  s = Copy(tdb);
   if s != s0 {
     Print("\n\nERROR! (Travels: 0)\n");
     return false;
   }
 
-  ok = tdb <- populate_travels(data: d1);
+  ok = Send(tdb, populate_travels(data: d1));
   if not ok {
     Print("\n\nERROR! (Travels: 1)\n");
     return false;
   }
 
-  s = read tdb;
+  s = Copy(tdb);
   if s != s1 {
     Print("\n\nERROR! (Travels: 2)\n");
     return false;
   }
 
-  ok = write tdb <- s2;
+  ok = Set(tdb, s2);
   if not ok {
     Print("\n\nERROR! (Travels: 4)\n");
     return false;
   }
 
-  s = read tdb;
+  s = Copy(tdb);
   if s != s2 {
     Print("\n\nERROR! (Travels: 5)\n");
     return false;
   }
 
-  ok = write tdb <- s1;
+  ok = Set(tdb, s1);
   if not ok {
     Print("\n\nERROR! (Travels: 6)\n");
     return false;
   }
 
-  s = read tdb;
+  s = Copy(tdb);
   if s != s1 {
     Print("\n\nERROR! (Travels: 7)\n");
     return false;
   }
 
-  ok = tdb <- populate_travels(data: d2);
+  ok = Send(tdb, populate_travels(data: d2));
   if not ok {
     Print("\n\nERROR! (Travels: 8)\n");
     return false;
   }
 
-  s = read tdb;
+  s = Copy(tdb);
   if s != s2 {
     Print("\n\nERROR! (Travels: 9)\n");
     return false;
   }
 
-  ok = write tdb <- s0;
+  ok = Set(tdb, s0);
   if not ok {
     Print("\n\nERROR! (Travels: 10)\n");
     return false;
   }
 
-  s = read tdb;
+  s = Copy(tdb);
   if s != s0 {
     Print("\n\nERROR! (Travels: 11)\n");
     return false;
   }
 
-  ok = tdb <- populate_travels(data: d2);
+  ok = Send(tdb, populate_travels(data: d2));
   if not ok {
     Print("\n\nERROR! (Travels: 12)\n");
     return false;
   }
 
-  s = read tdb;
+  s = Copy(tdb);
   if s != s2 {
     Print("\n\nERROR! (Travels: 13)\n");
     return false;

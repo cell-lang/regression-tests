@@ -1,8 +1,10 @@
-package net.cell_lang;
+// package net.cell_lang;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+
+import net.cell_lang.*;
 
 
 class ReactAutoA_Tests {
@@ -41,7 +43,7 @@ class ReactAutoA_Tests {
     aDateRec.month = 3;
     aDateRec.year = 2007;
 
-    Date aDate = new Date();
+    DateTagTuple aDate = new DateTagTuple();
     aDate.item1 = 5;
     aDate.item2 = 2;
     aDate.item3 = 2018;
@@ -148,7 +150,7 @@ class ReactAutoA_Tests {
       return;
     }
 
-    Date aDateOutput = testAuto.aDateOutput();
+    DateTagTuple aDateOutput = testAuto.aDateOutput();
     if (aDateOutput.item1 != aDate.item1 || aDateOutput.item2 != aDate.item2 || aDateOutput.item3 != aDate.item3) {
       System.out.printf("ERROR: aDateOutput = %s, aDate = %s\n", aDateOutput.toString(), aDate.toString());
       return;

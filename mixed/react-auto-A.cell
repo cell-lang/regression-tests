@@ -1,7 +1,7 @@
 reactive ReactAutoA {
   input:
     a_bool_input    : Bool;
-    a_symb_input    : Atom;
+    a_symb_input    : Symbol;
     an_int_input    : Int;
     a_float_input   : Float;
     a_string_input  : String;
@@ -10,7 +10,7 @@ reactive ReactAutoA {
 
     a_rect_input        : Rect;
     a_date_rec_input    : DateRec;
-    a_date_input        : Date;
+    a_date_input        : DateTagTuple;
     a_point_input       : Point;
     an_any_point_input  : AnyPoint;
 
@@ -22,11 +22,11 @@ reactive ReactAutoA {
     a_point_seq_input     : Point*;
     a_time_span_seq_input : TimeSpan*;
 
-    an_int_to_symb_map_input  : [Int -> Atom];
+    an_int_to_symb_map_input  : [Int -> Symbol];
 
   output:
     a_bool_output    : Bool;
-    a_symb_output    : Atom;
+    a_symb_output    : Symbol;
     an_int_output    : Int;
     a_float_output   : Float;
     a_string_output  : String;
@@ -35,7 +35,7 @@ reactive ReactAutoA {
 
     a_rect_output        : Rect;
     a_date_rec_output    : DateRec;
-    a_date_output        : Date;
+    a_date_output        : DateTagTuple;
     a_point_output       : Point;
     an_any_point_output  : AnyPoint;
 
@@ -47,7 +47,7 @@ reactive ReactAutoA {
     a_point_seq_output     : Point*;
     a_time_span_seq_output : TimeSpan*;
 
-    an_int_to_symb_map_output  : [Int -> Atom];
+    an_int_to_symb_map_output  : [Int -> Symbol];
 
   rules:
     a_bool_output   = a_bool_input;

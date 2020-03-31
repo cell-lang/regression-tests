@@ -1,5 +1,3 @@
-package net.cell_lang;
-
 import java.io.IOException;
 
 
@@ -9,6 +7,8 @@ public class Main {
       System.out.println("Usage: <executable> <directory>");
       return;
     }
+
+    // RelAutoA
 
     RelAutoA_Tests.run(args[0] + "/state-A0.txt", true);
 
@@ -21,6 +21,10 @@ public class Main {
     System.out.println("");
     System.out.println("");
 
+    // RelAutoB
+    RelAutoB_Tests.run();
+
+    // ReacAutoA
     ReactAutoA_Tests.run();
   }
 }

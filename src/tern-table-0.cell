@@ -589,7 +589,7 @@ Bool RunAllTernTableColsPermsTests() {
 
   // Inserting
   for t <- test_data {
-    ok = a <- t;
+    ok = Send(a, t);
     if not ok {
       Print("ERROR (1)\n");
       return false;
@@ -643,7 +643,7 @@ Bool RunAllTernTableColsPermsTests() {
 
   // Deleting by first column
   t = test_data(8);
-  ok = a <- t(0);
+  ok = Send(a, t(0));
   if not ok {
     Print("ERROR (3)\n");
     return false;
@@ -655,7 +655,7 @@ Bool RunAllTernTableColsPermsTests() {
 
   // Deleting by second column
   t = test_data(3);
-  ok = a <- t(1);
+  ok = Send(a, t(1));
   if not ok {
     Print("ERROR (5)\n");
     return false;
@@ -667,7 +667,7 @@ Bool RunAllTernTableColsPermsTests() {
 
   // Deleting by third column
   t = test_data(12);
-  ok = a <- t(2);
+  ok = Send(a, t(2));
   if not ok {
     Print("ERROR (7)\n");
     return false;
@@ -679,7 +679,7 @@ Bool RunAllTernTableColsPermsTests() {
 
   // Deleting by first and second columns
   t = test_data(15);
-  ok = a <- :del_01(t(0), t(1));
+  ok = Send(a, :del_01(t(0), t(1)));
   if not ok {
     Print("ERROR (9)\n");
     return false;
@@ -691,7 +691,7 @@ Bool RunAllTernTableColsPermsTests() {
 
   // Deleting by first and third columns
   t = test_data(10);
-  ok = a <- :del_02(t(0), t(2));
+  ok = Send(a, :del_02(t(0), t(2)));
   if not ok {
     Print("ERROR (9)\n");
     return false;
@@ -703,7 +703,7 @@ Bool RunAllTernTableColsPermsTests() {
 
   // Deleting by second and third columns
   t = test_data(2);
-  ok = a <- :del_12(t(1), t(2));
+  ok = Send(a, :del_12(t(1), t(2)));
   if not ok {
     Print("ERROR (11)\n");
     return false;
@@ -715,7 +715,7 @@ Bool RunAllTernTableColsPermsTests() {
 
   // Deleting by all columns
   t = test_data(7);
-  ok = a <- :del_012(t(0), t(1), t(2));
+  ok = Send(a, :del_012(t(0), t(1), t(2)));
   if not ok {
     Print("ERROR (13)\n");
     return false;
@@ -788,7 +788,7 @@ Bool RunTernTableKeyCheckTests(TernTableInsertOp msg, [[+Nat]] keys) {
   for n <- ns; s <- ss; p <- ps {
     nt = (n, s, p);
     exp_ok = not (t <- curr_tuples : conflict(nt, t, keys));
-    ok = a <- msg(nt);
+    ok = Send(a, msg(nt));
     if ok != exp_ok {
       Print("ERROR ERROR ERROR\n");
       print curr_tuples;
@@ -859,7 +859,7 @@ Bool RunTernTableUpdateTests(TernTableUpdateOp msg, [[+Nat]] keys) {
     nt = (an_n, an_s, a_p);
     exp_tuples = [t : t <- curr_tuples, not conflict(nt, t, keys)];
     exp_tuples = [t : t <- exp_tuples | t <- [nt]];
-    ok = a <- msg(nt);
+    ok = Send(a, msg(nt));
     if not ok {
       Print("ERROR (1)\n");
       print curr_tuples;

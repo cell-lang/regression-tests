@@ -1,7 +1,23 @@
 using System;
 using System.IO;
 
-using Cell.Facades;
+using Cell.Automata;
+using Cell.Typedefs;
+
+
+namespace Cell.Typedefs {
+  public partial class Polar : AnyPoint {
+    public override string ToString() {
+      return string.Format("polar(ro: {0}, theta: {1})", ro, theta);
+    }
+  }
+
+  public partial class Point : AnyPoint {
+    public override string ToString() {
+      return string.Format("point(x: {0}, y: {1})", x, y);
+    }
+  }
+}
 
 
 public static class RelAutoA_Tests {
@@ -63,12 +79,12 @@ public static class RelAutoA_Tests {
     long year = dateRec.year;
     Console.WriteLine("{0}/{1:00}/{2}\n", day, month, year);
 
-    (long x, long y)[] points = testDb.APointSeqVar();
+    Point[] points = testDb.APointSeqVar();
     for (int i=0 ; i < points.Length ; i++)
       Console.Write("point(x: {0}, y: {1}) ", points[i].x, points[i].y);
     Console.WriteLine("");
 
-    (long x, long y) point = testDb.APointVar();
+    Point point = testDb.APointVar();
     Console.WriteLine("point(x: {0}, y: {1})", point.x, point.y);
 
     var date = testDb.ADateVar();
@@ -91,7 +107,7 @@ public static class RelAutoA_Tests {
     var rect = testDb.ARectVar();
     double width = rect.width;
     double height = rect.height;
-    Color color = rect.color;
+    string color = rect.color;
     long x = rect.bottomLeft.x;
     long y = rect.bottomLeft.y;
     Console.WriteLine(
@@ -355,7 +371,7 @@ public static class RelAutoA_Tests {
       if (!first)
         Console.Write(", ");
       first = false;
-      Console.Write("{0} -> {1}", entry.Key, entry.Value);
+      Console.Write("{0} -> {1}", entry.Item1, entry.Item2);
     }
     Console.WriteLine("]");
 

@@ -47,9 +47,9 @@ Bool RunSortingTests() {
 }
 
 
-Bool (_<_)(String str1, String str2) = lt(str1, str2);
-Bool (_>_)(String str1, String str2) = lt(str2, str1);
-Bool (_<=_)(String str1, String str2) = lt(str1, str2) or str1 == str2;
+// Bool (_<_)(String str1, String str2) = lt(str1, str2);
+Bool (_>_)(String str1, String str2) = str2 < str1;
+Bool (_<=_)(String str1, String str2) = str1 < str2 or str1 == str2;
 
 Bool lt(String str1, String str2) {
   i = 0;

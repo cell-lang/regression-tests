@@ -25,13 +25,13 @@ polar(ro: 6.28318, theta: 1.73205)
 
 ["dog", "fox", "lazy", "jumps", "the", "quick", "over", "brown"]
 
-[point(x: 9, y: 64), polar(ro: 3.14159, theta: 1.41421), polar(ro: 2.71828, theta: 1.73205)]
+[point(x: 9, y: 64), polar(ro: 2.71828, theta: 1.73205), polar(ro: 3.14159, theta: 1.41421)]
 
-true false
-false true false
 false false true false
-false
 true false false true false
+false true false
+false
+true false
 
 10 20 30 40 50 60
 30 40 50 60
@@ -46,12 +46,12 @@ true false false true false
 0.500000 0.250000 0.125000 0.062500 0.031250
 0.125000 0.062500 0.031250
 
-[red, green, blue, yellow, white, black; yellow, white, black; white, black; blue, yellow, white, black; green, blue, yellow, white, black; black; ]
+[red, green, blue, yellow, white, black; yellow, white, black; blue, yellow, white, black; green, blue, yellow, white, black; black; white, black; ]
 
 [youhesheit; , he, she, it; , it; , I, you, he, she, it; , she, it; ]
 
 1 1 1 1 0 0 0 0 
-[(sqrt3, 1.732050), (e, 2.718280), (pi, 3.141590), (sqrt2, 1.414210)]
+[(sqrt2, 1.414210), (e, 2.718280), (pi, 3.141590), (sqrt3, 1.732050)]
 
 
 pi: 3.141590
@@ -61,9 +61,9 @@ sqrt3: 1.732050
 sqrt5: --
 non-key: --
 
-(1, -72305) (0, 2) (1, 1) (1, 0) (0, -1) 
-("010", (0, 1, 0)) ("100110", (1, 0, 0, 1, 1, 0)) ("", ()) 
-((9, 8, 7, 6, 5), 98765) ((0, 1, 2, 3), 123) 
+(1, 0) (0, -1) (1, -72305) (0, 2) (1, 1) 
+("100110", (1, 0, 0, 1, 1, 0)) ("", ()) ("010", (0, 1, 0)) 
+((0, 1, 2, 3), 123) ((9, 8, 7, 6, 5), 98765) 
 
 
 pi      =       pi 3.141590
@@ -92,7 +92,7 @@ sqrt(3) =    sqrt3 1.73205
 (0, 1, 2, 3) : msecs(123)
 (9, 8, 7, 6, 5) : msecs(98765)
 
-(sqrt3, 1.73205) (e, 2.71828) (pi, 3.14159) (sqrt2, 1.41421) 
+(sqrt2, 1.41421) (e, 2.71828) (pi, 3.14159) (sqrt3, 1.73205) 
 
 1
 1
@@ -109,20 +109,20 @@ sqrt(3) =    sqrt3 1.73205
 
 1 0 0
 
-one, 1, (1)
-three, 3, (1, 1)
-seven, 7, (1, 1, 1)
-five, 5, (1, 0, 1)
-six, 6, (1, 1, 0)
 two, 2, (1, 0)
+five, 5, (1, 0, 1)
+one, 1, (1)
 four, 4, (1, 0, 0)
+three, 3, (1, 1)
+six, 6, (1, 1, 0)
+seven, 7, (1, 1, 1)
 
 1 1 1 1 
 0 0 0 0 
 
 ( a_bool_var: true,
   a_date_var: date(11, 2, 1937),
-  a_rect_var: (color: blue, width: 4.16, height: 0.81, bottom_left: point(x: 25, y: 9)),
+  a_rect_var: (width: 4.16, height: 0.81, color: blue, bottom_left: point(x: 25, y: 9)),
   a_symb_var: an_updated_symbol,
   an_int_var: 42,
   a_float_var: 0.987654,
@@ -130,7 +130,7 @@ four, 4, (1, 0, 0)
   a_tuple_var: (9.8765, "ANOTHER UPDATED STRING", (2, 4, 8, 16, 32, 64, 128)),
   a_string_var: "An updated string",
   a_bool_seq_var: (false, true, true, false, false, false, true, true, false),
-  a_date_rec_var: (day: 15, year: 2007, month: 3),
+  a_date_rec_var: (year: 2007, month: 3, day: 15),
   an_int_seq_var: (9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
   a_float_seq_var: (0.5, 1.5, 2.5),
   a_point_seq_var: (point(x: 144, y: 9), point(x: 1, y: 16), point(x: 49, y: 225)),
@@ -280,13 +280,13 @@ polar(ro: 6.28318, theta: 1.73205)
 
 ["dog", "fox", "lazy", "jumps", "the", "quick", "over", "brown"]
 
-[point(x: 9, y: 64), polar(ro: 3.14159, theta: 1.41421), polar(ro: 2.71828, theta: 1.73205)]
+[point(x: 9, y: 64), polar(ro: 2.71828, theta: 1.73205), polar(ro: 3.14159, theta: 1.41421)]
 
-true false
-false true false
 false false true false
-false
 true false false true false
+false true false
+false
+true false
 
 10 20 30 40 50 60
 30 40 50 60
@@ -301,12 +301,12 @@ true false false true false
 0.500000 0.250000 0.125000 0.062500 0.031250
 0.125000 0.062500 0.031250
 
-[red, green, blue, yellow, white, black; yellow, white, black; white, black; blue, yellow, white, black; green, blue, yellow, white, black; black; ]
+[red, green, blue, yellow, white, black; yellow, white, black; blue, yellow, white, black; green, blue, yellow, white, black; black; white, black; ]
 
 [youhesheit; , he, she, it; , it; , I, you, he, she, it; , she, it; ]
 
 1 1 1 1 0 0 0 0 
-[(sqrt3, 1.732050), (e, 2.718280), (pi, 3.141590), (sqrt2, 1.414210)]
+[(sqrt2, 1.414210), (e, 2.718280), (pi, 3.141590), (sqrt3, 1.732050)]
 
 
 pi: 3.141590
@@ -316,9 +316,9 @@ sqrt3: 1.732050
 sqrt5: --
 non-key: --
 
-(1, -72305) (0, 2) (1, 1) (1, 0) (0, -1) 
-("010", (0, 1, 0)) ("100110", (1, 0, 0, 1, 1, 0)) ("", ()) 
-((9, 8, 7, 6, 5), 98765) ((0, 1, 2, 3), 123) 
+(1, 0) (0, -1) (1, -72305) (0, 2) (1, 1) 
+("100110", (1, 0, 0, 1, 1, 0)) ("", ()) ("010", (0, 1, 0)) 
+((0, 1, 2, 3), 123) ((9, 8, 7, 6, 5), 98765) 
 
 
 pi      =       pi 3.141590
@@ -347,7 +347,7 @@ sqrt(3) =    sqrt3 1.73205
 (0, 1, 2, 3) : msecs(123)
 (9, 8, 7, 6, 5) : msecs(98765)
 
-(sqrt3, 1.73205) (e, 2.71828) (pi, 3.14159) (sqrt2, 1.41421) 
+(sqrt2, 1.41421) (e, 2.71828) (pi, 3.14159) (sqrt3, 1.73205) 
 
 1
 1
@@ -364,20 +364,20 @@ sqrt(3) =    sqrt3 1.73205
 
 1 0 0
 
-one, 1, (1)
-three, 3, (1, 1)
-seven, 7, (1, 1, 1)
-five, 5, (1, 0, 1)
-six, 6, (1, 1, 0)
 two, 2, (1, 0)
+five, 5, (1, 0, 1)
+one, 1, (1)
 four, 4, (1, 0, 0)
+three, 3, (1, 1)
+six, 6, (1, 1, 0)
+seven, 7, (1, 1, 1)
 
 1 1 1 1 
 0 0 0 0 
 
 ( a_bool_var: true,
   a_date_var: date(11, 2, 1937),
-  a_rect_var: (color: blue, width: 4.16, height: 0.81, bottom_left: point(x: 25, y: 9)),
+  a_rect_var: (width: 4.16, height: 0.81, color: blue, bottom_left: point(x: 25, y: 9)),
   a_symb_var: an_updated_symbol,
   an_int_var: 42,
   a_float_var: 0.987654,
@@ -385,7 +385,7 @@ four, 4, (1, 0, 0)
   a_tuple_var: (9.8765, "ANOTHER UPDATED STRING", (2, 4, 8, 16, 32, 64, 128)),
   a_string_var: "An updated string",
   a_bool_seq_var: (false, true, true, false, false, false, true, true, false),
-  a_date_rec_var: (day: 15, year: 2007, month: 3),
+  a_date_rec_var: (year: 2007, month: 3, day: 15),
   an_int_seq_var: (9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
   a_float_seq_var: (0.5, 1.5, 2.5),
   a_point_seq_var: (point(x: 144, y: 9), point(x: 1, y: 16), point(x: 49, y: 225)),

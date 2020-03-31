@@ -1,0 +1,139 @@
+type Opt[T] = (), (T);
+
+Opt[T]   maybe2opt(Maybe[T] maybe)  = if maybe != :nothing then (_untag_(maybe)) else ();
+Maybe[T] opt2maybe(Opt[T] opt)      = if opt != () then :just(opt(0)) else :nothing;
+
+////////////////////////////////////////////////////////////////////////////////
+
+type TerritoryId = territory_id(Nat);
+type EmployeeId  = employee_id(Nat);
+type CustomerId  = customer_id(String);
+type OrderId     = order_id(Nat);
+
+////////////////////////////////////////////////////////////////////////////////
+
+schema RelAutoB {
+  opt_bool_memb_var:          Opt[Bool]                                                         = ();
+  opt_int_memb_var:           Opt[Int]                                                          = ();
+  opt_float_memb_var:         Opt[Float]                                                        = ();
+  opt_date_memb_var:          Opt[Date]                                                         = ();
+  opt_time_memb_var:          Opt[Time]                                                         = ();
+  opt_tuple_memb_var:         Opt[(Int, String, Date)]                                          = ();
+  opt_record_memb_var:        Opt[(time: Time, label: String, maybe: Maybe[OrderId])]           = ();
+  opt_string_memb_var:        Opt[String]                                                       = ();
+  opt_employee_id_memb_var:   Opt[EmployeeId]                                                   = ();
+  opt_customer_id_memb_var:   Opt[CustomerId]                                                   = ();
+  opt_tagged_maybe_memb_var:  Opt[<tagged_maybe(Maybe[Any])>]                                   = ();
+  opt_map_memb_var:           Opt[[EmployeeId -> TerritoryId]]                                  = ();
+  opt_byte_seq_memb_var:      Opt[Byte*]                                                        = ();
+  opt_tuple_seq_memb_var:     Opt[(EmployeeId, Time, Maybe[Any])*]                              = ();
+  opt_int32_seq_memb_var:     Opt[Int32*]                                                       = ();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+using RelAutoB {
+  Maybe[Bool]                                                 maybe_bool_memb_var             = opt2maybe(opt_bool_memb_var);
+  Maybe[Int]                                                  maybe_int_memb_var              = opt2maybe(opt_int_memb_var);
+  Maybe[Float]                                                maybe_float_memb_var            = opt2maybe(opt_float_memb_var);
+  Maybe[Date]                                                 maybe_date_memb_var             = opt2maybe(opt_date_memb_var);
+  Maybe[Time]                                                 maybe_time_memb_var             = opt2maybe(opt_time_memb_var);
+  Maybe[(Int, String, Date)]                                  maybe_tuple_memb_var            = opt2maybe(opt_tuple_memb_var);
+  Maybe[(time: Time, label: String, maybe: Maybe[OrderId])]   maybe_record_memb_var           = opt2maybe(opt_record_memb_var);
+  Maybe[String]                                               maybe_string_memb_var           = opt2maybe(opt_string_memb_var);
+  Maybe[EmployeeId]                                           maybe_employee_id_memb_var      = opt2maybe(opt_employee_id_memb_var);
+  Maybe[CustomerId]                                           maybe_customer_id_memb_var      = opt2maybe(opt_customer_id_memb_var);
+  Maybe[<tagged_maybe(Maybe[Any])>]                           maybe_tagged_maybe_memb_var     = opt2maybe(opt_tagged_maybe_memb_var);
+  Maybe[[EmployeeId -> TerritoryId]]                          maybe_map_memb_var              = opt2maybe(opt_map_memb_var);
+  Maybe[Byte*]                                                maybe_byte_seq_memb_var         = opt2maybe(opt_byte_seq_memb_var);
+  Maybe[(EmployeeId, Time, Maybe[Any])*]                      maybe_tuple_seq_memb_var        = opt2maybe(opt_tuple_seq_memb_var);
+  Maybe[Int32*]                                               maybe_int32_seq_memb_var        = opt2maybe(opt_int32_seq_memb_var);
+
+
+  (String, Float) my_method(Maybe[String] str, Maybe[Float] float) =
+    just(s?), just(f?)  = (s, f),
+    just(s?), nothing   = (s, 0.0),
+    nothing,  just(f?)  = ("", f),
+    nothing,  nothing   = ("", 0.0);
+
+  Nat my_poly_meth(String s, Float f)         = 0;
+  Nat my_poly_meth(String s, Int n)           = 1;
+  // Nat my_poly_meth(Symbol s, Maybe[Bool] b)   = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+RelAutoB.do_maybe(
+  maybe_bool:             Maybe[Bool],
+  maybe_int:              Maybe[Int],
+  maybe_float:            Maybe[Float],
+  maybe_date:             Maybe[Date],
+  maybe_time:             Maybe[Time],
+  maybe_tuple:            Maybe[(Int, String, Date)],
+  maybe_record:           Maybe[(time: Time, label: String, maybe: Maybe[OrderId])],
+  maybe_string:           Maybe[String],
+  maybe_employee_id:      Maybe[EmployeeId],
+  maybe_customer_id:      Maybe[CustomerId],
+  maybe_tagged_maybe:     Maybe[<tagged_maybe(Maybe[Any])>],
+  maybe_map:              Maybe[[EmployeeId -> TerritoryId]],
+  maybe_byte_seq:         Maybe[Byte*],
+  maybe_tuple_seq:        Maybe[(EmployeeId, Time, Maybe[Any])*],
+  maybe_int32_seq:        Maybe[Int32*]
+) {
+  set opt_bool_memb_var               = maybe2opt(this.maybe_bool);
+  set opt_int_memb_var                = maybe2opt(this.maybe_int);
+  set opt_float_memb_var              = maybe2opt(this.maybe_float);
+  set opt_date_memb_var               = maybe2opt(this.maybe_date);
+  set opt_time_memb_var               = maybe2opt(this.maybe_time);
+  set opt_tuple_memb_var              = maybe2opt(this.maybe_tuple);
+  set opt_record_memb_var             = maybe2opt(this.maybe_record);
+  set opt_string_memb_var             = maybe2opt(this.maybe_string);
+  set opt_employee_id_memb_var        = maybe2opt(this.maybe_employee_id);
+  set opt_customer_id_memb_var        = maybe2opt(this.maybe_customer_id);
+  set opt_tagged_maybe_memb_var       = maybe2opt(this.maybe_tagged_maybe);
+  set opt_map_memb_var                = maybe2opt(this.maybe_map);
+  set opt_byte_seq_memb_var           = maybe2opt(this.maybe_byte_seq);
+  set opt_tuple_seq_memb_var          = maybe2opt(this.maybe_tuple_seq);
+  set opt_int32_seq_memb_var          = maybe2opt(this.maybe_int32_seq);
+}
+
+
+RelAutoB.do_optional(
+  bool:             Bool?,
+  int:              Int?,
+  float:            Float?,
+  date:             Date?,
+  time:             Time?,
+  tuple:            (Int, String, Date)?,
+  record:           (time: Time, label: String, maybe: Maybe[OrderId])?,
+  string:           String?,
+  employee_id:      EmployeeId?,
+  customer_id:      CustomerId?,
+  tagged_maybe:     <tagged_maybe(Maybe[Any])>?,
+  map:              [EmployeeId -> TerritoryId]?,
+  byte_seq:         Byte*?,
+  tuple_seq:        (EmployeeId, Time, Maybe[Any])*?,
+  int32_seq:        Int32*?
+) {
+  set opt_bool_memb_var               = (this.bool)             if this.bool?;
+  set opt_int_memb_var                = (this.int)              if this.int?;
+  set opt_float_memb_var              = (this.float)            if this.float?;
+  set opt_date_memb_var               = (this.date)             if this.date?;
+  set opt_time_memb_var               = (this.time)             if this.time?;
+  set opt_tuple_memb_var              = (this.tuple)            if this.tuple?;
+  set opt_record_memb_var             = (this.record)           if this.record?;
+  set opt_string_memb_var             = (this.string)           if this.string?;
+  set opt_employee_id_memb_var        = (this.employee_id)      if this.employee_id?;
+  set opt_customer_id_memb_var        = (this.customer_id)      if this.customer_id?;
+  set opt_tagged_maybe_memb_var       = (this.tagged_maybe)     if this.tagged_maybe?;
+  set opt_map_memb_var                = (this.map)              if this.map?;
+  set opt_byte_seq_memb_var           = (this.byte_seq)         if this.byte_seq?;
+  set opt_tuple_seq_memb_var          = (this.tuple_seq)        if this.tuple_seq?;
+  set opt_int32_seq_memb_var          = (this.int32_seq)        if this.int32_seq?;
+}
+
+
+RelAutoB.do_optional_maybe(maybe_float: Maybe[Float]?, maybe_string: Maybe[String]?) {
+  set opt_float_memb_var  = maybe2opt(this.maybe_float)  if this.maybe_float?;
+  set opt_string_memb_var = maybe2opt(this.maybe_string) if this.maybe_string?;
+}

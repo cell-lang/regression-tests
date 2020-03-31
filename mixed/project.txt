@@ -1,3 +1,4 @@
 mixed/common.cell
 mixed/rel-auto-A.cell
+mixed/rel-auto-B.cell
 mixed/react-auto-A.cell
