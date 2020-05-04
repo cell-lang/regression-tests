@@ -1,0 +1,294 @@
+schema ForeignKeysA {
+  entity(Id);
+  value(Any);
+  relationship(Id, Id);
+  relationship_attribute(Id, Id, Any);
+
+  relationship(id1, id2) -> entity(id1), entity(id2);
+  relationship_attribute(id1, id2, v) -> relationship(id1, id2), value(v);
+
+  // entity(id) -> relationship(id, _);
+  value(v) -> relationship_attribute(_, _, v);
+  // entity(id) -> relationship_attribute(id, _, _);
+  // relationship(id1, id2) -> relationship_attribute(id1, id2, _);
+}
+
+
+Bool is_valid_state_a(ForeignKeys state) {
+  entity = state.entity;
+  value = state.value;
+  relationship = state.relationship;
+  relationship_attribute = state.relationship_attribute;
+
+  // relationship_attribute(id1, id2, v) -> relationship(id1, id2), value(v);
+  for id1 id2 v <- relationship_attribute
+    if not (relationship(id1, id2) and value(v))
+      return false;
+
+  // relationship(id1, id2) -> entity(id1), entity(id2);
+  for id1 id2 <- relationship
+    if not (entity(id1) and entity(id2))
+      return false;
+
+  // value(v) -> relationship_attribute(_, _, v);
+  for v <- value
+    if not relationship_attribute(_, _, v)
+      return false;
+
+  // entity(id) -> relationship(id, _);
+  // entity(id) -> relationship_attribute(id, _, _);
+  // relationship(id1, id2) -> relationship_attribute(id1, id2, _);
+
+  return true;
+}
+
+
+Bool ForeignKeysEqA(ForeignKeys ref_auto, ForeignKeysA auto) {
+  ok = [id : id <- ref_auto.entity] == [id : id <- auto.entity] and
+       [id : id <- ref_auto.value] == [id : id <- auto.value];
+  return false if not ok;
+
+  ok = |ref_auto.relationship| == |auto.relationship| and
+       |ref_auto.relationship_attribute| == |auto.relationship_attribute|;
+  return false if not ok;
+
+  for id1 id2 <- ref_auto.relationship
+    if not auto.relationship(id1, id2)
+      return false;
+
+  for id1 id2 v <- ref_auto.relationship_attribute
+    if not auto.relationship_attribute(id1, id2, v)
+      return false;
+
+  return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+ForeignKeysA.execute([ForeignKeysMsg]) {
+  for m <- _untag_(this)
+    execute(m);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+using ForeignKeysA {
+  execute(InsertEntity action) {
+    insert entity(action.id);
+  }
+
+  execute(InsertValue action) {
+    insert value(action.value);
+  }
+
+  execute(InsertRelationship action) {
+    insert relationship(action.id1, action.id2);
+  }
+
+  execute(InsertRelationshipAttribute action) {
+    insert relationship_attribute(action.id1, action.id2, action.value);
+  }
+
+  execute(DeleteEntity action) {
+    delete entity(action.id);
+  }
+
+  execute(DeleteValue action) {
+    delete value(action.value);
+  }
+
+  execute(DeleteRelationship action) {
+    delete relationship(action.id1, action.id2);
+  }
+
+  execute(DeleteRelationship1 action) {
+    delete relationship(action.id, *);
+  }
+
+  execute(DeleteRelationshipAttribute action) {
+    delete relationship_attribute(action.id1, action.id2, action.value);
+  }
+
+  execute(DeleteRelationshipAttribute12 action) {
+    delete relationship_attribute(action.id1, action.id2, *);
+  }
+
+  execute(DeleteRelationshipAttribute13 action) {
+    delete relationship_attribute(action.id, *, action.value);
+  }
+
+  execute(DeleteRelationshipAttribute1 action) {
+    delete relationship_attribute(action.id, *, *);
+  }
+
+  execute(DeleteRelationshipAttribute3 action) {
+    delete relationship_attribute(*, *, action.value);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+ForeignKeysA.insert_entity(id: Id) {
+  insert entity(this.id);
+}
+
+ForeignKeysA.insert_value(value: Any) {
+  insert value(this.value);
+}
+
+ForeignKeysA.insert_relationship(id1: Id, id2: Id) {
+  insert relationship(this.id1, this.id2);
+}
+
+ForeignKeysA.insert_relationship_attribute(id1: Id, id2: Id, value: Any) {
+  insert relationship_attribute(this.id1, this.id2, this.value);
+}
+
+ForeignKeysA.delete_entity(id: Id) {
+  delete entity(this.id);
+}
+
+ForeignKeysA.delete_value(value: Any) {
+  delete value(this.value);
+}
+
+ForeignKeysA.delete_relationship(id1: Id, id2: Id) {
+  delete relationship(this.id1, this.id2);
+}
+
+ForeignKeysA.delete_relationship_1(id: Id) {
+  delete relationship(this.id, *);
+}
+
+ForeignKeysA.delete_relationship_attribute(id1: Id, id2: Id, value: Any) {
+  delete relationship_attribute(this.id1, this.id2, this.value);
+}
+
+ForeignKeysA.delete_relationship_attribute_12(id1: Id, id2: Id) {
+  delete relationship_attribute(this.id1, this.id2, *);
+}
+
+ForeignKeysA.delete_relationship_attribute_13(id: Id, value: Any) {
+  delete relationship_attribute(this.id, *, this.value);
+}
+
+ForeignKeysA.delete_relationship_attribute_1(id: Id) {
+  delete relationship_attribute(this.id, *, *);
+}
+
+ForeignKeysA.delete_relationship_attribute_3(value: Any) {
+  delete relationship_attribute(*, *, this.value);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+RunForeingKeysTestsA(Id* ids, Any* values, Maybe[NzNat] maybe_max_msgs, Nat no_iters, Nat run_no) {
+  ref_auto : ForeignKeys;
+  auto     : ForeignKeysA;
+
+  ins_msgs, del_msgs = messages(ids, values);
+  all_msgs = _cat_(ins_msgs, del_msgs);
+  len = nz_nat(|all_msgs|);
+
+  for iter_no < no_iters {
+    eq = ForeignKeysEqA(ref_auto, auto);
+    assert eq;
+
+    init_state = read auto;
+
+    if maybe_max_msgs != :nothing {
+      max_msgs = _untag_(maybe_max_msgs);
+      count = 1 + _rand_nat_(max_msgs);
+      msgs = [all_msgs(_rand_nat_(len)) : _ <- range(max_msgs)];
+      msg = :execute(msgs);
+    }
+    else
+      msg = all_msgs(_rand_nat_(len));
+
+    ok = ref_auto <- msg;
+    assert ok;
+
+    ref_state = read ref_auto;
+    is_valid = is_valid_state_a(ref_state);
+
+
+// Print("iter_no = " & _print_(iter_no) & ", run_no = " & _print_(run_no));
+
+// // if maybe_max_msgs == :just(2) and iter_no == 8181 and run_no == 1 {
+// if maybe_max_msgs == :just(2) and iter_no == 7157 and run_no == 1 {
+//   print "------------------------------------------------";
+//   print maybe_max_msgs;
+//   print iter_no;
+//   print init_state;
+//   print msg;
+
+//   exp_msg = #{
+//     execute([
+//       delete_relationship_attribute_1(id: id(3)),
+//       delete_relationship_attribute(id1: id(3), id2: id(2), value: yellow)
+//     ])
+//   };
+
+//   assert msg == exp_msg;
+
+//   // msg = #{
+//   //   execute([
+//   //     delete_relationship_attribute_1(id: id(3))
+//   //     // delete_relationship_attribute(id1: id(3), id2: id(2), value: yellow)
+//   //   ])
+//   // };
+
+
+//   // iter_no = 9836, run_no = 1
+//   // Error (1):  success
+//   // execute([
+//   //   delete_relationship_attribute(id1: id(2), id2: id(3), value: red),
+//   //   delete_relationship_attribute_13(id: id(2), value: red)
+//   // ])
+
+
+//   unused_var = Ticks();
+//   print unused_var;
+// }
+
+// // print msg;
+
+
+
+
+
+    ok = auto <- msg;
+
+    // Print(if ok then ": Success\n" else ": Failure\n");
+
+    state = read auto;
+
+    // if not ok and is_valid {
+    //   err = Error(auto);
+    //   if err != nothing {
+    //     Print(value(err));
+    //     Print("\n");
+    //   }
+    // }
+
+    assert ok == is_valid;
+
+    if ok {
+      eq = ForeignKeysEqA(ref_auto, auto);
+      if not eq {
+        ref_state = read ref_auto;
+        state = read auto;
+        Print("\n\n");
+        print ref_state;
+        Print("\n");
+        print state;
+        Print("\n");
+      }
+      assert eq;
+    }
+    else {
+      assert state == init_state;
+      ok = write ref_auto <- init_state;
+    }
+  }
+}

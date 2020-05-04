@@ -1,0 +1,143 @@
+type Id = id(Nat);
+
+////////////////////////////////////////////////////////////////////////////////
+
+schema ForeignKeys {
+  entity(Id);
+  value(Any);
+  relationship(Id | Id);
+  relationship_attribute(Id | Id, Any);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+type InsertEntity                     = insert_entity(id: Id);
+type InsertValue                      = insert_value(value: Any);
+type InsertRelationship               = insert_relationship(id1: Id, id2: Id);
+type InsertRelationshipAttribute      = insert_relationship_attribute(id1: Id, id2: Id, value: Any);
+type DeleteEntity                     = delete_entity(id: Id);
+type DeleteValue                      = delete_value(value: Any);
+type DeleteRelationship               = delete_relationship(id1: Id, id2: Id);
+type DeleteRelationship1              = delete_relationship_1(id: Id);
+type DeleteRelationshipAttribute      = delete_relationship_attribute(id1: Id, id2: Id, value: Any);
+type DeleteRelationshipAttribute12    = delete_relationship_attribute_12(id1: Id, id2: Id);
+type DeleteRelationshipAttribute13    = delete_relationship_attribute_13(id: Id, value: Any);
+type DeleteRelationshipAttribute1     = delete_relationship_attribute_1(id: Id);
+type DeleteRelationshipAttribute3     = delete_relationship_attribute_3(value: Any);
+
+type ForeignKeysMsg =  InsertEntity,
+                              InsertValue,
+                              InsertRelationship,
+                              InsertRelationshipAttribute,
+                              DeleteEntity,
+                              DeleteValue,
+                              DeleteRelationship,
+                              DeleteRelationship1,
+                              DeleteRelationshipAttribute,
+                              DeleteRelationshipAttribute12,
+                              DeleteRelationshipAttribute13,
+                              DeleteRelationshipAttribute1,
+                              DeleteRelationshipAttribute3;
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+(ForeignKeysMsg*, ForeignKeysMsg*) messages(Id* ids, Any* values) {
+  insert_msgs = ();
+  for id <- ids
+    insert_msgs = (insert_msgs | insert_entity(id: id));
+  for v <- values
+    insert_msgs = (insert_msgs | insert_value(value: v));
+  for id1 <- ids; id2 <- ids
+    insert_msgs = (insert_msgs | insert_relationship(id1: id1, id2: id2));
+  for id1 <- ids; id2 <- ids; v <- values
+    insert_msgs = (insert_msgs | insert_relationship_attribute(id1: id1, id2: id2, value: v));
+
+  delete_msgs = ();
+  for id <- ids
+    delete_msgs = (delete_msgs | delete_entity(id: id));
+  for v <- values
+    delete_msgs = (delete_msgs | delete_value(value: v));
+  for id1 <- ids; id2 <- ids
+    delete_msgs = (delete_msgs | delete_relationship(id1: id1, id2: id2));
+  for id <- ids
+    delete_msgs = (delete_msgs | delete_relationship_1(id: id));
+  for id1 <- ids; id2 <- ids; v <- values
+    delete_msgs = (delete_msgs | delete_relationship_attribute(id1: id1, id2: id2, value: v));
+  for id1 <- ids; id2 <- ids
+    delete_msgs = (delete_msgs | delete_relationship_attribute_12(id1: id1, id2: id2));
+  for id <- ids; v <- values
+    delete_msgs = (delete_msgs | delete_relationship_attribute_13(id: id, value: v));
+  for id <- ids
+    delete_msgs = (delete_msgs | delete_relationship_attribute_1(id: id));
+  for v <- values
+    delete_msgs = (delete_msgs | delete_relationship_attribute_3(value: v));
+
+  return (_isort_([m : m <- insert_msgs]), _isort_([m : m <- delete_msgs]));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+ForeignKeys.ForeignKeysMsg {
+  execute(this);
+}
+
+ForeignKeys.execute([ForeignKeysMsg]) {
+  for m <- _untag_(this)
+    execute(m);
+}
+
+using ForeignKeys {
+  execute(InsertEntity action) {
+    insert entity(action.id);
+  }
+
+  execute(InsertValue action) {
+    insert value(action.value);
+  }
+
+  execute(InsertRelationship action) {
+    insert relationship(action.id1, action.id2);
+  }
+
+  execute(InsertRelationshipAttribute action) {
+    insert relationship_attribute(action.id1, action.id2, action.value);
+  }
+
+  execute(DeleteEntity action) {
+    delete entity(action.id);
+  }
+
+  execute(DeleteValue action) {
+    delete value(action.value);
+  }
+
+  execute(DeleteRelationship action) {
+    delete relationship(action.id1, action.id2);
+  }
+
+  execute(DeleteRelationship1 action) {
+    delete relationship(action.id, *);
+  }
+
+  execute(DeleteRelationshipAttribute action) {
+    delete relationship_attribute(action.id1, action.id2, action.value);
+  }
+
+  execute(DeleteRelationshipAttribute12 action) {
+    delete relationship_attribute(action.id1, action.id2, *);
+  }
+
+  execute(DeleteRelationshipAttribute13 action) {
+    delete relationship_attribute(action.id, *, action.value);
+  }
+
+  execute(DeleteRelationshipAttribute1 action) {
+    delete relationship_attribute(action.id, *, *);
+  }
+
+  execute(DeleteRelationshipAttribute3 action) {
+    delete relationship_attribute(*, *, action.value);
+  }
+}

@@ -1,0 +1,227 @@
+schema ForeignKeysB {
+  entity(Id);
+  value(Any);
+  relationship(Id | Id);
+  relationship_attribute(Id | Id, Any);
+
+  relationship(id1, id2) -> entity(id1), entity(id2);
+  relationship_attribute(id1, id2, v) -> relationship(id1, id2), value(v);
+
+  // entity(id) -> relationship(id, _);
+  value(v) -> relationship_attribute(_, _, v);
+  // entity(id) -> relationship_attribute(id, _, _);
+  // relationship(id1, id2) -> relationship_attribute(id1, id2, _);
+}
+
+
+Bool is_valid_state_b(ForeignKeys state) {
+  entity = state.entity;
+  value = state.value;
+  relationship = state.relationship;
+  relationship_attribute = state.relationship_attribute;
+
+  // relationship_attribute(id1, id2, v) -> relationship(id1, id2), value(v);
+  for id1 id2 v <- relationship_attribute
+    if not ((relationship(id1, id2) or relationship(id2, id1)) and value(v))
+      return false;
+
+  // relationship(id1, id2) -> entity(id1), entity(id2);
+  for id1 id2 <- relationship
+    if not (entity(id1) and entity(id2))
+      return false;
+
+  // value(v) -> relationship_attribute(_, _, v);
+  for v <- value
+    if not relationship_attribute(_, _, v)
+      return false;
+
+  // entity(id) -> relationship(id, _);
+  // entity(id) -> relationship_attribute(id, _, _);
+  // relationship(id1, id2) -> relationship_attribute(id1, id2, _);
+
+  return true;
+}
+
+
+Bool ForeignKeysEqB(ForeignKeys ref_auto, ForeignKeysB auto) {
+  ok = [id : id <- ref_auto.entity] == [id : id <- auto.entity] and
+       [id : id <- ref_auto.value] == [id : id <- auto.value];
+  return false if not ok;
+
+  ok = |ref_auto.relationship| == |auto.relationship| and
+       |ref_auto.relationship_attribute| == |auto.relationship_attribute|;
+  return false if not ok;
+
+  for id1 id2 <- ref_auto.relationship
+    if not auto.relationship(id1, id2)
+      return false;
+
+  for id1 id2 v <- ref_auto.relationship_attribute
+    if not auto.relationship_attribute(id1, id2, v)
+      return false;
+
+  return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+ForeignKeysB.execute([ForeignKeysMsg]) {
+  for m <- _untag_(this)
+    execute(m);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+using ForeignKeysB {
+  execute(InsertEntity action) {
+    insert entity(action.id);
+  }
+
+  execute(InsertValue action) {
+    insert value(action.value);
+  }
+
+  execute(InsertRelationship action) {
+    insert relationship(action.id1, action.id2);
+  }
+
+  execute(InsertRelationshipAttribute action) {
+    insert relationship_attribute(action.id1, action.id2, action.value);
+  }
+
+  execute(DeleteEntity action) {
+    delete entity(action.id);
+  }
+
+  execute(DeleteValue action) {
+    delete value(action.value);
+  }
+
+  execute(DeleteRelationship action) {
+    delete relationship(action.id1, action.id2);
+  }
+
+  execute(DeleteRelationship1 action) {
+    delete relationship(action.id, *);
+  }
+
+  execute(DeleteRelationshipAttribute action) {
+    delete relationship_attribute(action.id1, action.id2, action.value);
+  }
+
+  execute(DeleteRelationshipAttribute12 action) {
+    delete relationship_attribute(action.id1, action.id2, *);
+  }
+
+  execute(DeleteRelationshipAttribute13 action) {
+    delete relationship_attribute(action.id, *, action.value);
+  }
+
+  execute(DeleteRelationshipAttribute1 action) {
+    delete relationship_attribute(action.id, *, *);
+  }
+
+  execute(DeleteRelationshipAttribute3 action) {
+    delete relationship_attribute(*, *, action.value);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+ForeignKeysB.insert_entity(id: Id) {
+  insert entity(this.id);
+}
+
+ForeignKeysB.insert_value(value: Any) {
+  insert value(this.value);
+}
+
+ForeignKeysB.insert_relationship(id1: Id, id2: Id) {
+  insert relationship(this.id1, this.id2);
+}
+
+ForeignKeysB.insert_relationship_attribute(id1: Id, id2: Id, value: Any) {
+  insert relationship_attribute(this.id1, this.id2, this.value);
+}
+
+ForeignKeysB.delete_entity(id: Id) {
+  delete entity(this.id);
+}
+
+ForeignKeysB.delete_value(value: Any) {
+  delete value(this.value);
+}
+
+ForeignKeysB.delete_relationship(id1: Id, id2: Id) {
+  delete relationship(this.id1, this.id2);
+}
+
+ForeignKeysB.delete_relationship_1(id: Id) {
+  delete relationship(this.id, *);
+}
+
+ForeignKeysB.delete_relationship_attribute(id1: Id, id2: Id, value: Any) {
+  delete relationship_attribute(this.id1, this.id2, this.value);
+}
+
+ForeignKeysB.delete_relationship_attribute_12(id1: Id, id2: Id) {
+  delete relationship_attribute(this.id1, this.id2, *);
+}
+
+ForeignKeysB.delete_relationship_attribute_13(id: Id, value: Any) {
+  delete relationship_attribute(this.id, *, this.value);
+}
+
+ForeignKeysB.delete_relationship_attribute_1(id: Id) {
+  delete relationship_attribute(this.id, *, *);
+}
+
+ForeignKeysB.delete_relationship_attribute_3(value: Any) {
+  delete relationship_attribute(*, *, this.value);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+RunForeingKeysTestsB(Id* ids, Any* values, Maybe[NzNat] maybe_max_msgs, Nat no_iters) {
+  ref_auto : ForeignKeys;
+  auto     : ForeignKeysB;
+
+  ins_msgs, del_msgs = messages(ids, values);
+  all_msgs = _cat_(ins_msgs, del_msgs);
+  len = nz_nat(|all_msgs|);
+
+  for no_iters {
+    eq = ForeignKeysEqB(ref_auto, auto);
+    assert eq;
+
+    init_state = read auto;
+
+    if maybe_max_msgs != :nothing {
+      max_msgs = _untag_(maybe_max_msgs);
+      count = 1 + _rand_nat_(max_msgs);
+      msgs = [all_msgs(_rand_nat_(len)) : _ <- range(max_msgs)];
+      msg = :execute(msgs);
+    }
+    else
+      msg = all_msgs(_rand_nat_(len));
+
+    ok = ref_auto <- msg;
+    assert ok;
+
+    ref_state = read ref_auto;
+    is_valid = is_valid_state_b(ref_state);
+
+    ok = auto <- msg;
+    assert ok == is_valid;
+    state = read auto;
+
+    if ok {
+      eq = ForeignKeysEqB(ref_auto, auto);
+      assert eq;
+    }
+    else {
+      assert state == init_state;
+      ok = write ref_auto <- init_state;
+    }
+  }
+}
