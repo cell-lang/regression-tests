@@ -1,4 +1,8 @@
 run-all-tests:
+	make --no-print-directory run-all-java-tests
+	make --no-print-directory run-all-csharp-tests
+
+run-all-java-tests:
 	make -s clean
 	make --no-print-directory tests.jar
 	java -jar tmp/tests.jar
@@ -16,6 +20,8 @@ run-all-tests:
 	make --no-print-directory mixed-date-time-tests.jar
 	java -jar tmp/mixed-date-time-tests.jar
 	@echo ; echo
+
+run-all-csharp-tests:
 	make -s clean
 	make --no-print-directory tests.dll
 	dotnet/bin/Debug/netcoreapp3.1/tests
@@ -27,7 +33,7 @@ run-all-tests:
 	@echo ; echo
 	make -s clean
 	make --no-print-directory stdlib-tests.dll
-	time dotnet-stdlib/bin/Debug/netcoreapp3.1/dotnet-stdlib
+	time dotnet-stdlib/bin/Release/netcoreapp3.1/dotnet-stdlib
 	@echo ; echo
 	make -s clean
 
